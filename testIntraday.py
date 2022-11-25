@@ -6,8 +6,8 @@ import pandas as pd
 import strategies
 import reporting as rep
 
-Banknifty_Path = 'NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = 'NIFTYOptionsData/OptionsData/Nifty/'
+Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
+Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
 
 start_date = datetime.date(2022, 1, 3)
 end_date = datetime.date(2022, 2, 28)
