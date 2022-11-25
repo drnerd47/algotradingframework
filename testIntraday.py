@@ -5,15 +5,21 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
+import time
 
-Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
+import warnings
+warnings.filterwarnings('ignore')
+
+# Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
+# Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
+
+Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
 
 start_date = datetime.date(2022, 1, 3)
-end_date = datetime.date(2022, 2, 28)
+end_date = datetime.date(2022, 1, 10)
 delta = datetime.timedelta(days=1)
-
-trades = pd.DataFrame()
+trade = pd.DataFrame()
+trades = []
 generalconfig = {"SquareOffSL":defs.ALLLEGS,"SquareOffTG":defs.EXITLEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY",
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO}
@@ -29,11 +35,16 @@ while start_date <= end_date:
 
   if my_file.exists():
     masterdf = atom.LoadDF(currpath)
+    tic = time.perf_counter()
     trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
+    toc = time.perf_counter()
+    print(f"Time taken is {toc - tic:0.4f} seconds")
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
   trades.append(trade)
+
+trades = pd.concat(trades)
 
 report = rep.Report(trades)
 print(report)
