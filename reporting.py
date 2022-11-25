@@ -4,7 +4,7 @@ def Report(trades):
 
   rep = {}
   date = trades["date"].tolist()
-  reason = trades["reason"].tolist()
+  reason = trades["Reason"].tolist()
   dct = {}
   for x in range(len(date)):
     if reason[x] == "SL HIT":
@@ -19,18 +19,18 @@ def Report(trades):
 
   def generate_streak_info(trades):
 
-    data = shots['reason'].to_frame()
-    data['start_of_streak'] = data['reason'].ne(data['reason'].shift())
+    data = shots['Reason'].to_frame()
+    data['start_of_streak'] = data['Reason'].ne(data['Reason'].shift())
     data['streak_id'] = data.start_of_streak.cumsum()
     data['streak_counter'] = data.groupby('streak_id').cumcount() + 1
     shots_with_streaks = pd.concat([shots, data['streak_counter']], axis=1)
     return shots_with_streaks
 
-  shots = trades['reason'].to_frame()
+  shots = trades['Reason'].to_frame()
   generate_streak_info(shots)
 
-  Max_winning_Streak = generate_streak_info(shots)[generate_streak_info(shots)["reason"] == "Time Up"]["streak_counter"].max()
-  Max_Losing_Streak = generate_streak_info(shots)[generate_streak_info(shots)["reason"] == "SL HIT"]["streak_counter"].max()
+  Max_winning_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "Time Up"]["streak_counter"].max()
+  Max_Losing_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "SL HIT"]["streak_counter"].max()
 
   Zero_SL_HIT = counts.count(0)
   First_SL_HIT = counts.count(1)
