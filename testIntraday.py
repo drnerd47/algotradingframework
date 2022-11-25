@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 # Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
 # Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
 
-Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
+# Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
 
 start_date = datetime.date(2022, 1, 3)
 end_date = datetime.date(2022, 1, 10)
@@ -49,8 +49,7 @@ trades = pd.concat(trades)
 report = rep.Report(trades)
 print(report)
 
-weeklybreakdown = rep.WeeklyBreakdown(trades)
-print(weeklybreakdown)
+
 
 
 
