@@ -15,8 +15,7 @@ def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
     exp = GetExpiry(masterdf, generalconfig["symbol"])
     cst = strikeprice
     cst = int(round(cst / 100, 0) * 100)
-    price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][
-        HLOC]
+    price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][HLOC]
     return price
 
 def GetOptionPrice(masterdf, opsymbol, time, HLOC):
