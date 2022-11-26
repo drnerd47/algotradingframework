@@ -1,6 +1,7 @@
 import pandas as pd
 from pathlib import Path
 import definitions as defs
+import time
 
 def LoadDF(currpath):
     my_file = Path(currpath)
@@ -15,7 +16,8 @@ def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
     exp = GetExpiry(masterdf, generalconfig["symbol"])
     cst = strikeprice
     cst = int(round(cst / 100, 0) * 100)
-    price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][HLOC]
+    price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][
+        HLOC]
     return price
 
 def GetOptionPrice(masterdf, opsymbol, time, HLOC):
@@ -45,10 +47,13 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
     cst = int(round(cst / 100, 0) * 100)
     positionsNotPlaced = []
     for posc in positionconfig:
-        price = GetOptionPrice(masterdf, generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"], currentcandle.name, "open")
-        if (price != -1):
+        opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
+        # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
+        if currentcandle.name in opdf.index:
+            price = opdf.loc[currentcandle.name]["open"]
             position = {"EnterPrice": price, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                   "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
+                "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
                   "Entertime": currentcandle.name.time(), "Qty": 25 * posc["LotSize"],
                    "date": currentcandle.name.date(),
                   "SLCond": price - posc["Action"] * price * posc["SLPc"] / 100,
@@ -60,11 +65,11 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
             positionsNotPlaced.append(posc)
     return (positions, positionsNotPlaced)
 
-def CheckStopLoss(masterdf, positions, currentcandle):
+def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
     for pos in positions:
-        optionprice = GetOptionPrice(masterdf, pos["OpSymbol"], currentcandle.name, 'high')
-        if (optionprice != -1):
+        if currentcandle.name in pos['OpData'].index:
+            optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 if optionprice >= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
                     positionstoExit.append(pos)
@@ -73,11 +78,11 @@ def CheckStopLoss(masterdf, positions, currentcandle):
                     positionstoExit.append(pos)
     return positionstoExit
 
-def CheckTargetCondition(masterdf, positions, currentcandle):
+def CheckTargetCondition(positions, currentcandle):
     positionstoExit = []
     for pos in positions:
-        optionprice = GetOptionPrice(masterdf, pos["OpSymbol"], currentcandle.name, 'high')
-        if (optionprice != -1):
+        if currentcandle.name in pos['OpData'].index:
+            optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 if optionprice <= pos['TargetCond'] and pos['Active'] and (pos["PositionConfig"]["Target"] == defs.YES):
                     positionstoExit.append(pos)
@@ -86,9 +91,10 @@ def CheckTargetCondition(masterdf, positions, currentcandle):
                     positionstoExit.append(pos)
     return positionstoExit
 
-def ExitPosition(masterdf, positionstoExit, currentcandle, ExitReason):
+def ExitPosition(positionstoExit, currentcandle, ExitReason):
     for pos in positionstoExit:
         if (pos["Active"]):
+            exit = False
             Str = ""
             if (pos["PositionConfig"]["Action"] == defs.BUY):
                 Str = "Buy "
@@ -97,17 +103,26 @@ def ExitPosition(masterdf, positionstoExit, currentcandle, ExitReason):
             Str = Str + pos["PositionConfig"]["Type"]
             if (ExitReason == defs.SL):
                 exitprice = pos["SLCond"]
+                exitReason = "SL HIT"
+                exit = True
             elif (ExitReason == defs.TARGET):
                 exitprice = pos["TargetCond"]
+                exitReason = "Target Hit"
+                exit = True
             elif (ExitReason == defs.SQUAREOFF):
-                exitprice = GetOptionPrice(masterdf, pos["OpSymbol"], currentcandle.name, 'close')
-
+                if currentcandle.name in pos["OpData"]:
+                    exitprice = pos["OpData"].loc[currentcandle.name]['close']
+                    exitReason = "Square Off"
+                    exit = True
+                else:
+                    return exit
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'ExitTime': currentcandle.name.time(),
-                     'Reason': "SL HIT", 'Trade Type': Str,
+                     'Reason': exitReason, 'Trade Type': Str,
                      "pnl": (enterprice - exitprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                      "date": pos["date"], "symbol": pos["symbol"]}
             pos["Active"] = False
+            return exit
 
 def GetFinalTrades(positions):
     trades = pd.DataFrame()
