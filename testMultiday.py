@@ -22,11 +22,11 @@ while start_date <= end_date:
   if my_file.exists():
     masterdf = atom.LoadDF(currpath)
     generalconfig = {"SL": defs.YES, "Target": defs.YES, "SquareOffSL":defs.ALLLEGS,"SquareOffTG":defs.EXITLEG,
-                     "EnterDay":[defs.MON],"EnterTime":datetime.time(9,30),"ExitDay":defs.THU, "ExitTime":datetime.time(15,15),
-                     "symbol":"BANKNIFTY", "ReEntrySL": defs.YES, "ReEntryTG": defs.YES}
-    positionconfig = [{"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50, "LotSize": 1,
+                     "EnterDay":[defs.MON, defs.TUE, defs.WED],"EnterTime":datetime.time(9,30),"ExitDay":defs.THU,
+                     "ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY", "ReEntrySL": defs.YES, "ReEntryTG": defs.YES}
+    positionconfig = [{"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50, "LotSize": [1,1,2],
                        "SL": defs.YES, "Target": defs.YES},
-                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50, "LotSize": 1,
+                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50, "LotSize": [1,1,2],
                        "SL": defs.YES, "Target": defs.YES}]
     trades = strategies.MultidayStrategy(masterdf, generalconfig, positionconfig)
   else:
