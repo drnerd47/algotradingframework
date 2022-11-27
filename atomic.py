@@ -110,17 +110,24 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                 exitReason = "Target Hit"
                 exit = True
             elif (ExitReason == defs.SQUAREOFF):
-                if currentcandle.name in pos["OpData"]:
+                if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['close']
                     exitReason = "Square Off"
                     exit = True
                 else:
-                    return exit
+                    return False
+            elif (ExitReason == defs.SQUAREOFFEOD):
+                if currentcandle.name in pos["OpData"].index:
+                    exitprice = pos["OpData"].loc[currentcandle.name]['open']
+                    exitReason = "Square Off"
+                    exit = True
+                else:
+                    return False
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'ExitTime': currentcandle.name.time(),
                      'Reason': exitReason, 'Trade Type': Str,
-                     "pnl": (enterprice - exitprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                     "date": pos["date"], "symbol": pos["symbol"]}
+                     "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
+                     "date": pos["date"], "symbol": pos["OpSymbol"]}
             pos["Active"] = False
             return exit
 

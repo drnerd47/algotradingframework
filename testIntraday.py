@@ -7,26 +7,22 @@ import strategies
 import reporting as rep
 import time
 
-import warnings
-warnings.filterwarnings('ignore')
-
-# Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
-# Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
-
-Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
+Banknifty_Path = 'D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/'
+Nifty_Path = '/Users/rishabhiyer/Software/algotrading/NIFTYOptionsData/OptionsData/Nifty/'
 
 start_date = datetime.date(2022, 1, 3)
 end_date = datetime.date(2022, 1, 10)
 delta = datetime.timedelta(days=1)
+
 trade = pd.DataFrame()
 trades = []
-generalconfig = {"SquareOffSL":defs.ALLLEGS,"SquareOffTG":defs.EXITLEG,
+generalconfig = {"SquareOffSL":defs.EXITLEG,"SquareOffTG":defs.EXITLEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY",
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "debug": defs.DEBUGTIME}
 positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.YES},
+                       "SL": defs.YES, "Target":defs.NO},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"SLPc":25,"TargetPc":50,"LotSize":1,
-                       "SL": defs.YES,"Target":defs.YES}]
+                       "SL": defs.YES,"Target":defs.NO}]
 while start_date <= end_date:
   date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
   currpath = Banknifty_Path + date_string
@@ -45,11 +41,12 @@ while start_date <= end_date:
   trades.append(trade)
 
 trades = pd.concat(trades)
+print(trades)
+report = rep.Report(trades)
+print(report)
 
-# report = rep.Report(trades)
-# print(report)
-print(trades.head(10))
-
+#weeklybreakdown = rep.WeeklyBreakdown(trades)
+#print(weeklybreakdown)
 
 
 

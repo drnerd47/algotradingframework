@@ -43,11 +43,12 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]) or (needsExit == True):
-          exit = atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
+          exit = atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
           if (exit == False):
             needsExit = True
           else:
             trades = atom.GetFinalTrades(positions)
+            print(trades)
   return trades
 
 def MultidayStrategy(masterdf, generalconfig, positionconfig):

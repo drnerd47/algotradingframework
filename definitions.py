@@ -1,8 +1,8 @@
 CALL = "CE"
 PUT = "PE"
 
-BUY = -1
-SELL = 1
+BUY = 1
+SELL = -1
 
 MONDAY = 1
 TUESDAY = 2
@@ -35,6 +35,7 @@ BN = 'BANKNIFTY'
 SL = 1
 TARGET = 2
 SQUAREOFF = 3
+SQUAREOFFEOD = 4
 
 YES = 1
 NO = 0
