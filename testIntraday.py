@@ -50,7 +50,7 @@ print(trades)
 report = rep.Report(trades)
 print(report)
 
-weeklybreakdown = rep.WeeklyBreakdown(trades)
+weeklybreakdown = rep.WeeklyBreakDown(trades)
 print(weeklybreakdown)
 
 monthlybreakdown = rep.MonthlyBreakDown(trades)

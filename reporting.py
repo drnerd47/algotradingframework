@@ -72,7 +72,7 @@ def Report(trades):
   report = pd.DataFrame(rep, index=[0])
   return report
 
-def WeeklyBreakdown(trades):
+def WeeklyBreakDown(trades):
   trades['date'] = pd.to_datetime(trades["date"])
   trades["DayOfWeek"] = trades["date"].dt.day_name()
   trades["Month"] = trades['date'].dt.month_name()
