@@ -25,7 +25,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
         if (generalconfig["ReEntrySL"] == defs.YES):
-          if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+          if (generalconfig["SquareOffSL"] == defs.ONELEG):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitSL, currentcandle)
           elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
@@ -36,7 +36,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
         if (generalconfig["ReEntrySL"] == defs.YES):
-          if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+          if (generalconfig["SquareOffSL"] == defs.ONELEG):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitTarget, currentcandle)
           elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
@@ -75,7 +75,7 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
         if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
         if (generalconfig["ReEntrySL"] == defs.YES):
-          if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+          if (generalconfig["SquareOffSL"] == defs.ONELEG):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitSL, currentcandle)
           elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
@@ -86,7 +86,7 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
         if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
         if (generalconfig["ReEntrySL"] == defs.YES):
-          if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+          if (generalconfig["SquareOffSL"] == defs.ONELEG):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitTarget, currentcandle)
           elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
@@ -122,7 +122,7 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
 #           if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
 #             atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
 #           if (generalconfig["ReEntrySL"] == defs.YES):
-#             if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+#             if (generalconfig["SquareOffSL"] == defs.ONELEG):
 #               atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitSL, currentcandle)
 #             elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
 #               atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
@@ -134,7 +134,7 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
 #           if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
 #             atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
 #           if (generalconfig["ReEntrySL"] == defs.YES):
-#             if (generalconfig["SquareOffSL"] == defs.EXITLEG):
+#             if (generalconfig["SquareOffSL"] == defs.ONELEG):
 #               atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitTarget, currentcandle)
 #             elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
 #               atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)

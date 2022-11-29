@@ -8,7 +8,7 @@ import strategies
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
+Banknifty_Path = "../NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = 'NIFTYOptionsData/OptionsData/Nifty/'
 
 start_date = datetime.date(2022, 1, 3)

@@ -10,17 +10,17 @@ import time
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/Banknifty/'
-Nifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/nifty/'
+Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
+Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
 
-start_date = datetime.date(2022, 1, 3)
-end_date = datetime.date(2022, 1, 10)
+start_date = datetime.date(2021, 3, 1)
+end_date = datetime.date(2021, 3, 31)
 delta = datetime.timedelta(days=1)
 
 
 trade = pd.DataFrame()
 trades = []
-generalconfig = {"SquareOffSL":defs.EXITLEG,"SquareOffTG":defs.EXITLEG,
+generalconfig = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY",
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "debug": defs.DEBUGTIME}
 positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "LotSize":1,
@@ -43,7 +43,6 @@ while start_date <= end_date:
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
-
 
 trades = pd.concat(trades)
 print(trades)
