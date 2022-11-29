@@ -73,6 +73,12 @@ def Report(trades):
   return report
 
 def WeeklyBreakdown(trades):
+  trades['date'] = pd.to_datetime(trades["date"])
+  trades["DayOfWeek"] = trades["date"].dt.day_name()
+  trades["Month"] = trades['date'].dt.month_name()
+  trades["Year"] = trades['date'].dt.year
+  trades = trades.reset_index()
+  trades = trades.drop(["EnterPrice","ExitTime","ExitPrice","Reason","Trade Type","pnl","symbol","Cummulative pnl","Daily Cummulative pnl","Expiry Date","index"],axis = 1) 
   x = trades.set_index('date')
   y = x.resample("W-Fri")["Daily pnl"].sum()
   Weekly_BreakDown = pd.DataFrame(y, columns=["Daily pnl"])
@@ -80,6 +86,12 @@ def WeeklyBreakdown(trades):
   return Weekly_BreakDown
 
 def MonthlyBreakDown(trades):
+  trades['date'] = pd.to_datetime(trades["date"])
+  trades["DayOfWeek"] = trades["date"].dt.day_name()
+  trades["Month"] = trades['date'].dt.month_name()
+  trades["Year"] = trades['date'].dt.year
+  trades = trades.reset_index()
+  trades = trades.drop(["EnterPrice","ExitTime","ExitPrice","Reason","Trade Type","pnl","symbol","Cummulative pnl","Daily Cummulative pnl","Expiry Date","index"],axis = 1) 
   x = trades.groupby("Month")
   y = trades.groupby("Year")
   a = print("Yearly BreakDown For Month","\n")
@@ -98,6 +110,12 @@ def MonthlyBreakDown(trades):
   return repa
 
 def DayOfWeek(trades):
+  trades['date'] = pd.to_datetime(trades["date"])
+  trades["DayOfWeek"] = trades["date"].dt.day_name()
+  trades["Month"] = trades['date'].dt.month_name()
+  trades["Year"] = trades['date'].dt.year
+  trades = trades.reset_index()
+  trades = trades.drop(["EnterPrice","ExitTime","ExitPrice","Reason","Trade Type","pnl","symbol","Cummulative pnl","Daily Cummulative pnl","Expiry Date","index"],axis = 1) 
   y = trades.groupby("Year")
   z = trades.groupby("DayOfWeek")
   a = print("Yearly BreakDown For Day Of Week","\n")
@@ -114,3 +132,5 @@ def DayOfWeek(trades):
   g = print(g,"\n")
   repa = {a,b,d,e,g}
   return repa
+
+

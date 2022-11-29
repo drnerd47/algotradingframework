@@ -68,7 +68,8 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index:
+        
+        if currentcandle.name in pos['OpData'].index :
             optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 if optionprice >= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
@@ -141,6 +142,12 @@ def GetFinalTrades(positions):
     trades["Daily Cummulative pnl"] = trades['pnl'].cumsum()
     trades["Daily pnl"][0::2] = 0
     return trades
+
+
+# def GetMultipledayData(start_date, end_date, currpath):
+#     df = LoadDF(currpath)
+
+
 
 
 

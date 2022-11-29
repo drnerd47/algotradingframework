@@ -7,12 +7,16 @@ import strategies
 import reporting as rep
 import time
 
+import warnings
+warnings.filterwarnings("ignore")
+
 Banknifty_Path = 'D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/'
 Nifty_Path = '/Users/rishabhiyer/Software/algotrading/NIFTYOptionsData/OptionsData/Nifty/'
 
 start_date = datetime.date(2022, 1, 3)
 end_date = datetime.date(2022, 1, 10)
 delta = datetime.timedelta(days=1)
+
 
 trade = pd.DataFrame()
 trades = []
@@ -35,18 +39,25 @@ while start_date <= end_date:
     trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
     toc = time.perf_counter()
     print(f"Time taken is {toc - tic:0.4f} seconds")
+    trades.append(trade)
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
-  trades.append(trade)
+
 
 trades = pd.concat(trades)
 print(trades)
 report = rep.Report(trades)
 print(report)
 
-#weeklybreakdown = rep.WeeklyBreakdown(trades)
-#print(weeklybreakdown)
+weeklybreakdown = rep.WeeklyBreakdown(trades)
+print(weeklybreakdown)
+
+monthlybreakdown = rep.MonthlyBreakDown(trades)
+print(monthlybreakdown)
+
+dayofweek = rep.DayOfWeek(trades)
+print(dayofweek)
 
 
 

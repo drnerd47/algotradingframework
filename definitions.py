@@ -4,11 +4,11 @@ PUT = "PE"
 BUY = 1
 SELL = -1
 
-MONDAY = 1
-TUESDAY = 2
-WEDNESDAY = 3
-THURSDAY = 4
-FRIDAY = 5
+MON = 0
+TUE = 1
+WED = 2
+THU = 3
+FRI = 4
 
 JAN = 1
 FEB = 2
