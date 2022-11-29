@@ -95,7 +95,6 @@ def CheckTargetCondition(positions, currentcandle):
 def ExitPosition(positionstoExit, currentcandle, ExitReason):
     for pos in positionstoExit:
         if (pos["Active"]):
-            exit = False
             Str = ""
             if (pos["PositionConfig"]["Action"] == defs.BUY):
                 Str = "Buy "
@@ -105,32 +104,23 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
             if (ExitReason == defs.SL):
                 exitprice = pos["SLCond"]
                 exitReason = "SL HIT"
-                exit = True
             elif (ExitReason == defs.TARGET):
                 exitprice = pos["TargetCond"]
                 exitReason = "Target Hit"
-                exit = True
             elif (ExitReason == defs.SQUAREOFF):
                 if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['close']
                     exitReason = "Square Off"
-                    exit = True
-                else:
-                    return False
             elif (ExitReason == defs.SQUAREOFFEOD):
                 if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['open']
                     exitReason = "Square Off"
-                    exit = True
-                else:
-                    return False
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'ExitTime': currentcandle.name.time(),
                      'Reason': exitReason, 'Trade Type': Str,
                      "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                      "date": pos["date"], "symbol": pos["OpSymbol"]}
             pos["Active"] = False
-    return exit
 
 def GetFinalTrades(positions):
     trades = pd.DataFrame()

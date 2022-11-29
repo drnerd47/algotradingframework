@@ -13,8 +13,8 @@ warnings.filterwarnings("ignore")
 Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
 Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
 
-start_date = datetime.date(2022, 1, 11)
-end_date = datetime.date(2022, 1, 13)
+start_date = datetime.date(2022, 1, 3)
+end_date = datetime.date(2022, 2, 28)
 delta = datetime.timedelta(days=1)
 
 

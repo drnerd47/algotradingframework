@@ -11,12 +11,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
   for s in range(len(spotdata)):
     currentcandle = spotdata.iloc[s]
     if currentcandle.name.time() == generalconfig["EnterTime"] and not placed:
-      if generalconfig["debug"] == defs.DEBUGTIME:
-        tic = time.perf_counter()
       (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
-      if generalconfig["debug"] == defs.DEBUGTIME:
-        toc = time.perf_counter()
-        print(f"Time taken by EnterPosition is {toc - tic:0.4f} seconds")
       placed = True
     if placed:
       postoExitSL = atom.CheckStopLoss(positions, currentcandle)
@@ -42,13 +37,10 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
             atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
 
       # Square off Remaining Legs EOD
-      if (currentcandle.name.time() == generalconfig["ExitTime"]) or (needsExit == True):
-          exit = atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
-          if (exit == False):
-            needsExit = True
-          else:
-            trades = atom.GetFinalTrades(positions)
-            print(trades)
+      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        trades = atom.GetFinalTrades(positions)
+        print(trades)
   return trades
 
 def MultidayStrategy(masterdf, generalconfig, positionconfig):
@@ -93,13 +85,10 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
 
       # Square off Remaining Legs at Exit day
             
-      if (currentcandle.name.weekday() == generalconfig['ExitDay'] and currentcandle.name.time() == generalconfig["ExitTime"]) or (needsExit == True):
-        exit = atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
-        if (exit == False):
-          needsExit = True
-        else:
-          trades = atom.GetFinalTrades(positions)
-          print(trades)
+      if (currentcandle.name.weekday() == generalconfig['ExitDay'] and currentcandle.name.time() == generalconfig["ExitTime"]):
+        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        trades = atom.GetFinalTrades(positions)
+        print(trades)
   return trades
 
 
