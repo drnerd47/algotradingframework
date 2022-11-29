@@ -13,8 +13,8 @@ warnings.filterwarnings("ignore")
 Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
 Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
 
-start_date = datetime.date(2021, 3, 1)
-end_date = datetime.date(2021, 3, 31)
+start_date = datetime.date(2022, 1, 11)
+end_date = datetime.date(2022, 1, 13)
 delta = datetime.timedelta(days=1)
 
 
@@ -39,7 +39,8 @@ while start_date <= end_date:
     trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
     toc = time.perf_counter()
     print(f"Time taken is {toc - tic:0.4f} seconds")
-    trades.append(trade)
+    if (len(trade) > 0):
+        trades.append(trade)
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta

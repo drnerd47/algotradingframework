@@ -130,7 +130,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                      "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                      "date": pos["date"], "symbol": pos["OpSymbol"]}
             pos["Active"] = False
-            return exit
+    return exit
 
 def GetFinalTrades(positions):
     trades = pd.DataFrame()
