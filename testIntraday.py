@@ -10,8 +10,8 @@ import time
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = 'D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '/Users/rishabhiyer/Software/algotrading/NIFTYOptionsData/OptionsData/Nifty/'
+Banknifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/Banknifty/'
+Nifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/nifty/'
 
 start_date = datetime.date(2022, 1, 3)
 end_date = datetime.date(2022, 1, 10)
