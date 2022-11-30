@@ -5,46 +5,57 @@ import time
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
   placed = False
-  needsExit = False
   positions = []
   trades = []
   MinCounter = 0
   ReEnterCounterSL = 0
   ReEnterCounterTG = 0
+  ReEnterNextSL = False
+  ReEnterNextTG = False
   for s in range(len(spotdata)):
     MinCounter += 1
     currentcandle = spotdata.iloc[s]
     if currentcandle.name.time() == generalconfig["EnterTime"] and not placed:
-      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
+      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, "open")
       placed = True
     if placed:
       if (generalconfig["Timerenter"] == defs.YES):
         if (MinCounter % generalconfig["ReEnterEvery"] == 0):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
-                                                               currentcandle)
-      postoExitSL = atom.CheckStopLoss(positions, currentcandle)
+                                                               currentcandle, "open")
+      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL):
+        ReEnterNextSL = False
+        ReEnterCounterSL += 1
+        if (generalconfig["SquareOffSL"] == defs.ONELEG):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitSLNext, masterdf, positions,
+                                                               currentcandle, "open")
+        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, "open")
       if (len(postoExitSL) > 0):
+        print("SL Hit, Entering the exit and reentry loop")
+        ReEnterNextSL = True
+        posConfigtoExitSLNext = posConfigtoExitSL
         atom.ExitPosition(postoExitSL, currentcandle, defs.SL)
         if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
-        if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]):
-          ReEnterCounterSL += 1
-          if (generalconfig["SquareOffSL"] == defs.ONELEG):
-            atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitSL, currentcandle)
-          elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-            atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
 
-      postoExitTarget = atom.CheckTargetCondition(positions, currentcandle)
+      (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+      if (generalconfig["ReEntryTG"] == defs.YES) and (ReEnterCounterTG <= generalconfig["MaxReEnterCounterTG"]) and (ReEnterNextTG):
+        ReEnterCounterTG += 1
+        if (generalconfig["SquareOffSL"] == defs.ONELEG):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitTGNext, masterdf, positions,
+                                                               currentcandle, "open")
+        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, "open")
       if (len(postoExitTarget) > 0):
+        ReEnterNextTG = True
+        posConfigtoExitTGNext = posConfigtoExitTG
         atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET)
         if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
-        if (generalconfig["ReEntryTG"] == defs.YES) and (ReEnterCounterTG <= generalconfig["MaxReEnterCounterTG"]):
-          ReEnterCounterTG += 1
-          if (generalconfig["SquareOffSL"] == defs.ONELEG):
-            atom.EnterPosition(generalconfig, positionconfig, masterdf, postoExitTarget, currentcandle)
-          elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-            atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle)
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]):

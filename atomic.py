@@ -40,17 +40,17 @@ def GetExpiry(masterdf, symbol):
 def GetSpotData(masterdf, symbol):
     return masterdf[masterdf['symbol'] == symbol]
 
-def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle):
+def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC):
     print("Entering Position!")
     exp = GetExpiry(masterdf, generalconfig["symbol"])
-    cst = currentcandle['open']
+    cst = currentcandle[OHLC]
     cst = int(round(cst / 100, 0) * 100)
     positionsNotPlaced = []
     for posc in positionconfig:
         opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
         # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
         if currentcandle.name in opdf.index:
-            price = opdf.loc[currentcandle.name]["open"]
+            price = opdf.loc[currentcandle.name][OHLC]
             position = {"EnterPrice": price, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                   "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                 "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
@@ -67,30 +67,35 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
 
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
+    posconfigtoExit = []
     for pos in positions:
-        
         if currentcandle.name in pos['OpData'].index :
             optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 if optionprice >= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
                     positionstoExit.append(pos)
+                    posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
                 if optionprice <= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
                     positionstoExit.append(pos)
-    return positionstoExit
+                    posconfigtoExit.append(pos["PositionConfig"])
+    return (positionstoExit, posconfigtoExit)
 
 def CheckTargetCondition(positions, currentcandle):
     positionstoExit = []
+    posconfigtoExit = []
     for pos in positions:
         if currentcandle.name in pos['OpData'].index:
             optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 if optionprice <= pos['TargetCond'] and pos['Active'] and (pos["PositionConfig"]["Target"] == defs.YES):
                     positionstoExit.append(pos)
+                    posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
                 if optionprice >= pos['TargetCond'] and pos['Active'] and (pos["PositionConfig"]["Target"] == defs.YES):
                     positionstoExit.append(pos)
-    return positionstoExit
+                    posconfigtoExit.append(pos["PositionConfig"])
+    return (positionstoExit, posconfigtoExit)
 
 def ExitPosition(positionstoExit, currentcandle, ExitReason):
     for pos in positionstoExit:
@@ -116,7 +121,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                     exitprice = pos["OpData"].loc[currentcandle.name]['open']
                     exitReason = "Square Off"
             enterprice = pos['EnterPrice']
-            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'ExitTime': currentcandle.name.time(),
+            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                      'Reason': exitReason, 'Trade Type': Str,
                      "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                      "date": pos["date"], "symbol": pos["OpSymbol"]}
