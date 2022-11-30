@@ -127,6 +127,10 @@ def GetFinalTrades(positions):
     for pos in positions:
         trades = trades.append(pos["trades"], ignore_index=True)
     #trades = trades.append(trades, ignore_index=True)
+    trades["Cummulative pnl"] = trades['pnl'].cumsum()
+    trades["Daily pnl"] = trades.groupby("date")["pnl"].cumsum()
+    trades["Daily Cummulative pnl"] = trades['pnl'].cumsum()
+    trades["Daily pnl"][0::2] = 0
     return trades
 
 
