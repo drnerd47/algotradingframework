@@ -47,17 +47,20 @@ while start_date <= end_date:
 
 trades = pd.concat(trades)
 print(trades)
-report = rep.Report(trades)
-print(report)
+# report = rep.Report(trades)
+# print(report)
 
-weeklybreakdown = rep.WeeklyBreakDown(trades)
-print(weeklybreakdown)
+dailydata = rep.GetDailyChart(trades)
+print(dailydata)
 
-monthlybreakdown = rep.MonthlyBreakDown(trades)
-print(monthlybreakdown)
+# weeklybreakdown = rep.WeeklyBreakDown(trades)
+# print(weeklybreakdown)
 
-dayofweek = rep.DayOfWeek(trades)
-print(dayofweek)
+# monthlybreakdown = rep.MonthlyBreakDown(trades)
+# print(monthlybreakdown)
+
+# dayofweek = rep.DayOfWeek(trades)
+# print(dayofweek)
 
 
 

@@ -133,4 +133,12 @@ def DayOfWeek(trades):
   repa = {a,b,d,e,g}
   return repa
 
+#def GetDailyChart(trades):
+
+def GetDailyChart(trades):
+  daily_data = trades.drop(['Cummulative pnl', 'Daily pnl', 'Daily Cummulative pnl','symbol','Trade Type','Reason','ExitTime','ExitPrice','EnterPrice'], axis=1)
+  daily_data = daily_data.groupby(['date']).sum()
+
+  return daily_data
+
 
