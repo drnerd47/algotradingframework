@@ -14,7 +14,7 @@ Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
 Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
 
 start_date = datetime.date(2021, 1, 1)
-end_date = datetime.date(2021, 1, 31)
+end_date = datetime.date(2022, 6, 30)
 delta = datetime.timedelta(days=1)
 
 
@@ -24,10 +24,36 @@ generalconfig = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY",
                      "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
                  "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5}
-positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "LotSize":1,
+# Straddle
+positionconfigStraddle = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "LotSize":1,
                        "SL": defs.YES, "Target":defs.NO},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"SLPc":25,"TargetPc":50,"LotSize":1,
                        "SL": defs.YES,"Target":defs.NO}]
+# Strangle
+positionconfigStrangle = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":200, "SLPc":25, "TargetPc":50, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO},
+                      {"Type":defs.PUT,"Action":defs.SELL,"Delta":-200,"SLPc":25,"TargetPc":50,"LotSize":1,
+                       "SL": defs.YES,"Target":defs.NO}]
+# Iron Butterfly
+positionconfigIronButterfly = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":1000, "SLPc":25, "TargetPc":50, "LotSize":1,
+                       "SL": defs.NO, "Target":defs.NO},
+                      {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1000,"SLPc":25,"TargetPc":50,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO},
+                      {"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
+                       "LotSize": 1, "SL": defs.YES, "Target": defs.NO},
+                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
+                       "LotSize": 1, "SL": defs.YES, "Target": defs.NO}]
+
+# Iron Condor
+positionconfigIronCondor = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":200, "SLPc":25, "TargetPc":50, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO},
+                      {"Type":defs.PUT,"Action":defs.BUY,"Delta":-200,"SLPc":25,"TargetPc":50,"LotSize":1,
+                       "SL": defs.YES,"Target":defs.NO},
+                      {"Type": defs.CALL, "Action": defs.SELL, "Delta": -100, "SLPc": 25, "TargetPc": 50,
+                       "LotSize": 1, "SL": defs.YES, "Target": defs.NO},
+                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 100, "SLPc": 25, "TargetPc": 50,
+                       "LotSize": 1, "SL": defs.YES, "Target": defs.NO}]
+
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 
@@ -40,7 +66,7 @@ while start_date <= end_date:
   if my_file.exists():
     masterdf = atom.LoadDF(currpath)
     tic = time.perf_counter()
-    trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
+    trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfigIronButterfly)
     toc = time.perf_counter()
     print(f"Time taken is {toc - tic:0.4f} seconds")
     if (len(trade) > 0):
@@ -54,20 +80,15 @@ trades = trades.reset_index()
 trades = trades.drop(["index"],axis = 1)
 
 print(trades)
+trades.to_csv("Results/trades.csv")
+
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
+Daily_Chart.to_csv("Results/trades.csv")
 
 report = rep.Report(trades, Daily_Chart)
 print(report)
-
-weeklybreakdown = rep.WeeklyBreakDown(Daily_Chart)
-print(weeklybreakdown)
-
-monthlybreakdown = rep.MonthlyBreakDown(Daily_Chart)
-print(monthlybreakdown)
-
-dayofweek = rep.DayOfWeek(Daily_Chart)
-print(dayofweek)
+report.to_csv("Results/report.csv")
 
 
 
