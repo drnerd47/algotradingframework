@@ -31,10 +31,10 @@ def GetOptionPrice(masterdf, opsymbol, time, HLOC):
 def GetExpiry(masterdf, symbol):
     if (symbol == defs.BN):
         return masterdf.iloc[0]['symbol'][9:16]
-    elif (symbol == defs.NIFTY):
+    elif (symbol == defs.N):
         return masterdf.iloc[0]['symbol'][5:12]
     else:
-        print("Get Expiry: Come to the Else part")
+        print("Unknown Symbol")
         return 0
 
 def GetSpotData(masterdf, symbol):
@@ -42,11 +42,11 @@ def GetSpotData(masterdf, symbol):
 
 def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC):
     print("Entering Position!")
-    exp = GetExpiry(masterdf, generalconfig["symbol"])
-    cst = currentcandle[OHLC]
-    cst = int(round(cst / 100, 0) * 100)
     positionsNotPlaced = []
     for posc in positionconfig:
+        exp = GetExpiry(masterdf, generalconfig["symbol"])
+        cst = currentcandle[OHLC]
+        cst = int(round(cst / 100, 0) * 100)
         opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
         # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
         if currentcandle.name in opdf.index:

@@ -64,7 +64,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         print(trades)
   return trades
 
-def MultidayStrategy(masterdf, generalconfig, positionconfig):
+def MultidayStrategy(masterdfDict, positions, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
   placed = False
   needsExit = False
@@ -72,7 +72,6 @@ def MultidayStrategy(masterdf, generalconfig, positionconfig):
   trades = []
   for s in range(len(spotdata)):
     currentcandle = spotdata.iloc[s]
-  
     if (currentcandle.name.weekday() == generalconfig['EnterDay'] and currentcandle.name.time() == generalconfig["EnterTime"]) and not placed:
       if generalconfig["debug"] == defs.DEBUGTIME:
         tic = time.perf_counter()
