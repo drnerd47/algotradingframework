@@ -40,6 +40,12 @@ def GetExpiry(masterdf, symbol):
 def GetSpotData(masterdf, symbol):
     return masterdf[masterdf['symbol'] == symbol]
 
+def UpdatePosition(masterdf, positions):
+    if (len(positions) > 0):
+        for pos in positions:
+            if (pos["Active"]):
+                pos["OpData"] = masterdf[masterdf['symbol'] == pos["OpSymbol"]]
+    return positions
 def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC):
     print("Entering Position!")
     positionsNotPlaced = []
@@ -116,10 +122,21 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                 if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['close']
                     exitReason = "Square Off"
+                else:
+                    idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                    exitprice = pos["OpData"][idx]
             elif (ExitReason == defs.SQUAREOFFEOD):
                 if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['open']
-                    exitReason = "Square Off"
+                    exitReason = "Square Off EOD"
+                    print("Squared off Position EOD!")
+                else:
+                    if pos["OpData"].empty:
+                        return
+                    else:
+                        idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                        exitprice = pos["OpData"][idx]
+
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                      'Reason': exitReason, 'Trade Type': Str,

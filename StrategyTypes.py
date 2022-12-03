@@ -87,3 +87,6 @@ def getStatArb(Delta1, Delta2, SL1, Target1, SLPc1, TargetPc1, SL2, Target2, SLP
     positionconfigShort = getStrangles(defs.SELL, Delta1, SL1, Target1, SLPc1, TargetPc1)
     positionconfigLong = getStrangles(defs.BUY, Delta2, SL2, Target2, SLPc2, TargetPc2)
     return [positionconfigShort, positionconfigLong]
+
+def getStatArbDef():
+    return [positionconfigShortStraddle, positionconfigLongStraddle]

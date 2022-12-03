@@ -40,10 +40,16 @@ while start_date <= end_date:
   if my_fileN.exists() and my_fileBN.exists():
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
-    tic = time.perf_counter()
-    trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
-    toc = time.perf_counter()
-    print(f"Time taken is {toc - tic:0.4f} seconds")
+    if (generalconfig["symbol"] == defs.BN):
+      trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+    elif (generalconfig["symbol"] == defs.N):
+      trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
+    elif (generalconfig["symbol"] == defs.BOTH):
+      positionconfig = st.getStatArbDef()
+      trade1 = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig[0])
+      trade2 = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig[1])
+      trade.append(trade1)
+      trade.append(trade2)
     if (len(trade) > 0):
         trades = trades.append(trade)
   else:
