@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
+import generalconfigs as genconfigs
 import positionconfigs as st
 
 import warnings
@@ -20,41 +21,33 @@ delta = datetime.timedelta(days=1)
 
 trade = pd.DataFrame()
 trades = []
+generalconfigBN = genconfigs.generalconfigBN
+generalconfigN = genconfigs.generalconfigN
+positionconfig = st.positionconfitStatArbStraddle
 
-
-generalconfig = generalconfigExpiry
-
-positionconfigSS = st.getStraddles(defs.SELL, defs.NO, defs.NO, 35, 50)
-positionconfigIB = st.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
-positionconfig = positionconfigSS
-trade = pd.DataFrame()
 trades = pd.DataFrame()
-positions = []
 
 while start_date <= end_date:
+  trade = pd.DataFrame()
   date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
   BNPath = Banknifty_Path + date_string
   NPath = Nifty_Path + date_string
-  my_fileN = Path(BNPath)
-  my_fileBN = Path(NPath)
+  my_fileN = Path(NPath)
+  my_fileBN = Path(BNPath)
   print(date_string)
   if my_fileN.exists() and my_fileBN.exists():
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
-    if (generalconfig["symbol"] == defs.BN):
-      (trade, positions) = strategies.MultiDayStrategy(masterdfBN, positions, generalconfig, positionconfig)
-    elif (generalconfig["symbol"] == defs.N):
-      (trade, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig)
-    elif (generalconfig["symbol"] == defs.BOTH):
-      positionconfig = st.getStatArbDef()
-      (trade1, positions) = strategies.MultiDayStrategy(masterdfBN, positions, generalconfig, positionconfig[0])
-      (trade2, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig[1])
-      trade.append(trade1)
-      trade.append(trade2)
+    generalconfigBN["symbol"] = defs.BN
+    trade1 = strategies.IntraDayStrategy(masterdfBN, generalconfigBN, positionconfig[0])
+    generalconfigN["symbol"] = defs.N
+    trade2 = strategies.IntraDayStrategy(masterdfN, generalconfigN, positionconfig[1])
+    trade = trade.append(trade1)
+    trade = trade.append(trade2)
     if (len(trade) > 0):
         trades = trades.append(trade)
-  else:
-    print("No data for " + start_date.strftime("%Y-%m-%d"))
+    else:
+        print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
 
 trades['date'] = pd.to_datetime(trades["date"])
@@ -66,7 +59,7 @@ trades.to_csv("Results/trades.csv")
 
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv("Results/dailychart.csv")
+Daily_Chart.to_csv("Results/trades.csv")
 
 report = rep.Report(trades, Daily_Chart)
 print(report)
