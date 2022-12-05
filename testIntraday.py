@@ -14,7 +14,7 @@ Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
 Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 1, 30)
+end_date = datetime.date(2022, 8, 31)
 delta = datetime.timedelta(days=1)
 
 

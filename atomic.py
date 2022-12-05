@@ -75,12 +75,13 @@ def CheckStopLoss(positions, currentcandle):
     posconfigtoExit = []
     for pos in positions:
         if currentcandle.name in pos['OpData'].index :
-            optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
+                optionprice = pos["OpData"].loc[currentcandle.name]['high']
                 if optionprice >= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
+                optionprice = pos["OpData"].loc[currentcandle.name]['low']
                 if optionprice <= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])

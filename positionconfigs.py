@@ -39,9 +39,9 @@ def getStrangles(action, Delta, SL, Target, SLPc, TargetPc):
 
 # Iron Butterfly
 positionconfigIronButterfly = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":1000, "SLPc":25, "TargetPc":50, "LotSize":1,
-                       "SL": defs.NO, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1000,"SLPc":25,"TargetPc":50,"LotSize":1,
-                       "SL": defs.NO,"Target":defs.NO},
+                       "SL": defs.YES,"Target":defs.NO},
                       {"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
                        "LotSize": 1, "SL": defs.YES, "Target": defs.NO},
                       {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
