@@ -33,7 +33,12 @@ def get_config_space_intraday_straddle():
     cs.add_variables([SquareOffSL, SquareOffTG, ReEntrySL, ReEntryTG, MaxReEnterCounterTG, MaxReEnterCounterSL, SL, Target, SLPc, TargetPc])
     return cs
 
-def get_objective_function(config)
+def get_objective_function(config):
+    Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
+    Nifty_Path = '../NIFTYOptionsData/OptionsData/Nifty'
+    start_date = datetime.date(2022, 1, 1)
+    end_date = datetime.date(2022, 8, 30)
+    delta = datetime.timedelta(days=1)
     SquareOffSL = config['SquareOffSL']
     SquareOffTG = config['SquareOffTG']
     ReEntrySL = config['ReEntrySL']
@@ -44,8 +49,8 @@ def get_objective_function(config)
     Target = config['Target']
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG)
-    positionconfig = posconfigs.getStraddles(action, SL, Target, SLPc, TargetPc, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, defs.BN, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
     trade = pd.DataFrame()
     trades = pd.DataFrame()
 
@@ -53,6 +58,7 @@ def get_objective_function(config)
         date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
         BNPath = Banknifty_Path + date_string
         NPath = Nifty_Path + date_string
+        print(NPath)
         my_fileN = Path(NPath)
         my_fileBN = Path(BNPath)
         print(date_string)
@@ -79,7 +85,20 @@ def get_objective_function(config)
     Daily_Drawdown = Daily_Chart["Daily Cummulative pnl"] - Roll_max
     Max_Drawdown = min(Daily_Drawdown)
     result = dict()
-    result['objs'] = np.stack([Overall_Net, Max_Drawdown], axis=-1)
+    result['objs'] = [-1*Overall_Net, Max_Drawdown]
     return result
 
+config = {}
+config['SquareOffSL'] = defs.ONELEG
+config['SquareOffTG'] = defs.ONELEG
+config['ReEntrySL'] = defs.NO
+config['ReEntryTG'] = defs.NO
+config['MaxReEnterCounterTG'] = 3
+config['MaxReEnterCounterSL'] = 3
+config['SL'] = defs.YES
+config['Target'] = defs.NO
+config['SLPc'] = 25
+config['TargetPc'] = 50
+
+get_objective_function(config)
 

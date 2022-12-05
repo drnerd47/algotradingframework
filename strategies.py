@@ -71,7 +71,6 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
       if (currentcandle.name.time() == generalconfig["ExitTime"]):
         atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
         trades = atom.GetFinalTrades(positions)
-        print(trades)
   return trades
 
 def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):

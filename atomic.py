@@ -47,7 +47,6 @@ def UpdatePosition(masterdf, positions):
                 pos["OpData"] = masterdf[masterdf['symbol'] == pos["OpSymbol"]]
     return positions
 def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC):
-    print("Entering Position!")
     positionsNotPlaced = []
     for posc in positionconfig:
         exp = GetExpiry(masterdf, generalconfig["symbol"])
@@ -129,7 +128,6 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                 if currentcandle.name in pos["OpData"].index:
                     exitprice = pos["OpData"].loc[currentcandle.name]['open']
                     exitReason = "Square Off EOD"
-                    print("Squared off Position EOD!")
                 else:
                     if pos["OpData"].empty:
                         return
