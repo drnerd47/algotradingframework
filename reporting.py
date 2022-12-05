@@ -83,14 +83,17 @@ def Report(trades, Daily_Chart):
   # Total_no_of_expiry = Expiry_info[Expiry_info["Daily pnl"] !=0]["Daily pnl"].count()
   # Avg_Expiry_Net = Expiry_Net/Total_no_of_expiry
 
-  Expiry_Date = trades["symbol"].str.slice(9, 16)
+  # Expiry_Date = trades["symbol"].str.slice(9, 16)
+  Expiry_Date = trades["symbol"].str.slice(-14, -7)
   Daily_Chart["Expiry_Date"] = pd.to_datetime(Expiry_Date, infer_datetime_format=True)
   Expiry_info = Daily_Chart[Daily_Chart["Date"] == Daily_Chart["Expiry_Date"]]
   Expiry_Net = Expiry_info["Daily pnl"].sum()
   Total_no_of_expiry = Expiry_info[Expiry_info["Daily pnl"] != 0]["Daily pnl"].count()
   Avg_Expiry_Net = Expiry_Net / Total_no_of_expiry
 
-  Max_Drawdown = Daily_Chart["Daily Cummulative pnl"].min()
+  Roll_max = Daily_Chart["Daily Cummulative pnl"].rolling(window=Daily_Chart.size, min_periods=1).max()
+  Daily_Drawdown = Daily_Chart["Daily Cummulative pnl"] - Roll_max
+  Max_Drawdown = min(Daily_Drawdown)
   Return_to_MDD_Ratio = Overall_Net / Max_Drawdown
   Lot_Size = trades["date"].value_counts()[0]
 
