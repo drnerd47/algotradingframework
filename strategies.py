@@ -113,7 +113,7 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
                                                                currentcandle, "open")
       # We enter this loop if there is any position where stop-loss is triggered.
       if (len(postoExitSL) > 0):
-        print("SL Hit, Entering the exit and reentry loop")
+        #print("SL Hit, Entering the exit and reentry loop")
         ReEnterNextSL = True
         posConfigtoExitSLNext = posConfigtoExitSL
         atom.ExitPosition(postoExitSL, currentcandle, defs.SL)
@@ -143,11 +143,9 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
 
     # Square off Remaining Legs EOD
     if (currentcandle.name.time() == generalconfig['ExitTime']) and (currentcandle.name.weekday() in generalconfig["ExitDay"]):
-      print("Entered exit day!")
       atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
       trades = atom.GetFinalTrades(positions)
       positions = []
-      print(trades)
   return (trades, positions)
 
 
