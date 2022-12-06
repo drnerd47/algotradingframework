@@ -18,36 +18,50 @@ start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 8, 31)
 delta = datetime.timedelta(days=1)
 
-strategytypes = {"IntraDayN": 1, "IntraDayBN": 2, "IntradayNRE": 3, "IntradayBNRE": 4, "ExpiryBN": 5, "ExpiryN": 6, "NextDayBN": 7, "NextDayN": 8}
-
+strategytypes = {"IntraDayN": 1, "IntraDayBN": 2, "IntradayNRE": 3, "IntradayBNRE": 4, "ExpiryBN": 5, "ExpiryN": 6, "NextDayBNMW": 7, "NextDayNMW": 8,
+                 "NextDayBNMW": 9, "NextDayNMW": 10, "IntradaySA": 11, "ExpirySA": 12, "NextDaySA": 13}
 def RunStrategy(strattypes):
     if (strattypes == strategytypes["IntraDayN"]):
-      generalconfig = genconfig.generalconfigN
-    elif (strattypes == strategytypes["IntraDayBN"])
-      generalconfig = genconfig.generalconfigBN
-    elif (strattypes == strategytypes["IntradayNRE"])
-      generalconfig = genconfig.generalconfigREN
-    elif (strattypes == strategytypes["IntradayBNRE"])
-      generalconfig = genconfig.generalconfigREBN
-    elif (strattypes == strategytypes["ExpiryBN"])
-      generalconfig = genconfig.generalconfigExpiryBN
-    elif (strattypes == strategytypes["ExpiryN"])
-      generalconfig = genconfig.generalconfigExpiryN
-    elif (strattypes == strategytypes["NextDayBN"])
-      generalconfig = genconfig.generalconfigBN
-    elif (strattypes == strategytypes["NextDayN"])
-      generalconfig = genconfig.generalconfigBN
+        generalconfig = genconfig.generalconfigIntradayN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["IntraDayBN"]):
+        generalconfig = genconfig.generalconfigIntradayBN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["IntradayNRE"]):
+        generalconfig = genconfig.generalconfigIntradayREN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["IntradayBNRE"]):
+        generalconfig = genconfig.generalconfigIntradayREBN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["ExpiryBN"]):
+        generalconfig = genconfig.generalconfigExpiryBN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["ExpiryN"]):
+        generalconfig = genconfig.generalconfigExpiryN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["NextDayBNMW"]):
+        generalconfig = [genconfig.generalconfigNextDayBNMW, genconfig.generalconfigNextDayNMW]
+        positionconfig = posconfigs.getStatArbDef()
+    elif (strattypes == strategytypes["NextDayNMW"]):
+        generalconfig = genconfig.generalconfigBN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["NextDayBNMW"]):
+        generalconfig = [genconfig.generalconfigNextDayBNMW, genconfig.generalconfigNextDayNMW]
+        positionconfig = posconfigs.getStatArbDef()
+    elif (strattypes == strategytypes["NextDayNMW"]):
+        generalconfig = genconfig.generalconfigBN
+        positionconfig = posconfigs.positionconfigShortStraddle
+    elif (strattypes == strategytypes["IntradaySA"]):
+        generalconfig = [genconfigs.generalconfigBN, genconfigs.generalconfigN]
+        positionconfig = st.positionconfitStatArbStraddle
 
-trade = pd.DataFrame()
-trades = []
 
+    trade = pd.DataFrame()
+    trades = []
 
-positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 35, 50)
-positionconfigIB = posconfigs.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
-positionconfig = positionconfigSS
-trade = pd.DataFrame()
-trades = pd.DataFrame()
-positions = []
+    trade = pd.DataFrame()
+    trades = pd.DataFrame()
+    positions = []
 
 while start_date <= end_date:
   date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
