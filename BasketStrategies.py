@@ -11,8 +11,8 @@ import generalconfigs as genconfig
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '../NIFTYOptionsData/OptionsData/Nifty/'
+Banknifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/Banknifty/'
+Nifty_Path = 'C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/nifty/'
 
 strategytypes = {"IntraDayN": 0, "IntraDayBN": 1, "IntradayNRE": 2, "IntradayBNRE": 3, "ExpiryBN": 4, "ExpiryN": 5, "NextDayBNMW": 6, "NextDayNMW": 7,
                  "NextDayBNF": 8, "NextDayNF": 9, "IntradaySA": 10, "ExpirySA": 11, "NextDaySA": 12}
@@ -89,7 +89,7 @@ def RunStrategy(strattypes):
     positions1 = []
     positions2 = []
     start_date = datetime.date(2022, 1, 3)
-    end_date = datetime.date(2022, 2, 28)
+    end_date = datetime.date(2022, 1, 10)
     delta = datetime.timedelta(days=1)
 
     while start_date <= end_date:
@@ -132,12 +132,62 @@ def RunStrategy(strattypes):
     Daily_Chart = rep.GetDailyChart(trades)
     weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
     weeklyreport = weeklyreport.reset_index(drop=True)
-    return (Daily_Chart["Daily pnl"], weeklyreport["Daily pnl"])
+    return (Daily_Chart["Daily pnl"], weeklyreport["Weekly pnl"])
 
 dailyArr = pd.DataFrame()
 weeklyArr = pd.DataFrame()
 for i in range(13):
     print("Running Strategy " + str(i))
     (daily, weekly) = RunStrategy(strattypes=i)
-    dailyArr.append(daily)
-    weeklyArr.append(weekly)
+    dailyArr = dailyArr.append(daily)
+    dailyArr = dailyArr.fillna(0)
+    weeklyArr = weeklyArr.append(weekly)
+    weeklyArr = weeklyArr.fillna(0)
+
+print("\n","Daily pnl","\n",dailyArr)
+print("\n")
+print("Weekly pnl","\n",weeklyArr)
+print("\n")
+print("Daily Correlation")
+print("\n")
+dailyArrT = dailyArr.transpose()
+print(dailyArrT.corr())
+print("\n")
+print("Weekly Correlation")
+print("\n")
+weeklyArrT = weeklyArr.transpose()
+print(weeklyArrT.corr())
+print("\n")
+print("Weekly Report")
+
+w = []
+for i in weeklyArr:
+    w.append(
+        {
+            'Strategy Average': weeklyArr[i].mean(),
+            "Max Profit" : weeklyArr[i].max(),
+            "Max Loss" : weeklyArr[i].min(),
+            "Strategy Total" : weeklyArr[i].sum()
+        }
+    )
+
+w = pd.DataFrame(w)
+print(w)
+
+print("\n")
+print("Daily Report")
+
+
+d = []
+for i in weeklyArr:
+    d.append(
+        {
+            'Strategy Average': dailyArr[i].mean(),
+            "Max Profit" : dailyArr[i].max(),
+            "Max Loss" : dailyArr[i].min(),
+            "Strategy Total" : dailyArr[i].sum()
+        }
+    )
+
+d = pd.DataFrame(d)
+print(d)
