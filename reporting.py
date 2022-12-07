@@ -118,6 +118,7 @@ def WeeklyBreakDown(Daily_Chart):
   # y = trades.resample("W",on = "date").transform(sum)
   Weekly_BreakDown = pd.DataFrame(y, columns=["Daily pnl"])
   Weekly_BreakDown['Week Count'] = ["Week" + "-" + str(i) for i in range(1, len(Weekly_BreakDown) + 1)]
+  Weekly_BreakDown = Weekly_BreakDown.rename(columns = {'Daily pnl':'Weekly pnl'})
   return Weekly_BreakDown
 
 
