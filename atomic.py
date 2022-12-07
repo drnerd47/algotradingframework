@@ -1,7 +1,6 @@
 import pandas as pd
 from pathlib import Path
 import definitions as defs
-import time
 
 def LoadDF(currpath):
     my_file = Path(currpath)
