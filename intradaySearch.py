@@ -43,15 +43,16 @@ def get_objective_function(config):
     delta = datetime.timedelta(days=1)
     SquareOffSL = config['SquareOffSL']
     SquareOffTG = config['SquareOffTG']
-    ReEntrySL = config['ReEntrySL']
-    ReEntryTG = config['ReEntryTG']
-    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
-    MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    # ReEntrySL = config['ReEntrySL']
+    # ReEntryTG = config['ReEntryTG']
+    # MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    # MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    ReEnterEvery = config['ReEnterEvery']
     SL = config['SL']
     Target = config['Target']
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, defs.BN, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    generalconfig = genconfigs.GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, defs.BN, ReEnterEvery)
     positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
     trade = pd.DataFrame()
     trades = pd.DataFrame()

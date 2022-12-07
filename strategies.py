@@ -1,5 +1,6 @@
 import atomic as atom
 import definitions as defs
+import directional as direc
 import time
 
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
@@ -149,4 +150,73 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   return (trades, positions)
 
 
-  
+def RSIStrategy(data, masterdf, generalconfig, positionconfig, start_date):
+  spotdata = data[data.index.date == start_date]
+  placed = False
+  positions = []
+  trades = []
+  MinCounter = 0
+  ReEnterCounterSL = 0
+  ReEnterCounterTG = 0
+  ReEnterNextSL = False
+  ReEnterNextTG = False
+  for s in range(len(spotdata)):
+    MinCounter += 1
+    currentcandle = spotdata.iloc[s]
+    # Check Enter time Condition
+    if currentcandle.rsi > 60 and currentcandle.adx > 20 and not placed:
+      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, "open")
+      placed = True
+    if placed:
+      # Check time based re-entry. If true, re-enter every "ReEnterEvery" number of minutes.
+      if (generalconfig["Timerenter"] == defs.YES):
+        if (MinCounter % generalconfig["ReEnterEvery"] == 0):
+          (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, "open")
+      # Check Stop Loss Condition
+      (postoExitSL, posConfigtoExitSL) = direc.CheckStopLoss(positions, currentcandle)
+
+      # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
+      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL):
+        ReEnterNextSL = False
+        ReEnterCounterSL += 1
+        if (generalconfig["SquareOffSL"] == defs.ONELEG):
+          (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, posConfigtoExitSLNext, masterdf, positions,
+                                                               currentcandle, "open")
+        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, "open")
+      # We enter this loop if there is any position where stop-loss is triggered.
+      if (len(postoExitSL) > 0):
+        ReEnterNextSL = True
+        posConfigtoExitSLNext = posConfigtoExitSL
+        direc.ExitPosition(postoExitSL, currentcandle, defs.SL)
+        if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          direc.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
+
+      # Check Target Profit Condition
+      (postoExitTarget, posConfigtoExitTG) = direc.CheckTargetCondition(positions, currentcandle)
+
+      # We enter the loop below if re-entry is true and target profit condition was triggered the previous minute.
+      if (generalconfig["ReEntryTG"] == defs.YES) and (ReEnterCounterTG <= generalconfig["MaxReEnterCounterTG"]) and (ReEnterNextTG):
+        ReEnterCounterTG += 1
+        if (generalconfig["SquareOffSL"] == defs.ONELEG):
+          (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, posConfigtoExitTGNext, masterdf, positions,
+                                                               currentcandle, "open")
+        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, "open")
+
+      # We enter this loop if there is any position where target profit condition is satisfied.
+      if (len(postoExitTarget) > 0):
+        ReEnterNextTG = True
+        posConfigtoExitTGNext = posConfigtoExitTG
+        direc.ExitPosition(postoExitTarget, currentcandle, defs.TARGET)
+        if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
+          direc.ExitPosition(positions, currentcandle, defs.SQUAREOFF)
+
+      # Square off Remaining Legs EOD
+      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        trades = atom.GetFinalTrades(positions)
+  return trades
