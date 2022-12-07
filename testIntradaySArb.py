@@ -21,8 +21,8 @@ delta = datetime.timedelta(days=1)
 
 trade = pd.DataFrame()
 trades = []
-generalconfigBN = genconfigs.generalconfigBN
-generalconfigN = genconfigs.generalconfigN
+generalconfigBN = genconfigs.generalconfigIntradayBN
+generalconfigN = genconfigs.generalconfigIntradayN
 positionconfig = st.positionconfitStatArbStraddle
 
 trades = pd.DataFrame()
