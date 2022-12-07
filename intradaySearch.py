@@ -22,15 +22,16 @@ def get_config_space_intraday_straddle():
     cs = sp.Space()
     SquareOffSL = sp.Int("SquareOffSL", 1, 2, default_value=1)
     SquareOffTG = sp.Int("SquareOffTG", 1, 12, default_value=1)
-    ReEntrySL = sp.Int("ReEntrySL", 0, 1, default_value=0)
-    ReEntryTG = sp.Int("ReEntryTG", 0, 1, default_value=0)
-    MaxReEnterCounterTG = sp.Int("MaxReEnterCounterTG", 1, 10, default_value=3)
-    MaxReEnterCounterSL = sp.Int("MaxReEnterCounterSL", 1, 10, default_value=3)
+    # ReEntrySL = sp.Int("ReEntrySL", 0, 1, default_value=0)
+    # ReEntryTG = sp.Int("ReEntryTG", 0, 1, default_value=0)
+    # MaxReEnterCounterTG = sp.Int("MaxReEnterCounterTG", 1, 10, default_value=3)
+    # MaxReEnterCounterSL = sp.Int("MaxReEnterCounterSL", 1, 10, default_value=3)
+    ReEnterEvery = sp.Int("ReEnterEvery", 2, 30, default_value=2)
     SL = sp.Int("SL", 0, 1, default_value=1)
     Target = sp.Int("Target", 0, 1, default_value=1)
     SLPc = sp.Int("SLPc", 5, 40, q = 5, default_value=25)
     TargetPc = sp.Int("SLPc", 30, 70, q = 10, default_value=50)
-    cs.add_variables([SquareOffSL, SquareOffTG, ReEntrySL, ReEntryTG, MaxReEnterCounterTG, MaxReEnterCounterSL, SL, Target, SLPc, TargetPc])
+    cs.add_variables([SquareOffSL, SquareOffTG, ReEnterEvery, SL, Target, SLPc, TargetPc])
     return cs
 
 def get_objective_function(config):
@@ -41,15 +42,16 @@ def get_objective_function(config):
     delta = datetime.timedelta(days=1)
     SquareOffSL = config['SquareOffSL']
     SquareOffTG = config['SquareOffTG']
-    ReEntrySL = config['ReEntrySL']
-    ReEntryTG = config['ReEntryTG']
-    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
-    MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    # ReEntrySL = config['ReEntrySL']
+    # ReEntryTG = config['ReEntryTG']
+    # MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    # MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    ReEnterEvery = config['ReEnterEvery']
     SL = config['SL']
     Target = config['Target']
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, defs.BN, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    generalconfig = genconfigs.GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, defs.BN, ReEnterEvery)
     positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
     trade = pd.DataFrame()
     trades = pd.DataFrame()
@@ -99,6 +101,7 @@ config['SL'] = defs.YES
 config['Target'] = defs.NO
 config['SLPc'] = 25
 config['TargetPc'] = 50
+config['ReEnterEvery'] = defs.YES
 
 get_objective_function(config)
 
