@@ -17,13 +17,15 @@ def plotCandlestickChart(data):
     fig.show()
 
 def plotBollingerBands(data):
-    plt.plot(data['date'], data['close'])
-    plt.plot(data['date'], data['lowband'], color="orange")
-    plt.plot(data['date'], data['upband'], color="orange")
-    plt.fill_between(data['date'], data['lowband'], data['upband'], alpha=0.2, color="orange")
+    plt.figure(figsize=(20,10))
+    data['close'].plot(label='CLOSE PRICE',  color="black")
+    data['upband'].plot(label='UPPER BAND', linestyle = '--', linewidth = 1, color="orange")
+    data['lowband'].plot(label="LOWER BAND",linestyle = '--', linewidth = 1, color="orange")
+    plt.legend(loc='upper left')
     plt.show()
 
 def plotMACD(data):
+    plt.figure(figsize=(20,10))
     plt.plot(data.signal, label='signal', color='red')
     plt.plot(data.MACD, label='MACD', color='green')
     plt.legend()
