@@ -45,6 +45,7 @@ def UpdatePosition(masterdf, positions):
             if (pos["Active"]):
                 pos["OpData"] = masterdf[masterdf['symbol'] == pos["OpSymbol"]]
     return positions
+    
 def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC):
     positionsNotPlaced = []
     for posc in positionconfig:
@@ -76,12 +77,12 @@ def CheckStopLoss(positions, currentcandle):
         if currentcandle.name in pos['OpData'].index :
             if (pos["PositionConfig"]["Action"] == defs.SELL):
                 optionprice = pos["OpData"].loc[currentcandle.name]['high']
-                if optionprice >= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
+                if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice >= pos['SLCond'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
                 optionprice = pos["OpData"].loc[currentcandle.name]['low']
-                if optionprice <= pos['SLCond'] and pos['Active'] and (pos["PositionConfig"]["SL"] == defs.YES):
+                if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice <= pos['SLCond'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
     return (positionstoExit, posconfigtoExit)
@@ -93,11 +94,11 @@ def CheckTargetCondition(positions, currentcandle):
         if currentcandle.name in pos['OpData'].index:
             optionprice = pos["OpData"].loc[currentcandle.name]['high']
             if (pos["PositionConfig"]["Action"] == defs.SELL):
-                if optionprice <= pos['TargetCond'] and pos['Active'] and (pos["PositionConfig"]["Target"] == defs.YES):
+                if (pos["PositionConfig"]["Target"] == defs.YES) and optionprice <= pos['TargetCond'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
-                if optionprice >= pos['TargetCond'] and pos['Active'] and (pos["PositionConfig"]["Target"] == defs.YES):
+                if (pos["PositionConfig"]["Target"] == defs.YES) and optionprice >= pos['TargetCond'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
     return (positionstoExit, posconfigtoExit)
