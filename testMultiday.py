@@ -5,7 +5,8 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
-import positionconfigs as st
+import positionconfigs as posconfigs
+import generalconfigs as genconfigs
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -17,15 +18,10 @@ start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 8, 31)
 delta = datetime.timedelta(days=1)
 
+generalconfig = genconfigs.generalconfigExpiryBN
 
-trade = pd.DataFrame()
-trades = []
-
-
-generalconfig = generalconfigExpiry
-
-positionconfigSS = st.getStraddles(defs.SELL, defs.NO, defs.NO, 35, 50)
-positionconfigIB = st.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
+positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 35, 50)
+positionconfigIB = posconfigs.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
 positionconfig = positionconfigSS
 trade = pd.DataFrame()
 trades = pd.DataFrame()

@@ -6,7 +6,7 @@ import pandas as pd
 import strategies
 import reporting as rep
 import generalconfigs as genconfigs
-import positionconfigs as st
+import positionconfigs as posconfings
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -18,8 +18,8 @@ end_date = datetime.date(2022, 8, 31)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.generalconfigBN
-positionconfig = st.positionconfigIronButterfly
+generalconfig = genconfigs.generalconfigIntradayBN
+positionconfig = posconfings.positionconfigIronButterfly
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()
