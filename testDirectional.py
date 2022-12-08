@@ -18,40 +18,40 @@ end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
-Banknifty_Path = "../NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
+Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Nifty/"
 
 
-#generalconfig = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased"}
-generalconfig = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased"}
-
-# positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
-#                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL},
-#                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
-#                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL}, 
-#                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
-#                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL},
-#                     {"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
-#                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR},
-#                       {"Type":defs.CALL,"Action":defs.SELL,"Delta":0,"LotSize":1,
-#                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}, 
-#                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
-#                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}]
+generalconfig = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased"}
+#generalconfig = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased"}
 
 positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}, 
-                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL},
+                      {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL},
+                    {"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR},
+                      {"Type":defs.CALL,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}]
 
-#TIconfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 60, "ThreshBear": 40, "Window": 14, "SL": defs.YES, "Target": defs.YES, "SLBull": 40, "SLBear": 60, 
-#            "TargetBull": 70, "TargetBear": 18, "BullOperator": operator.gt, "BearOperator": operator.lt}, 
-#			{"TI": "ADX","columnname":"ADX14", "Window": 14, "ThreshBull": 20, "ThreshBear": 20, "SL": defs.NO, "Target": defs.NO, 
-#            "BullOperator": operator.gt, "BearOperator": operator.gt}]
+# positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+#                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}, 
+#                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
+#                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
 
-TIconfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 40, "ThreshBear": 60, "Window": 14, "SL": defs.NO, "Target": defs.NO,  
-            "BullOperator": operator.lt, "BearOperator": operator.gt}, 
-			{"TI": "RSI","columnname":"RSI2", "Window": 2, "ThreshBull": 10, "ThreshBear": 90, "SL": defs.NO, "Target": defs.NO, 
-            "BullOperator": operator.gt, "BearOperator": operator.gt}]
+TIconfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 60, "ThreshBear": 40, "Window": 14, "SL": defs.YES, "Target": defs.YES, "SLBull": 40, "SLBear": 60, 
+           "TargetBull": 70, "TargetBear": 18, "BullOperator": operator.gt, "BearOperator": operator.lt}, 
+			{"TI": "ADX","columnname":"ADX14", "Window": 14, "ThreshBull": 20, "ThreshBear": 20, "SL": defs.NO, "Target": defs.NO, 
+           "BullOperator": operator.gt, "BearOperator": operator.gt}]
+
+# TIconfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 40, "ThreshBear": 60, "Window": 14, "SL": defs.NO, "Target": defs.NO,  
+#             "BullOperator": operator.lt, "BearOperator": operator.gt}, 
+# 			{"TI": "RSI","columnname":"RSI2", "Window": 2, "ThreshBull": 10, "ThreshBear": 90, "SL": defs.NO, "Target": defs.NO, 
+#             "BullOperator": operator.gt, "BearOperator": operator.gt}]
 
 if (generalconfig["symbol"] == defs.N):
     data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])

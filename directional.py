@@ -56,9 +56,12 @@ def getBollingerBand(spotdata, period, perioddev):
     tempdf['lowband'] = bb.bollinger_lband()
     return tempdf
 
-def getMACD(spotdata, fastperiod, slowperiod, ):
+def getMACD(spotdata, fastperiod, slowperiod):
     tempdf = spotdata
-    macd = ta.trend.MACD(tempdf.close, )
+    macd = ta.trend.MACD(tempdf.close, slowperiod, fastperiod)
+    tempdf['MACD'] = macd.macd()
+    tempdf['signal'] = macd.macd_signal()
+    return tempdf
 
 def getTI(spotdata, TIconfig):
     for t in TIconfig:
