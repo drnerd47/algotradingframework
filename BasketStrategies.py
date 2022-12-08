@@ -111,7 +111,7 @@ def RunStrategy(strattypes):
                     trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
                 else:
                     (trade, positions) = strategies.MultiDayStrategy(masterdf, positions, generalconfig, positionconfig)
-                    # print(trade)
+                
             else:
                 if (intraday == True):
                     trade1 = strategies.IntraDayStrategy(masterdfBN, generalconfig[0], positionconfig[0])
@@ -137,13 +137,6 @@ def RunStrategy(strattypes):
 
 dailyArr = pd.DataFrame()
 weeklyArr = pd.DataFrame()
-#for i in range(13):
-#    print("Running Strategy " + str(i))
-#    (daily, weekly) = RunStrategy(strattypes=i)
-#    dailyArr = dailyArr.append(daily)
-#    dailyArr = dailyArr.fillna(0)
-#    weeklyArr = weeklyArr.append(weekly)
-#    weeklyArr = weeklyArr.fillna(0)
 
 for i in range(13):
     print("Running Strategy " + str(i))
@@ -169,38 +162,16 @@ col_list = list(weeklyArr)
 weeklyArr['Mean Strategy'] = weeklyArr[col_list].mean(axis=1)
 weeklyArr['Sum Strategy'] = weeklyArr[col_list].sum(axis=1)
 
+df = pd.DataFrame()
+df = weeklyArr.cumsum(axis=0)
+Roll_max = df.rolling(window = weeklyArr.size, min_periods=1).max()
+Weekly_Drawdown = df - Roll_max
+Max_Drawdown = Weekly_Drawdown.min()
+weeklyArr.loc["No. of Win Weeks"] = weeklyArr[weeklyArr > 0].count()
+weeklyArr.loc["No. of Bad Weeks"] = weeklyArr[weeklyArr < 0].count()
+weeklyArr.loc["Max Drawdown"] = Max_Drawdown
+print("\n")
 print(weeklyArr)
 print("\n")
-weeklyCorr.to_csv("Results/BasketCorr.csv")
-weeklyArr.to_csv("Results/BasketResults.csv")
-#w = []
-#for i in weeklyArr:
-#    w.append(
-#        {
-#            'Strategy Average': weeklyArr[i].mean(),
-#            "Max Profit" : weeklyArr[i].max(),
-#            "Max Loss" : weeklyArr[i].min(),
-#            "Strategy Total" : weeklyArr[i].sum()
-#        }
-#    )
-
-#w = pd.DataFrame(w)
-#print(w)
-
-#print("\n")
-#print("Daily Report")
-
-
-#d = []
-#for i in weeklyArr:
-#    d.append(
-#        {
-#            'Strategy Average': dailyArr[i].mean(),
-#            "Max Profit" : dailyArr[i].max(),
-#            "Max Loss" : dailyArr[i].min(),
-#            "Strategy Total" : dailyArr[i].sum()
-#        }
-#    )
-
-#d = pd.DataFrame(d)
-#print(d)
+weeklyCorr.to_csv("C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/BasketCorr.csv")
+weeklyArr.to_csv("C:/Users/shahm/(8)Work/IIT Bombay/OptionsData/BasketResults.csv")
