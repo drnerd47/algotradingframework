@@ -3,8 +3,6 @@ import ta
 from pathlib import Path
 import datetime
 import time
-from ta.trend import ADXIndicator
-from ta.momentum import RSIIndicator
 import atomic as atom
 import definitions as defs
 
