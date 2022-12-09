@@ -10,15 +10,15 @@ import positionconfigs as posconfings
 import warnings
 
 warnings.filterwarnings("ignore")
-Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
+Banknifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/Banknifty/'
+Nifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/nifty/'
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 8, 31)
+end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.generalconfigIntradayBN
+generalconfig = genconfigs.generalconfigIntradayREBN
 positionconfig = posconfings.positionconfigIronButterfly
 
 trade = pd.DataFrame()
@@ -48,26 +48,29 @@ trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"],axis = 1)
 
+print("\n")
 print(trades)
-trades.to_csv("Results/trades.csv")
+trades.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/trades.csv")
 
+print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv("Results/trades.csv")
+Daily_Chart.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/DailyChart.csv")
 
+print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv("Results/report.csv")
+report.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/Report.csv")
 
+print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
+weeklyreport.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/WeeklyReport.csv")
 
-print(report["Overall Profit"])
-print(report["Max Drawdown(MDD)"])
+print("\n")
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
 print(monthlyreport)
 
+print("\n")
 dayofweek = rep.DayOfWeek(Daily_Chart)
 print(dayofweek)
-
-

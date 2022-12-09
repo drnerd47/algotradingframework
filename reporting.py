@@ -1,8 +1,6 @@
 import pandas as pd
-
 import numpy as np
 import pandas as pd
-
 
 def GetDailyChart(trades):
   Daily_Chart = pd.DataFrame(trades, columns=["date", "Daily pnl", "DayOfWeek", "Month", "Year"])
@@ -74,23 +72,12 @@ def Report(trades, Daily_Chart):
   Win_Ratio = Total_no_of_win_trades / Total_no_of_trades
   Loss_Ratio = Total_no_of_bad_trades / Total_no_of_trades
   Expectancy = ((Avg_Profit_win_trades / -Avg_Loss_bad_trades) * Win_Ratio) - Loss_Ratio
-  # trades_op = trades['symbol'].str.slice(9, 16)
-  # x = pd.to_datetime(trades_op, infer_datetime_format=True)
-  # trades["Expiry Date"] = x
-  # Expiry_info = trades[trades["date"] == x]
-  # x = pd.to_datetime(x)
-  # Expiry_Net = Expiry_info["Daily pnl"].sum()
-  # Total_no_of_expiry = Expiry_info[Expiry_info["Daily pnl"] !=0]["Daily pnl"].count()
-  # Avg_Expiry_Net = Expiry_Net/Total_no_of_expiry
-
-  # Expiry_Date = trades["symbol"].str.slice(9, 16)
   Expiry_Date = trades["symbol"].str.slice(-14, -7)
   Daily_Chart["Expiry_Date"] = pd.to_datetime(Expiry_Date, infer_datetime_format=True)
   Expiry_info = Daily_Chart[Daily_Chart["Date"] == Daily_Chart["Expiry_Date"]]
   Expiry_Net = Expiry_info["Daily pnl"].sum()
   Total_no_of_expiry = Expiry_info[Expiry_info["Daily pnl"] != 0]["Daily pnl"].count()
   Avg_Expiry_Net = Expiry_Net / Total_no_of_expiry
-
   Roll_max = Daily_Chart["Daily Cummulative pnl"].rolling(window=Daily_Chart.size, min_periods=1).max()
   Daily_Drawdown = Daily_Chart["Daily Cummulative pnl"] - Roll_max
   Max_Drawdown = min(Daily_Drawdown)
@@ -122,39 +109,55 @@ def WeeklyBreakDown(Daily_Chart):
   return Weekly_BreakDown
 
 
+
 def MonthlyBreakDown(Daily_Chart):
+  
+  print("Total BreakDown For Months","\n")
   y = Daily_Chart.groupby("Year")
-  a = print("Yearly BreakDown For Month", "\n")
   for key, item in y:
     p = y.get_group(key).groupby("Month")["Daily pnl"].sum()
     Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                    'November', 'December']
+  
+    file = open('C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/MonthlyReport.txt','w')
+    file.write("Yearly BreakDown For Months\n\n")
+    file.write(str(key) + '\n\n' )
     p = p.reindex(Month_order, axis=0)
-    b = print(key, "\n")
-    c = print(p, "\n\n")
-  e = print("Total of Monthly BreakDown", "\n\n")
+    file.write(str(p) + "\n\n")
+    
+  
+
+    #e = "Total of Monthly BreakDown"
   f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
   Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-                 'November', 'December']
+                'November', 'December']
   f = f.reindex(Month_order, axis=0)
-  f = print(f, "\n")
-  repa = {a, b, c, e, f}
-  return repa
+  
+  file.write('Total BreakDown For Months\n\n')
+  file.write(str(f) + "\n\n")
+  file.close()
+  #repa = {a, b, c, e, f}
+  return f
 
 def DayOfWeek(Daily_Chart):
+  print("Total of Day of Week BreakDown","\n")
   y = Daily_Chart.groupby("Year")
   z = Daily_Chart.groupby("DayOfWeek")
-  a = print("Yearly BreakDown For Day Of Week","\n")
+  a = "DayOfWeek\n"
+  file = open('C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/DayOfWeek.txt','w')
   for key, item in y:
     r = y.get_group(key).groupby("DayOfWeek")['Daily pnl'].sum()
     Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     r = r.reindex(Week_order, axis=0)
-    b = print(key,"\n")
-    d = print(r,"\n\n")
-  e = print("Total of Day of Week BreakDown","\n\n")
+    file.write(a + '\n\n')
+    file.write(str(key) + '\n\n')
+    file.write(str(r) + "\n\n")
+  
+  e = "Total of Day of Week BreakDown\n\n"
   g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
   Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   g = g.reindex(Week_order, axis=0)
-  g = print(g,"\n")
-  repa = {a,b,d,e,g}
-  return repa
+  file.write(e)
+  file.write(str(g) + '\n\n')
+  file.close()
+  return g

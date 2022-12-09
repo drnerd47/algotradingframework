@@ -11,8 +11,8 @@ import generalconfigs as genconfig
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
+Banknifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/Banknifty/'
+Nifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/nifty/'
 
 strategytypes = {"IntraDayN": 0, "IntraDayBN": 1, "IntradayNRE": 2, "IntradayBNRE": 3, "ExpiryBN": 4, "ExpiryN": 5, "NextDayBNMW": 6, "NextDayNMW": 7,
                  "NextDayBNF": 8, "NextDayNF": 9, "IntradaySA": 10, "ExpirySA": 11, "NextDaySA": 12}
