@@ -51,9 +51,9 @@ def getADX(spotdata, columnname, period=14):
     tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
     return tempdf
 
-def getBollingerBand(spotdata, period, perioddev):
+def getBollingerBand(spotdata, period, stddev):
     tempdf = spotdata
-    bb = ta.volatility.BollingerBands(tempdf.close, period, perioddev)
+    bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
     tempdf['upband'] = bb.bollinger_hband()
     tempdf['sma'] = bb.bollinger_mavg()
     tempdf['lowband'] = bb.bollinger_lband()
@@ -75,6 +75,12 @@ def getTI(spotdata, TIconfig):
             data = getRSI(spotdata, t['columnname'], t['Window'])
         if t['TI'] == "ADX":
             data = getADX(spotdata, t['columnname'], t['Window'])
+        if t['TI'] == 'BB':
+            data = getBollingerBand(spotdata, t['period'], t['stddev'])
+        if t['TI'] == 'MACD':
+            data = getMACD(spotdata, t['fastperiod'], t['slowperiod'])
+        if t['TI'] == 'ST':
+            data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'])
     return data
 
 def getSuperTrendIndicator(spotdata, period, multiplier):
