@@ -19,7 +19,7 @@ delta = datetime.timedelta(days=1)
 
 
 generalconfig = genconfigs.generalconfigIntradayREBN
-positionconfig = posconfings.positionconfigIronButterfly
+positionconfig = posconfings.positionconfigShortStraddle
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()
