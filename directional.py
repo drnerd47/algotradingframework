@@ -5,6 +5,7 @@ import datetime
 import time
 import atomic as atom
 import definitions as defs
+import supertrend as st
 
 # This function resamples data to required frequency from 1 min data
 def Resample(df, freq='1T'): # freq format,  for 2min freq='2T', for 3min freq='3T' 
@@ -16,7 +17,7 @@ def Resample(df, freq='1T'): # freq format,  for 2min freq='2T', for 3min freq='
     })
     return resample_df
 
-# This function gets spot data of multiple days
+# This function gets spot data of multiple days and resamples for required frequency
 def getMultipledayData(start_date, end_date, path, symbol, freq):        
     df_list = []
     delta = datetime.timedelta(days=1)
@@ -53,7 +54,11 @@ def getBollingerBand(spotdata, period, perioddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, perioddev)
     tempdf['upband'] = bb.bollinger_hband()
+    tempdf['sma'] = bb.bollinger_mavg()
     tempdf['lowband'] = bb.bollinger_lband()
+    tempdf['hsignal'] = bb.bollinger_hband_signal()
+    tempdf['lsignal'] = bb.bollinger_lband_signal()
+    tempdf['bbsignal'] = tempdf.lsignal - tempdf.hsignal
     return tempdf
 
 def getMACD(spotdata, fastperiod, slowperiod):
@@ -71,6 +76,10 @@ def getTI(spotdata, TIconfig):
             data = getADX(spotdata, t['columnname'], t['Window'])
     return data
 
+def getSuperTrendIndicator(spotdata, period, multiplier):
+    tempdf = spotdata
+    df = st.SuperTrend(tempdf, period, multiplier)
+    return df
 
 # Check entry condition based on the TIconfig
 def CheckEntryCondition(currentcandle, TIconfig):
