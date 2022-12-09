@@ -151,9 +151,6 @@ def GetFinalTrades(positions):
     return trades
 
 
-# def GetMultipledayData(start_date, end_date, currpath):
-#     df = LoadDF(currpath)
-
 
 
 
