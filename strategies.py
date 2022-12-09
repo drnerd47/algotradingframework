@@ -1,5 +1,6 @@
 import atomic as atom
 import definitions as defs
+import directional as direc
 import time
 
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
@@ -149,4 +150,48 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   return (trades, positions)
 
 
-  
+def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig, start_date):
+  spotdata = data[data.index.date == start_date]
+  placedBull = False
+  placedBear = False
+  positions = []
+  trades = []
+  for s in range(len(spotdata)): 
+    currentcandle = spotdata.iloc[s]
+    (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
+    # Check Enter Condition
+    if bullentry and not placedBull:
+      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, "close", defs.BULL)
+      placedBull = True
+    if bearentry and not placedBear:
+      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, "close", defs.BEAR)
+      placedBear = True
+    if placedBull or placedBear:
+      # Check Stop Loss Condition
+      if (generalconfig["StopLoss"]):
+        if (generalconfig["StopLossCond"] == "TIBased"):
+          postoExitSL = direc.CheckStopLossTI(positions, currentcandle, TIconfig)
+        elif (generalconfig["StopLossCond"] == "PremiumBased"):
+          (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+          
+        # We enter this loop if there is any position where stop-loss is triggered.
+        if (len(postoExitSL) > 0):
+          direc.ExitPosition(postoExitSL, currentcandle, defs.SL)
+
+      # Check Target Profit Condition
+      if (generalconfig["Target"]):
+        if (generalconfig["TargetCond"] == "TIBased"):
+          postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, TIconfig)
+        elif (generalconfig["TargetCond"] == "PremiumBased"):
+          (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+        # We enter this loop if there is any position where target profit condition is satisfied.
+        if (len(postoExitTarget) > 0):
+          direc.ExitPosition(postoExitTarget, currentcandle, defs.TARGET)
+
+      # Square off Remaining Legs EOD
+      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        trades = atom.GetFinalTrades(positions)
+
+    
+  return trades

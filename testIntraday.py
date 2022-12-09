@@ -5,62 +5,72 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
-import time
-
+import generalconfigs as genconfigs
+import positionconfigs as posconfings
 import warnings
+
 warnings.filterwarnings("ignore")
+Banknifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/Banknifty/'
+Nifty_Path = 'C:/Users/shahm/(8)Work/SRE/OptionsData/nifty/'
 
-Banknifty_Path = 'D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '/Users/rishabhiyer/Software/algotrading/NIFTYOptionsData/OptionsData/Nifty/'
-
-start_date = datetime.date(2022, 1, 3)
-end_date = datetime.date(2022, 1, 10)
+start_date = datetime.date(2022, 1, 1)
+end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
+generalconfig = genconfigs.generalconfigIntradayREBN
+positionconfig = posconfings.positionconfigShortStraddle
+
 trade = pd.DataFrame()
-trades = []
-generalconfig = {"SquareOffSL":defs.EXITLEG,"SquareOffTG":defs.EXITLEG,
-                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":"BANKNIFTY",
-                     "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "debug": defs.DEBUGTIME}
-positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO},
-                      {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"SLPc":25,"TargetPc":50,"LotSize":1,
-                       "SL": defs.YES,"Target":defs.NO}]
+trades = pd.DataFrame()
+
 while start_date <= end_date:
   date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
-  currpath = Banknifty_Path + date_string
-  print(currpath)
-  my_file = Path(currpath)
-
-  if my_file.exists():
-    masterdf = atom.LoadDF(currpath)
-    tic = time.perf_counter()
-    trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
-    toc = time.perf_counter()
-    print(f"Time taken is {toc - tic:0.4f} seconds")
-    trades.append(trade)
+  BNPath = Banknifty_Path + date_string
+  NPath = Nifty_Path + date_string
+  my_fileN = Path(NPath)
+  my_fileBN = Path(BNPath)
+  print(date_string)
+  if my_fileN.exists() and my_fileBN.exists():
+    masterdfN = atom.LoadDF(NPath)
+    masterdfBN = atom.LoadDF(BNPath)
+    if (generalconfig["symbol"] == defs.BN):
+      trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+    elif (generalconfig["symbol"] == defs.N):
+      trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
+    if (len(trade) > 0):
+      trades = trades.append(trade)
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
 
+trades['date'] = pd.to_datetime(trades["date"])
+trades = trades.reset_index()
+trades = trades.drop(["index"],axis = 1)
 
-trades = pd.concat(trades)
+print("\n")
 print(trades)
-# report = rep.Report(trades)
-# print(report)
+trades.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/trades.csv")
 
-dailydata = rep.GetDailyChart(trades)
-print(dailydata)
+print("\n")
+Daily_Chart = rep.GetDailyChart(trades)
+print(Daily_Chart)
+Daily_Chart.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/DailyChart.csv")
 
-# weeklybreakdown = rep.WeeklyBreakDown(trades)
-# print(weeklybreakdown)
+print("\n")
+report = rep.Report(trades, Daily_Chart)
+print(report)
+report.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/Report.csv")
 
-# monthlybreakdown = rep.MonthlyBreakDown(trades)
-# print(monthlybreakdown)
+print("\n")
+weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
+print(weeklyreport)
+weeklyreport.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/WeeklyReport.csv")
 
-# dayofweek = rep.DayOfWeek(trades)
-# print(dayofweek)
+print("\n")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+print(monthlyreport)
 
-
-
+print("\n")
+dayofweek = rep.DayOfWeek(Daily_Chart)
+print(dayofweek)
