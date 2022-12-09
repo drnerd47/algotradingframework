@@ -109,3 +109,8 @@ positionconfig2_RSI = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize"
                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}, 
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
+
+positionconfigBB = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 20}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 20}]

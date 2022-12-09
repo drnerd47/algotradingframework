@@ -51,15 +51,15 @@ def getADX(spotdata, columnname, period=14):
     tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
     return tempdf
 
-def getBollingerBand(spotdata, period, stddev):
+def getBollingerBand(spotdata,columnname, period, stddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
     tempdf['upband'] = bb.bollinger_hband()
     tempdf['sma'] = bb.bollinger_mavg()
     tempdf['lowband'] = bb.bollinger_lband()
-    tempdf['hsignal'] = bb.bollinger_hband_signal()
-    tempdf['lsignal'] = bb.bollinger_lband_signal()
-    tempdf['bbsignal'] = tempdf.lsignal - tempdf.hsignal
+    tempdf['hsignal'] = bb.bollinger_hband_indicator()
+    tempdf['lsignal'] = bb.bollinger_lband_indicator()
+    tempdf[columnname] = tempdf.lsignal - tempdf.hsignal
     return tempdf
 
 def getMACD(spotdata, fastperiod, slowperiod):
@@ -76,7 +76,7 @@ def getTI(spotdata, TIconfig):
         if t['TI'] == "ADX":
             data = getADX(spotdata, t['columnname'], t['Window'])
         if t['TI'] == 'BB':
-            data = getBollingerBand(spotdata, t['period'], t['stddev'])
+            data = getBollingerBand(spotdata,t['columnname'], t['period'], t['stddev'])
         if t['TI'] == 'MACD':
             data = getMACD(spotdata, t['fastperiod'], t['slowperiod'])
         if t['TI'] == 'ST':

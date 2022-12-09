@@ -10,3 +10,6 @@ TIconfig2_RSI = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 40, "ThreshB
             "BullOperator": operator.lt, "BearOperator": operator.gt}, 
 			{"TI": "RSI","columnname":"RSI2", "Window": 2, "ThreshBull": 10, "ThreshBear": 90, "SL": defs.NO, "Target": defs.NO, 
             "BullOperator": operator.gt, "BearOperator": operator.gt}]
+
+TIconfigBB = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": 0, "ThreshBear": 0, "period": 14,"stddev":3, "SL": defs.NO, "Target": defs.NO,
+                "BullOperator": operator.gt, "BearOperator": operator.lt}]

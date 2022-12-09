@@ -67,3 +67,4 @@ generalconfigIntradayREN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
 
 generalconfigRSI_ADX = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased"}
 
+generalconfigBB = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '1T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased"}
