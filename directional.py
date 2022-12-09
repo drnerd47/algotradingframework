@@ -6,6 +6,7 @@ import time
 import atomic as atom
 import definitions as defs
 import supertrend as st
+import numpy as np
 
 # This function resamples data to required frequency from 1 min data
 def Resample(df, freq='1T'): # freq format,  for 2min freq='2T', for 3min freq='3T' 
@@ -65,7 +66,7 @@ def getMACD(spotdata, fastperiod, slowperiod):
     tempdf = spotdata
     macd = ta.trend.MACD(tempdf.close, slowperiod, fastperiod)
     tempdf['MACD'] = macd.macd()
-    tempdf['signal'] = macd.macd_signal()
+    tempdf['MACD_signal'] = macd.macd_signal()
     return tempdf
 
 def getTI(spotdata, TIconfig):
@@ -79,6 +80,7 @@ def getTI(spotdata, TIconfig):
 def getSuperTrendIndicator(spotdata, period, multiplier):
     tempdf = spotdata
     df = st.SuperTrend(tempdf, period, multiplier)
+    df['signal'] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
     return df
 
 # Check entry condition based on the TIconfig

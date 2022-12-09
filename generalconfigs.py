@@ -65,3 +65,5 @@ generalconfigIntradayREN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
                  "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5}
 
+generalconfigRSI_ADX = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased"}
+

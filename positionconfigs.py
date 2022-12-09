@@ -90,3 +90,22 @@ def getStatArb(Delta1, Delta2, SL1, Target1, SLPc1, TargetPc1, SL2, Target2, SLP
 
 def getStatArbDef():
     return [positionconfigShortStraddle, positionconfigLongStraddle]
+
+
+positionconfigRSI_ADX = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL},
+                      {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL},
+                    {"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR},
+                      {"Type":defs.CALL,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}]
+
+positionconfig2_RSI = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}, 
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
