@@ -124,8 +124,6 @@ def MonthlyBreakDown(Daily_Chart):
     file.write(str(key) + '\n\n' )
     p = p.reindex(Month_order, axis=0)
     file.write(str(p) + "\n\n")
-    
-  
 
     #e = "Total of Monthly BreakDown"
   f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
