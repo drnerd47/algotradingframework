@@ -14,11 +14,22 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022,1,1)
+start_date = datetime.date(2022, 9, 1)
 end_date = datetime.date(2022, 9, 30)
 delta = datetime.timedelta(days=1)
 
-Root = "../"
+user = "SD"
+
+if user == "SD":
+  Root = "D:/Work/Sykes and Ray/"
+  Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
+elif user == "RI":
+  Root = "../"
+  Result_path = "Results/"
+elif user == "MS":
+  Root = "Moulik's File path"
+  Result_path = " Moulik's result path"
+
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
@@ -66,26 +77,26 @@ trades = trades.drop(["index"],axis = 1)
 
 print("trades is ", trades)
 Daily_Chart = rep.GetDailyChart(trades)
-trades.to_csv("Results/trades.csv")
+trades.to_csv(Result_path+"trades.csv")
 print("daily chart is ",Daily_Chart)
-Daily_Chart.to_csv("Results/dailychart.csv")
+Daily_Chart.to_csv(Result_path+"dailychart.csv")
 
 report = rep.Report(trades, Daily_Chart)
 print("report is ",report)
-report.to_csv("Results/report.csv")
+report.to_csv(Result_path+"report.csv")
 
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
-weeklyreport.to_csv("Results/weeklyreport.csv")
+weeklyreport.to_csv(Result_path+"weeklyreport.csv")
 print(weeklyreport)
 
 print(report["Overall Profit"])
 print(report["Max Drawdown(MDD)"])
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-rep.OutputMonthlyBreakDown(Daily_Chart, 'Results/monthlyreport.csv')
+rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.csv')
 #monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
 print("monthly report is ",monthlyreport)
 
 dayofweek = rep.DayOfWeek(Daily_Chart)
-rep.OutputDayofWeek(Daily_Chart, 'Results/dayofweekreport.csv')
+rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.csv')
 # #dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
 print("day of week is ",dayofweek)
