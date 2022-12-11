@@ -108,43 +108,40 @@ def WeeklyBreakDown(Daily_Chart):
   Weekly_BreakDown = Weekly_BreakDown.rename(columns = {'Daily pnl':'Weekly pnl'})
   return Weekly_BreakDown
 
-
-
-def MonthlyBreakDown(Daily_Chart):
-  
-  print("Total BreakDown For Months","\n")
+def OutputMonthlyBreakDown(Daily_Chart, filename):
   y = Daily_Chart.groupby("Year")
   for key, item in y:
     p = y.get_group(key).groupby("Month")["Daily pnl"].sum()
     Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                    'November', 'December']
-  
-    file = open('C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/MonthlyReport.txt','w')
+
+    file = open(filename, 'w')
     file.write("Yearly BreakDown For Months\n\n")
-    file.write(str(key) + '\n\n' )
+    file.write(str(key) + '\n\n')
     p = p.reindex(Month_order, axis=0)
     file.write(str(p) + "\n\n")
-    
-  
+  f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
+  Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
+                 'November', 'December']
+  f = f.reindex(Month_order, axis=0)
 
-    #e = "Total of Monthly BreakDown"
+  file.write('Total BreakDown For Months\n\n')
+  file.write(str(f) + "\n\n")
+  file.close()
+
+def MonthlyBreakDown(Daily_Chart):
+  print("Total BreakDown For Months","\n")
   f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
   Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                 'November', 'December']
   f = f.reindex(Month_order, axis=0)
-  
-  file.write('Total BreakDown For Months\n\n')
-  file.write(str(f) + "\n\n")
-  file.close()
   #repa = {a, b, c, e, f}
   return f
 
-def DayOfWeek(Daily_Chart):
-  print("Total of Day of Week BreakDown","\n")
-  y = Daily_Chart.groupby("Year")
-  z = Daily_Chart.groupby("DayOfWeek")
+def OutputDayofWeek(Daily_Chart, filename):
   a = "DayOfWeek\n"
-  file = open('C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/DayOfWeek.txt','w')
+  file = open('filename', 'w')
+  y = Daily_Chart.groupby("Year")
   for key, item in y:
     r = y.get_group(key).groupby("DayOfWeek")['Daily pnl'].sum()
     Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -152,12 +149,15 @@ def DayOfWeek(Daily_Chart):
     file.write(a + '\n\n')
     file.write(str(key) + '\n\n')
     file.write(str(r) + "\n\n")
-  
-  e = "Total of Day of Week BreakDown\n\n"
   g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
   Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   g = g.reindex(Week_order, axis=0)
-  file.write(e)
   file.write(str(g) + '\n\n')
   file.close()
+
+def DayOfWeek(Daily_Chart):
+  print("Total of Day of Week BreakDown","\n")
+  g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
+  Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+  g = g.reindex(Week_order, axis=0)
   return g

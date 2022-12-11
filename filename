@@ -1,0 +1,25 @@
+DayOfWeek
+
+
+2022
+
+DayOfWeek
+Monday       37706.25
+Tuesday       4016.25
+Wednesday    34481.25
+Thursday     41663.75
+Friday       37552.50
+Saturday          NaN
+Sunday            NaN
+Name: Daily pnl, dtype: float64
+
+DayOfWeek
+Monday       37706.25
+Tuesday       4016.25
+Wednesday    34481.25
+Thursday     41663.75
+Friday       37552.50
+Saturday          NaN
+Sunday            NaN
+Name: Daily pnl, dtype: float64
+

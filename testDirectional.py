@@ -15,21 +15,20 @@ import TIconfigs
 warnings.filterwarnings("ignore")
 
 start_date = datetime.date(2022,1,1)
-end_date = datetime.date(2022, 1, 30)
+end_date = datetime.date(2022, 9, 30)
 delta = datetime.timedelta(days=1)
 
-
-Banknifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Nifty/"
-
-
-generalconfig = genconfigs.generalconfigBB
-
-positionconfig = posconfigs.positionconfigBB
-
-TIconfig = TIconfigs.TIconfigBB
+Root = "../"
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
+generalconfig = genconfigs.generalconfigBNST
+#generalconfig = genconfigs.generalconfigBNRSIADX
+positionconfig = posconfigs.positionconfigsingleselldirecSL
+#TIconfig = TIconfigs.TIconfigRSI_ADX
+#TIconfig = TIconfigs.TIconfigBB2
+TIconfig = TIconfigs.TIconfigST
 if (generalconfig["symbol"] == defs.N):
     data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
 else:
@@ -66,27 +65,30 @@ trades = trades.reset_index()
 trades = trades.drop(["index"],axis = 1)
 
 print("trades is ", trades)
-# Daily_Chart = rep.GetDailyChart(trades)
-# print("daily chart is ",Daily_Chart)
-# Daily_Chart.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dailychart.csv")
+Daily_Chart = rep.GetDailyChart(trades)
+trades.to_csv("Results/trades.csv")
+print("daily chart is ",Daily_Chart)
+Daily_Chart.to_csv("Results/dailychart.csv")
 
-# report = rep.Report(trades, Daily_Chart)
-# print("report is ",report)
-# report.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/report.csv")
+report = rep.Report(trades, Daily_Chart)
+print("report is ",report)
+report.to_csv("Results/report.csv")
 
-# weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
-# weeklyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/weeklyreport.csv")
-# print(weeklyreport)
+weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
+weeklyreport.to_csv("Results/weeklyreport.csv")
+print(weeklyreport)
 
-# print(report["Overall Profit"])
-# print(report["Max Drawdown(MDD)"])
-# monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-# #monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
-# print("monthly report is ",monthlyreport)
+print(report["Overall Profit"])
+print(report["Max Drawdown(MDD)"])
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+rep.OutputMonthlyBreakDown(Daily_Chart, 'Results/monthlyreport.csv')
+#monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
+print("monthly report is ",monthlyreport)
 
-# dayofweek = rep.DayOfWeek(Daily_Chart)
+dayofweek = rep.DayOfWeek(Daily_Chart)
+rep.OutputDayofWeek(Daily_Chart, 'Results/dayofweekreport.csv')
 # #dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
-# print("day of week is ",dayofweek)
+print("day of week is ",dayofweek)
 
 
 

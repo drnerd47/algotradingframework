@@ -55,11 +55,11 @@ def getBollingerBand(spotdata,columnname, period, stddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
     tempdf['upband'] = bb.bollinger_hband()
-    tempdf['sma'] = bb.bollinger_mavg()
+    #tempdf['sma'] = bb.bollinger_mavg()
     tempdf['lowband'] = bb.bollinger_lband()
-    tempdf['hsignal'] = bb.bollinger_hband_indicator()
-    tempdf['lsignal'] = bb.bollinger_lband_indicator()
-    tempdf[columnname] = tempdf.lsignal - tempdf.hsignal
+    #tempdf['hsignal'] = bb.bollinger_hband_indicator()
+    #tempdf['lsignal'] = bb.bollinger_lband_indicator()
+    tempdf[columnname] = (tempdf.close - bb.bollinger_lband())/(bb.bollinger_hband() - bb.bollinger_lband())
     return tempdf
 
 def getMACD(spotdata, fastperiod, slowperiod):
@@ -80,13 +80,13 @@ def getTI(spotdata, TIconfig):
         if t['TI'] == 'MACD':
             data = getMACD(spotdata, t['fastperiod'], t['slowperiod'])
         if t['TI'] == 'ST':
-            data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'])
+            data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'], t['columnname'])
     return data
 
-def getSuperTrendIndicator(spotdata, period, multiplier):
+def getSuperTrendIndicator(spotdata, period, multiplier, columnname):
     tempdf = spotdata
     df = st.SuperTrend(tempdf, period, multiplier)
-    df['signal'] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
+    df[columnname] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
     return df
 
 # Check entry condition based on the TIconfig
@@ -115,7 +115,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
                     "Entertime": currentcandle.name.time(), "Qty": 25 * posc["LotSize"],
                     "date": currentcandle.name.date(),                    
-                    "TargetCond": posc["Target"] ,
+                    "TargetCond": posc["Target"], "EnterSpotPrice": currentcandle[OHLC],
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance}
                 if (posc["SL"] == defs.YES):
@@ -133,11 +133,11 @@ def CheckStopLossConditionStance(stance, currentcandle, TIconfig):
     if (stance == defs.BULL):
         for t in TIconfig:
             if (t["SL"]):
-                SLCondBull = SLCondBull or (not t["BullOperator"](currentcandle[t["columnname"]], t["SLBull"]))
+                SLCondBull = SLCondBull or (t["SLBullOperator"](currentcandle[t["columnname"]], t["SLBull"]))
     if (stance == defs.BEAR):
         for t in TIconfig:
             if (t["SL"]):
-                SLCondBear = SLCondBear or (not t["BearOperator"](currentcandle[t["columnname"]], t["SLBear"])) 
+                SLCondBear = SLCondBear or (t["SLBearOperator"](currentcandle[t["columnname"]], t["SLBear"]))
     return (SLCondBull, SLCondBear)      
          
 def CheckStopLossTI(positions, currentcandle, TIconfig):
@@ -157,11 +157,11 @@ def CheckTargetConditionStance(stance, currentcandle, TIconfig):
         if (stance == defs.BULL):
             for t in TIconfig:
                 if (t["Target"]):
-                    TargetCondBull = TargetCondBull or (t["BullOperator"](currentcandle[t["columnname"]], t["TargetBull"]))
+                    TargetCondBull = TargetCondBull or (t["TBullOperator"](currentcandle[t["columnname"]], t["TargetBull"]))
         if (stance == defs.BEAR):
             for t in TIconfig:
                 if (t["Target"]):
-                    TargetCondBear = TargetCondBear or (t["BearOperator"](currentcandle[t["columnname"]], t["TargetBear"]))
+                    TargetCondBear = TargetCondBear or (t["TBearOperator"](currentcandle[t["columnname"]], t["TargetBear"]))
         return (TargetCondBull, TargetCondBear)
 
 def CheckTargetConditionTI(positions, currentcandle, TIconfig):
@@ -208,10 +208,9 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                     else:
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
                         exitprice = pos["OpData"][idx]
-
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
-                     'Reason': exitReason, 'Trade Type': Str,
+                     'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
                      "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                      "date": pos["date"], "symbol": pos["OpSymbol"]}
             pos["Active"] = False

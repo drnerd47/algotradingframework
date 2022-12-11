@@ -91,8 +91,9 @@ def getStatArb(Delta1, Delta2, SL1, Target1, SLPc1, TargetPc1, SL2, Target2, SLP
 def getStatArbDef():
     return [positionconfigShortStraddle, positionconfigLongStraddle]
 
+# Position Configs for Directional Strategies
 
-positionconfigRSI_ADX = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+positionconfig21selldirec = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL}, 
@@ -105,12 +106,17 @@ positionconfigRSI_ADX = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSiz
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"LotSize":1,
                        "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}]
 
-positionconfig2_RSI = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}, 
+positionconfigsingleselldire = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
 
-positionconfigBB = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 20}, 
+positionconfigsingleselldirecSL = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 25, "TargetPc": 70},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "LotSize":1,
-                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 20}]
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 25, "TargetPc": 70}]
+
+positionconfigsinglebuydirec = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "LotSize":1,
+                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
+                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "LotSize":1,
+                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
