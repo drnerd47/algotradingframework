@@ -124,7 +124,6 @@ def OutputMonthlyBreakDown(Daily_Chart, filename):
   Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                  'November', 'December']
   f = f.reindex(Month_order, axis=0)
-
   file.write('Total BreakDown For Months\n\n')
   file.write(str(f) + "\n\n")
   file.close()

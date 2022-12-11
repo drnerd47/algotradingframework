@@ -89,7 +89,3 @@ dayofweek = rep.DayOfWeek(Daily_Chart)
 rep.OutputDayofWeek(Daily_Chart, 'Results/dayofweekreport.csv')
 # #dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
 print("day of week is ",dayofweek)
-
-
-
-
