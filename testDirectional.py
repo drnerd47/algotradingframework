@@ -5,8 +5,8 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
-import generalconfigs as genconfigs
-import positionconfigs as posconfigs
+import generalconfigs as genconfig
+import positionconfigs as posconfig
 import directional as direc
 import operator
 import warnings
@@ -43,9 +43,10 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 # TIconfig = TIconfigs.TIconfigRSI_ADX
 # #TIconfig = TIconfigs.TIconfigBB2
 # #TIconfig = TIconfigs.TIconfigST
-generalconfig = genconfigs.generalconfigBNRSIADX
-positionconfig = posconfigs.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfigRSI_ADX
+generalconfig = genconfig.generalconfigIntradayBN
+positionconfig = posconfig.positionconfigsinglebuydirec
+TIconfig = TIconfigs.TIconfig2_RSI
+
 
 if (generalconfig["symbol"] == defs.N):
     data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])

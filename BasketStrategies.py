@@ -158,14 +158,14 @@ def RunStrategy(strattypes):
         Arb = False
         directional = True
     elif (strattypes == strategytypes["RSI2BNb"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigBNRSI2
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfig2_RSI
         intraday = True
         Arb = False
         directional = True
     elif (strattypes == strategytypes["BB2BNb"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigBNBB
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
@@ -179,21 +179,21 @@ def RunStrategy(strattypes):
         Arb = False
         directional = True
     elif (strattypes == strategytypes["RSI-ADXNs"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigNRSIADX
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
     elif (strattypes == strategytypes["RSI2Ns"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigNRSI2
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfig2_RSI
         intraday = True
         Arb = False
         directional = True
     elif (strattypes == strategytypes["BB2Ns"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigNBB
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
@@ -207,21 +207,21 @@ def RunStrategy(strattypes):
         Arb = False
         directional = True
     elif (strattypes == strategytypes["RSI-ADXBNs"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigBNRSIADX
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
     elif (strattypes == strategytypes["RSI2BNs"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigBNRSI2
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfig2_RSI
         intraday = True
         Arb = False
         directional = True
     elif (strattypes == strategytypes["BB2BNs"]):
-        generalconfig = genconfig.generalconfigIntradayBN
+        generalconfig = genconfig.generalconfigBNBB
         positionconfig = posconfig.positionconfigsingleselldire
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
@@ -240,8 +240,8 @@ def RunStrategy(strattypes):
     positions = []
     positions1 = []
     positions2 = []
-    start_date = datetime.date(2022, 9, 1)
-    end_date = datetime.date(2022, 9, 10)
+    start_date = datetime.date(2018, 1, 1)
+    end_date = datetime.date(2022, 9, 30)
     delta = datetime.timedelta(days=1)
     
     directory = "Strategy "+str(strattypes)
@@ -273,7 +273,11 @@ def RunStrategy(strattypes):
                 elif (intraday == False and directional == False):
                     (trade, positions) = strategies.MultiDayStrategy(masterdf, positions, generalconfig, positionconfig)
                 elif (intraday == True and directional == True):
-                    data = direc.getMultipledayData(start_date, end_date, Nifty_Path, generalconfig['symbol'], generalconfig["Resample"])
+                    if (generalconfig["symbol"] == defs.N):
+                        data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
+                    else:
+                        data = direc.getMultipledayData(start_date, end_date, Banknifty_Path, defs.BN, generalconfig["Resample"])
+
                     data = direc.getTI(data, TIconfig)
                     trade = strategies.DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig, start_date)
                 
@@ -314,17 +318,17 @@ for i in range(len(strategytypes)):
     weeklyArr['Strategy ' + str(i)] = weekly
     weeklyArr = weeklyArr.fillna(0)
 
-print("\n","Daily pnl","\n",dailyArr)
-print("\n")
-print("Weekly pnl","\n",weeklyArr)
-print("\n")
+# print("\n","Daily pnl","\n",dailyArr)
+# print("\n")
+# print("Weekly pnl","\n",weeklyArr)
+# print("\n")
 
-print("Weekly Correlation")
-print("\n")
+# print("Weekly Correlation")
+# print("\n")
 weeklyCorr = weeklyArr.corr()
-print(weeklyCorr)
-print("\n")
-print("Weekly Report: Sum and Mean")
+# print(weeklyCorr)
+# print("\n")
+# print("Weekly Report: Sum and Mean")
 # sum specific columns
 col_list = list(weeklyArr)
 weeklyArr['Mean Strategy'] = weeklyArr[col_list].mean(axis=1)
@@ -338,8 +342,8 @@ Max_Drawdown = Weekly_Drawdown.min()
 weeklyArr.loc["No. of Win Weeks"] = weeklyArr[weeklyArr > 0].count()
 weeklyArr.loc["No. of Bad Weeks"] = weeklyArr[weeklyArr < 0].count()
 weeklyArr.loc["Max Drawdown"] = Max_Drawdown
-print("\n")
-print(weeklyArr)
-print("\n")
+# print("\n")
+# print(weeklyArr)
+# print("\n")
 weeklyCorr.to_csv(Result_path+"BasketCorr.csv")
 weeklyArr.to_csv(Result_path+"BasketResults.csv")
