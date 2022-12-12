@@ -14,8 +14,8 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2018, 1, 1)
-end_date = datetime.date(2018, 9, 30)
+start_date = datetime.date(2022, 9, 1)
+end_date = datetime.date(2022, 9, 10)
 delta = datetime.timedelta(days=1)
 
 # Logic to define path
@@ -35,14 +35,18 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
-#generalconfig = genconfigs.generalconfigBNST
+# #generalconfig = genconfigs.generalconfigBNST
+# generalconfig = genconfigs.generalconfigBNRSIADX
+# #generalconfig = genconfigs.generalconfigBNBB
+# #positionconfig = posconfigs.positionconfigsingleselldirecSL
+# positionconfig = posconfigs.positionconfigsingleselldire
+# TIconfig = TIconfigs.TIconfigRSI_ADX
+# #TIconfig = TIconfigs.TIconfigBB2
+# #TIconfig = TIconfigs.TIconfigST
 generalconfig = genconfigs.generalconfigBNRSIADX
-#generalconfig = genconfigs.generalconfigBNBB
-#positionconfig = posconfigs.positionconfigsingleselldirecSL
 positionconfig = posconfigs.positionconfigsinglebuydirec
 TIconfig = TIconfigs.TIconfigRSI_ADX
-#TIconfig = TIconfigs.TIconfigBB2
-#TIconfig = TIconfigs.TIconfigST
+
 if (generalconfig["symbol"] == defs.N):
     data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
 else:
@@ -71,7 +75,7 @@ while start_date <= end_date:
     if (len(trade) > 0):
       trades = trades.append(trade)
   else:
-    print("No data for " + start_date.strftime("%Y-%m-%d"))
+    print("No data for " + start_date.strftime("%Y-%m-%d"))  
   start_date += delta
 
 trades['date'] = pd.to_datetime(trades["date"])

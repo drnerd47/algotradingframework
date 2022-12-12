@@ -9,6 +9,7 @@ import positionconfigs as posconfig
 import generalconfigs as genconfig
 import TIconfigs
 import directional as direc
+import os
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -19,12 +20,15 @@ user = "SD"
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
   Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
+  parent_dir = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/BasketStrategies/"
 elif user == "RI":
   Root = "../"
   Result_path = "Results/"
+  parent_dir = "BasketStrategies/"
 elif user == "MS":
   Root = "Moulik's File path"
   Result_path = " Moulik's result path"
+  parent_dir = " "
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
@@ -236,9 +240,18 @@ def RunStrategy(strattypes):
     positions = []
     positions1 = []
     positions2 = []
-    start_date = datetime.date(2018, 1, 1)
-    end_date = datetime.date(2022, 9, 30)
+    start_date = datetime.date(2022, 9, 1)
+    end_date = datetime.date(2022, 9, 10)
     delta = datetime.timedelta(days=1)
+    
+    directory = "Strategy "+str(strattypes)
+    path = os.path.join(parent_dir, directory)
+    
+    file = Path(path)
+    if file.exists():
+        pass
+    else:
+        os.mkdir(path)  
 
     while start_date <= end_date:
         trade = pd.DataFrame()
@@ -282,9 +295,12 @@ def RunStrategy(strattypes):
     trades['date'] = pd.to_datetime(trades["date"])
     trades = trades.reset_index()
     trades = trades.drop(["index"],axis = 1)
+    trades.to_csv(path+"/trades.csv")
     Daily_Chart = rep.GetDailyChart(trades)
+    Daily_Chart.to_csv(path+"/Daily_Chart.csv")
     weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
     weeklyreport = weeklyreport.reset_index(drop=True)
+    weeklyreport.to_csv(path+"/weeklyreport.csv")
     return (Daily_Chart["Daily pnl"], weeklyreport["Weekly pnl"])
 
 dailyArr = pd.DataFrame()

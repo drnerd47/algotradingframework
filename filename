@@ -1,25 +1,25 @@
 DayOfWeek
 
 
-2018
+2022
 
 DayOfWeek
-Monday       15068.75
-Tuesday      16056.25
-Wednesday    27411.25
-Thursday      5242.50
-Friday         252.50
-Saturday          NaN
-Sunday            NaN
+Monday        885.00
+Tuesday     -4978.75
+Wednesday   -1396.25
+Thursday     4342.50
+Friday       -530.00
+Saturday         NaN
+Sunday           NaN
 Name: Daily pnl, dtype: float64
 
 DayOfWeek
-Monday       15068.75
-Tuesday      16056.25
-Wednesday    27411.25
-Thursday      5242.50
-Friday         252.50
-Saturday          NaN
-Sunday            NaN
+Monday        885.00
+Tuesday     -4978.75
+Wednesday   -1396.25
+Thursday     4342.50
+Friday       -530.00
+Saturday         NaN
+Sunday           NaN
 Name: Daily pnl, dtype: float64
 

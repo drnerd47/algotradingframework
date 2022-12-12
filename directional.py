@@ -35,8 +35,7 @@ def getMultipledayData(start_date, end_date, path, symbol, freq):
             resampled = Resample(spotdata, freq)
             resampled.dropna(inplace=True)
             df_list.append(resampled)
-        else:
-            print("No data for " + start_date.strftime("%Y-%m-%d"))        
+     
         start_date += delta
     finaldf = pd.concat(df_list)
     finaldf = finaldf.apply(pd.to_numeric)
