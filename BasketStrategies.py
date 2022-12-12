@@ -308,10 +308,10 @@ def RunStrategy(strattypes):
     report = rep.Report(trades, Daily_Chart)
     report.to_csv(path+"/report.csv")
     monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-    rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.csv')
+    rep.OutputMonthlyBreakDown(Daily_Chart, path+'/monthlyreport.csv')
     monthlyreport.to_csv(path+"/monthlyreport.csv")
     dayofweek = rep.DayOfWeek(Daily_Chart)
-    rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.csv')
+    rep.OutputDayofWeek(Daily_Chart, path+'/dayofweekreport.csv')
     dayofweek.to_csv(path+"/dayofweekreport.csv")
 
 
