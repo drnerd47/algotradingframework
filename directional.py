@@ -39,6 +39,7 @@ def getMultipledayData(start_date, end_date, path, symbol, freq):
             print("No data for " + start_date.strftime("%Y-%m-%d"))        
         start_date += delta
     finaldf = pd.concat(df_list)
+    finaldf = finaldf.apply(pd.to_numeric)
     return finaldf
 
 def getRSI(spotdata, columnname, period=14):

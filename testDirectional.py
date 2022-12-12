@@ -14,10 +14,11 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022, 9, 1)
-end_date = datetime.date(2022, 9, 30)
+start_date = datetime.date(2018, 1, 1)
+end_date = datetime.date(2018, 9, 30)
 delta = datetime.timedelta(days=1)
 
+# Logic to define path
 user = "SD"
 
 if user == "SD":
