@@ -34,12 +34,14 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
-generalconfig = genconfigs.generalconfigBNST
-#generalconfig = genconfigs.generalconfigBNRSIADX
-positionconfig = posconfigs.positionconfigsingleselldirecSL
-#TIconfig = TIconfigs.TIconfigRSI_ADX
+#generalconfig = genconfigs.generalconfigBNST
+generalconfig = genconfigs.generalconfigBNRSIADX
+#generalconfig = genconfigs.generalconfigBNBB
+#positionconfig = posconfigs.positionconfigsingleselldirecSL
+positionconfig = posconfigs.positionconfigsinglebuydirec
+TIconfig = TIconfigs.TIconfigRSI_ADX
 #TIconfig = TIconfigs.TIconfigBB2
-TIconfig = TIconfigs.TIconfigST
+#TIconfig = TIconfigs.TIconfigST
 if (generalconfig["symbol"] == defs.N):
     data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
 else:

@@ -134,8 +134,8 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                         return
                     else:
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
-                        exitprice = pos["OpData"][idx]
-
+                        exitprice = pos["OpData"].loc[idx]['open']
+                        exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                      'Reason': exitReason, 'Trade Type': Str,
