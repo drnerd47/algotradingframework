@@ -35,17 +35,15 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
-# #generalconfig = genconfigs.generalconfigBNST
-# generalconfig = genconfigs.generalconfigBNRSIADX
-# #generalconfig = genconfigs.generalconfigBNBB
-# #positionconfig = posconfigs.positionconfigsingleselldirecSL
-# positionconfig = posconfigs.positionconfigsingleselldire
-# TIconfig = TIconfigs.TIconfigRSI_ADX
-# #TIconfig = TIconfigs.TIconfigBB2
-# #TIconfig = TIconfigs.TIconfigST
-generalconfig = genconfig.generalconfigIntradayBN
-positionconfig = posconfig.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfig2_RSI
+#generalconfig = genconfigs.generalconfigBNST
+generalconfig = genconfig.generalconfigBNRSIADX
+#generalconfig = genconfigs.generalconfigBNBB
+#positionconfig = posconfigs.positionconfigsingleselldirecSL
+positionconfig = posconfig.positionconfigsingleselldire
+TIconfig = TIconfigs.TIconfigRSI_ADX
+#TIconfig = TIconfigs.TIconfigBB2
+#TIconfig = TIconfigs.TIconfigST
+
 
 
 if (generalconfig["symbol"] == defs.N):
@@ -101,10 +99,10 @@ print(report["Overall Profit"])
 print(report["Max Drawdown(MDD)"])
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
 rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.csv')
-#monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
+monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
 print("monthly report is ",monthlyreport)
 
 dayofweek = rep.DayOfWeek(Daily_Chart)
 rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.csv')
-# #dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
+dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
 print("day of week is ",dayofweek)
