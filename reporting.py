@@ -129,7 +129,6 @@ def OutputMonthlyBreakDown(Daily_Chart, filename):
   file.close()
 
 def MonthlyBreakDown(Daily_Chart):
-  print("Total BreakDown For Months","\n")
   f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
   Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
                 'November', 'December']
@@ -139,7 +138,7 @@ def MonthlyBreakDown(Daily_Chart):
 
 def OutputDayofWeek(Daily_Chart, filename):
   a = "DayOfWeek\n"
-  file = open('filename', 'w')
+  file = open(filename, 'w')
   y = Daily_Chart.groupby("Year")
   for key, item in y:
     r = y.get_group(key).groupby("DayOfWeek")['Daily pnl'].sum()
@@ -155,7 +154,6 @@ def OutputDayofWeek(Daily_Chart, filename):
   file.close()
 
 def DayOfWeek(Daily_Chart):
-  print("Total of Day of Week BreakDown","\n")
   g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
   Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   g = g.reindex(Week_order, axis=0)
