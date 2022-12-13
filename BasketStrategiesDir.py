@@ -48,13 +48,13 @@ def RunStrategy(strattypes):
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["RSI2Nb"]):
-        generalconfig = genconfig.generalconfigNRSI2
-        positionconfig = posconfig.positionconfigsinglebuydirec
-        TIconfig = TIconfigs.TIconfig2_RSI
-        intraday = True
-        Arb = False
-        directional = True
+    # elif (strattypes == strategytypes["RSI2Nb"]):
+    #     generalconfig = genconfig.generalconfigNRSI2
+    #     positionconfig = posconfig.positionconfigsinglebuydirec
+    #     TIconfig = TIconfigs.TIconfig2_RSI
+    #     intraday = True
+    #     Arb = False
+    #     directional = True
     elif (strattypes == strategytypes["BB2Nb"]):
         generalconfig = genconfig.generalconfigNBB
         positionconfig = posconfig.positionconfigsinglebuydirec
@@ -171,6 +171,7 @@ def RunStrategy(strattypes):
         pass
     else:
         os.mkdir(path)
+    
 
     if directional == True:
         if (generalconfig["symbol"] == defs.N):

@@ -66,24 +66,24 @@ generalconfigIntradayREN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                  "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":50}
 
 generalconfigBNRSIADX = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-"Slippage": 0.5, "LotSize":25}
+                        "Slippage": 0.5, "LotSize":25}
 generalconfigNRSIADX = {"symbol":defs.N, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-"Slippage": 0.5, "LotSize":50}
+                        "Slippage": 0.5, "LotSize":50}
 
 generalconfigBNRSI2 = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-"Slippage": 0.5, "LotSize":25}
+                        "Slippage": 0.5, "LotSize":25}
 generalconfigNRSI2 = {"symbol":defs.N, "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-"Slippage": 0.5, "LotSize":50}
+                        "Slippage": 0.5, "LotSize":50}
 
 generalconfigBNBB = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-"Slippage": 0.5, "LotSize":25}
+                    "Slippage": 0.5, "LotSize":25}
 generalconfigNBB = {"symbol":defs.N, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-"Slippage": 0.5, "LotSize":50}
+                    "Slippage": 0.5, "LotSize":50}
 
 generalconfigBNST = {"symbol":defs.BN, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-"Slippage": 0.5, "LotSize":25}
+                    "Slippage": 0.5, "LotSize":25}
 generalconfigNST = {"symbol":defs.N, "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-"Slippage": 0.5, "LotSize":50}
+                    "Slippage": 0.5, "LotSize":50}
 
 
 

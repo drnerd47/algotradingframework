@@ -14,11 +14,11 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 9, 30)
+start_date = datetime.date(2019, 1, 1)
+end_date = datetime.date(2019, 12, 31)
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -34,16 +34,10 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
-#generalconfig = genconfigs.generalconfigBNST
-#generalconfig = genconfigs.generalconfigNRSIADX
-#generalconfig = genconfigs.generalconfigNST
-generalconfig = genconfig.generalconfigNBB
-#positionconfig = posconfigs.positionconfigsingleselldirecSL
-positionconfig = posconfig.positionconfigsinglebuydirec
 
-#TIconfig = TIconfigs.TIconfigRSI_ADX
+generalconfig = genconfig.generalconfigNBB
+positionconfig = posconfig.positionconfigsinglebuydirec
 TIconfig = TIconfigs.TIconfigBB2
-#TIconfig = TIconfigs.TIconfigST
 
 
 
@@ -82,26 +76,29 @@ trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"],axis = 1)
 
-print("trades is ", trades)
+print("\n")
+print(trades)
+trades.to_csv(Result_path + "trades.csv")
+
+print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
-trades.to_csv(Result_path+"trades.csv")
-print("daily chart is ",Daily_Chart)
-Daily_Chart.to_csv(Result_path+"dailychart.csv")
+print(Daily_Chart)
+Daily_Chart.to_csv(Result_path + "DailyChart.csv")
 
+print("\n")
 report = rep.Report(trades, Daily_Chart)
-print("report is ",report)
-report.to_csv(Result_path+"report.csv")
+print(report)
+report.to_csv(Result_path + "Report.csv")
 
+print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
-weeklyreport.to_csv(Result_path+"weeklyreport.csv")
 print(weeklyreport)
+weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 
-print(report["Overall Profit"])
-print(report["Max Drawdown(MDD)"])
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.txt')
-print("monthly report is ",monthlyreport)
+print("\n")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
+print(monthlyreport)
 
-dayofweek = rep.DayOfWeek(Daily_Chart)
-rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.txt')
-print("day of week is ",dayofweek)
+print("\n")
+dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
+print(dayofweek)

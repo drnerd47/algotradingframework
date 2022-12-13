@@ -33,14 +33,23 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-strategytypes = {"IntraDayN": 0, "IntraDayBN": 1, "IntradayNRE": 2, "IntradayBNRE": 3,
-                 "ExpiryBN": 4, "ExpiryN": 5,
-                 "NextDayBNMW": 6, "NextDayNMW": 7, "NextDayBNF": 8, "NextDayNF": 9,
-                 "IntradaySA": 10, "ExpirySA": 11, "NextDaySA": 12,
-                 "RSI-ADXNb": 13, "RSI2Nb": 14, "BB2Nb": 15, "SupertrendNb":16,
-                 "RSI-ADXBNb": 17, "RSI2BNb": 18, "BB2BNb": 19, "SupertrendBNb":20,
-                 "RSI-ADXNs": 21, "RSI2Ns": 22, "BB2Ns": 23, "SupertrendNs":24,
-                 "RSI-ADXBNs": 25, "RSI2BNs": 26, "BB2BNs": 27, "SupertrendBNs":28}
+strategytypes = {"IntraDayN": "IntraDayN", "IntraDayBN": "IntraDayBN", "IntradayNRE": "IntradayNRE", "IntradayBNRE": "IntradayBNRE",
+                 "ExpiryBN":"ExpiryBN" , "ExpiryN": "ExpiryN",
+                 "NextDayBNMW": "NextDayBNMW", "NextDayNMW": "NextDayNMW", "NextDayBNF":"NextDayBNF", "NextDayNF":"NextDayNF",
+                 "IntradaySA": "IntradaySA", "ExpirySA":"ExpirySA", "NextDaySA":"NextDaySA",
+                 "RSI-ADXNb": "RSI-ADXNb", "RSI2Nb": "RSI2Nb", "BB2Nb": "BB2Nb", "SupertrendNb":"SupertrendNb",
+                 "RSI-ADXBNb": "RSI-ADXBNb", "RSI2BNb": "RSI2BNb", "BB2BNb": "BB2BNb", "SupertrendBNb":"SupertrendBNb",
+                 "RSI-ADXNs": "RSI-ADXNs", "RSI2Ns": "RSI2Ns", "BB2Ns": "BB2Ns", "SupertrendNs":"SupertrendNs",
+                 "RSI-ADXBNs": "RSI-ADXBNs", "RSI2BNs": "RSI2BNs", "BB2BNs": "BB2BNs", "SupertrendBNs":"SupertrendBNs" }
+
+# strategytypes = {"IntraDayN": 0, "IntraDayBN": 1, "IntradayNRE": 2, "IntradayBNRE": 3,
+#                  "ExpiryBN": 4, "ExpiryN": 5,
+#                  "NextDayBNMW": 6, "NextDayNMW": 7, "NextDayBNF": 8, "NextDayNF": 9,
+#                  "IntradaySA": 10, "ExpirySA": 11, "NextDaySA": 12,
+#                  "RSI-ADXNb": 13, "BB2Nb": 14, "SupertrendNb":15,
+#                  "RSI-ADXBNb": 16, "BB2BNb": 17, "SupertrendBNb":18,
+#                  "RSI-ADXNs": 19, "BB2Ns": 20, "SupertrendNs":21,
+#                  "RSI-ADXBNs": 22, "BB2BNs": 23, "SupertrendBNs":24}
 
 def RunStrategy(strattypes):
     if (strattypes == strategytypes["IntraDayN"]):
@@ -280,13 +289,7 @@ def RunStrategy(strattypes):
                     trade = strategies.IntraDayStrategy(masterdf, generalconfig, positionconfig)
                 elif (intraday == False and directional == False):
                     (trade, positions) = strategies.MultiDayStrategy(masterdf, positions, generalconfig, positionconfig)
-                elif (intraday == True and directional == True):
-                    if (generalconfig["symbol"] == defs.N):
-                        data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
-                    else:
-                        data = direc.getMultipledayData(start_date, end_date, Banknifty_Path, defs.BN, generalconfig["Resample"])
-
-                    data = direc.getTI(data, TIconfig)
+                elif (intraday == True and directional == True):                    
                     trade = strategies.DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig, start_date)
                 
             else:
@@ -313,14 +316,8 @@ def RunStrategy(strattypes):
     weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
     weeklyreport = weeklyreport.reset_index(drop=True)
     weeklyreport.to_csv(path+"/weeklyreport.csv")
-    # report = rep.Report(trades, Daily_Chart)
-    # report.to_csv(path+"/report.csv")
-    # monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-    # rep.OutputMonthlyBreakDown(Daily_Chart, path+'/monthlyreport.csv')
-    # monthlyreport.to_csv(path+"/monthlyreport.csv")
-    # dayofweek = rep.DayOfWeek(Daily_Chart)
-    # rep.OutputDayofWeek(Daily_Chart, path+'/dayofweekreport.csv')
-    # dayofweek.to_csv(path+"/dayofweekreport.csv")
+    report = rep.Report(trades, Daily_Chart)
+    report.to_csv(path + "/Report.csv")
 
 
     return (Daily_Chart["Daily pnl"], weeklyreport["Weekly pnl"])
@@ -328,12 +325,12 @@ def RunStrategy(strattypes):
 dailyArr = pd.DataFrame()
 weeklyArr = pd.DataFrame()
 
-for i in range(len(strategytypes)):
-    print("Running Strategy " + str(i))
-    (daily, weekly) = RunStrategy(strattypes=i)
-    dailyArr['Strategy ' + str(i)] = daily
+for strategy in strategytypes :
+    print("Running Strategy " + strategy)
+    (daily, weekly) = RunStrategy(strategy)
+    dailyArr['Strategy ' + strategy] = daily
     dailyArr = dailyArr.fillna(0)
-    weeklyArr['Strategy ' + str(i)] = weekly
+    weeklyArr['Strategy ' + strategy] = weekly
     weeklyArr = weeklyArr.fillna(0)
 
 # print("\n","Daily pnl","\n",dailyArr)

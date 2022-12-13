@@ -26,8 +26,8 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 1, 10)
+start_date = datetime.date(2019, 2, 1)
+end_date = datetime.date(2019, 12, 31)
 delta = datetime.timedelta(days=1)
 
 
@@ -83,6 +83,7 @@ weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 print("\n")
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
 print(monthlyreport)
+
 
 print("\n")
 dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")

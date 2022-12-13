@@ -11,8 +11,20 @@ import positionconfigs as st
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
+user = "MS"
+
+if user == "SD":
+  Root = "D:/Work/Sykes and Ray/"
+  Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
+elif user == "RI":
+  Root = "../"
+  Result_path = "Results/"
+elif user == "MS":
+  Root = "C:/Users/shahm/(8)Work/SRE/"
+  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/test/"
+
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 8, 31)
