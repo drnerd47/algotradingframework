@@ -14,13 +14,8 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-<<<<<<< Updated upstream
 start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 9, 30)
-=======
-start_date = datetime.date(2018, 1, 1)
-end_date = datetime.date(2022, 9, 10)
->>>>>>> Stashed changes
 delta = datetime.timedelta(days=1)
 
 user = "RI"
@@ -39,31 +34,17 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
-<<<<<<< Updated upstream
 #generalconfig = genconfigs.generalconfigBNST
 #generalconfig = genconfigs.generalconfigNRSIADX
 #generalconfig = genconfigs.generalconfigNST
-generalconfig = genconfigs.generalconfigNBB
+generalconfig = genconfig.generalconfigNBB
 #positionconfig = posconfigs.positionconfigsingleselldirecSL
-positionconfig = posconfigs.positionconfigsinglebuydirec
+positionconfig = posconfig.positionconfigsinglebuydirec
 
 #TIconfig = TIconfigs.TIconfigRSI_ADX
 TIconfig = TIconfigs.TIconfigBB2
 #TIconfig = TIconfigs.TIconfigST
 
-=======
-# #generalconfig = genconfigs.generalconfigBNST
-# generalconfig = genconfig.generalconfigBNRSIADX
-# #generalconfig = genconfigs.generalconfigBNBB
-# #positionconfig = posconfigs.positionconfigsingleselldirecSL
-# positionconfig = posconfig.positionconfigsingleselldire
-# TIconfig = TIconfigs.TIconfigRSI_ADX
-# #TIconfig = TIconfigs.TIconfigBB2
-# #TIconfig = TIconfigs.TIconfigST
-generalconfig = genconfig.generalconfigNRSIADX
-positionconfig = posconfig.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfigRSI_ADX
->>>>>>> Stashed changes
 
 
 if (generalconfig["symbol"] == defs.N):

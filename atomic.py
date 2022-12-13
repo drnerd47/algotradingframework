@@ -11,7 +11,7 @@ def LoadDF(currpath):
         masterdf = masterdf.set_index(masterdf['datetime'])
     return masterdf
 
-def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
+def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC, generalconfig):
     exp = GetExpiry(masterdf, generalconfig["symbol"])
     cst = strikeprice
     cst = int(round(cst / 100, 0) * 100)
