@@ -241,7 +241,7 @@ def RunStrategy(strattypes):
     positions1 = []
     positions2 = []
     start_date = datetime.date(2019, 2, 1)
-    end_date = datetime.date(2022, 9, 30)
+    end_date = datetime.date(2019, 12, 31)
     delta = datetime.timedelta(days=1)
     
     directory = "Strategy "+str(strattypes)
