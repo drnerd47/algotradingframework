@@ -189,6 +189,6 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]):
-        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
         trades = atom.GetFinalTrades(positions)
   return trades

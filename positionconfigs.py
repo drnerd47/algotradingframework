@@ -120,3 +120,8 @@ positionconfigsinglebuydirec = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "
                         "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
                         {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "LotSize":1,
                         "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
+
+positionconfigsinglebuydirecSL = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 25, "TargetPc": 70},
+                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "LotSize":1,
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 25, "TargetPc": 70}]

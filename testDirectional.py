@@ -14,12 +14,11 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022, 9, 1)
-end_date = datetime.date(2022, 9, 10)
+start_date = datetime.date(2022, 1, 1)
+end_date = datetime.date(2022, 9, 30)
 delta = datetime.timedelta(days=1)
 
-# Logic to define path
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -36,12 +35,14 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
 #generalconfig = genconfigs.generalconfigBNST
-generalconfig = genconfig.generalconfigBNRSIADX
-#generalconfig = genconfigs.generalconfigBNBB
+#generalconfig = genconfigs.generalconfigNRSIADX
+#generalconfig = genconfigs.generalconfigNST
+generalconfig = genconfigs.generalconfigNBB
 #positionconfig = posconfigs.positionconfigsingleselldirecSL
-positionconfig = posconfig.positionconfigsingleselldire
-TIconfig = TIconfigs.TIconfigRSI_ADX
-#TIconfig = TIconfigs.TIconfigBB2
+positionconfig = posconfigs.positionconfigsinglebuydirec
+
+#TIconfig = TIconfigs.TIconfigRSI_ADX
+TIconfig = TIconfigs.TIconfigBB2
 #TIconfig = TIconfigs.TIconfigST
 
 
@@ -98,11 +99,9 @@ print(weeklyreport)
 print(report["Overall Profit"])
 print(report["Max Drawdown(MDD)"])
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
-rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.csv')
-monthlyreport.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/monthlyreport.csv")
+rep.OutputMonthlyBreakDown(Daily_Chart, Result_path+'monthlyreport.txt')
 print("monthly report is ",monthlyreport)
 
 dayofweek = rep.DayOfWeek(Daily_Chart)
-rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.csv')
-dayofweek.to_csv("D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/dayofweekreport.csv")
+rep.OutputDayofWeek(Daily_Chart, Result_path+'dayofweekreport.txt')
 print("day of week is ",dayofweek)
