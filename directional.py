@@ -104,8 +104,12 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
     for posc in positionconfig:
         if (posc["Stance"] == stance):
             exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
-            cst = currentcandle[OHLC]
-            cst = int(round(cst / 100, 0) * 100)
+            if generalconfig['symbol'] == defs.N :
+                cst = currentcandle[OHLC]
+                cst = int(round(cst / 50, 0) * 50)
+            elif generalconfig['symbol'] == defs.BN :
+                cst = currentcandle[OHLC]
+                cst = int(round(cst / 100, 0) * 100)
             opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if currentcandle.name in opdf.index:
@@ -113,11 +117,11 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                 position = {"EnterPrice": price, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                     "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
-                    "Entertime": currentcandle.name.time(), "Qty": 25 * posc["LotSize"],
+                    "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
                     "date": currentcandle.name.date(),                    
                     "TargetCond": posc["Target"], "EnterSpotPrice": currentcandle[OHLC],
                     "Active": True, "Strike": cst + posc["Delta"],
-                    "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance}
+                    "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage']}
                 if (posc["SL"] == defs.YES):
                     position["SLCond"] = price - posc["Action"]*price*posc["SLPc"]/100
                 if (posc["Target"] == defs.YES):
@@ -209,10 +213,11 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
                         exitprice = pos["OpData"][idx]
             enterprice = pos['EnterPrice']
-            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice, 'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
-                     'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
-                     "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                     "date": pos["date"], "symbol": pos["OpSymbol"]}
+            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]*enterprice/100*pos["Action"]), 'ExitPrice': exitprice*(1 + pos["Slippage"]*exitprice/100*pos["Action"]), 
+                            'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
+                            'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
+                            "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
+                            "date": pos["date"], "symbol": pos["OpSymbol"]}
             pos["Active"] = False
 
 

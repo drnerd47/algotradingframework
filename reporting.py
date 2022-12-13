@@ -82,7 +82,7 @@ def Report(trades, Daily_Chart):
   Daily_Drawdown = Daily_Chart["Daily Cummulative pnl"] - Roll_max
   Max_Drawdown = min(Daily_Drawdown)
   Return_to_MDD_Ratio = Overall_Net / Max_Drawdown
-  Lot_Size = trades["date"].value_counts()[0]
+  Lot_Size = trades['Trade Type'].nunique()
 
   rep = {"Overall Profit": Overall_Net, "Avg Expiry Profit": Avg_Expiry_Net, "Avg Day Profit": Avg_Day_Net,
          "Max Profit": Max_Profit, "Max Loss": Max_Loss,
