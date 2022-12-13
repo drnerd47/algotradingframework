@@ -11,7 +11,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-user = "RI"
+user = "MS"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -20,14 +20,14 @@ elif user == "RI":
   Root = "../"
   Result_path = "Results/"
 elif user == "MS":
-  Root = "Moulik's File path"
-  Result_path = " Moulik's result path"
+  Root = "C:/Users/shahm/(8)Work/SRE/"
+  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/test/"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 8, 30)
+end_date = datetime.date(2022, 1, 10)
 delta = datetime.timedelta(days=1)
 
 
@@ -63,27 +63,27 @@ trades = trades.drop(["index"],axis = 1)
 
 print("\n")
 print(trades)
-trades.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/trades.csv")
+trades.to_csv(Result_path + "trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/DailyChart.csv")
+Daily_Chart.to_csv(Result_path + "DailyChart.csv")
 
 print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/Report.csv")
+report.to_csv(Result_path + "Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
-weeklyreport.to_csv("C:/Users/shahm/(8)Work/SRE/OptionsData/Results/IntradayBankNiftyRe-Entry/WeeklyReport.csv")
+weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart)
+dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
 print(dayofweek)

@@ -101,14 +101,12 @@ def WeeklyBreakDown(Daily_Chart):
   Daily_Chart["Date"] = pd.to_datetime(Daily_Chart["Date"])
   Daily_Chart = Daily_Chart.set_index("Date")
   y = Daily_Chart.resample('W-Fri').sum()
-  # y = x.resample("W-Fri")["Daily pnl"].sum()
-  # y = trades.resample("W",on = "date").transform(sum)
   Weekly_BreakDown = pd.DataFrame(y, columns=["Daily pnl"])
   Weekly_BreakDown['Week Count'] = ["Week" + "-" + str(i) for i in range(1, len(Weekly_BreakDown) + 1)]
   Weekly_BreakDown = Weekly_BreakDown.rename(columns = {'Daily pnl':'Weekly pnl'})
   return Weekly_BreakDown
 
-def OutputMonthlyBreakDown(Daily_Chart, filename):
+def MonthlyBreakDown(Daily_Chart, filename):
   y = Daily_Chart.groupby("Year")
   for key, item in y:
     p = y.get_group(key).groupby("Month")["Daily pnl"].sum()
@@ -128,15 +126,8 @@ def OutputMonthlyBreakDown(Daily_Chart, filename):
   file.write(str(f) + "\n\n")
   file.close()
 
-def MonthlyBreakDown(Daily_Chart):
-  f = Daily_Chart.groupby("Month")["Daily pnl"].sum()
-  Month_order = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October',
-                'November', 'December']
-  f = f.reindex(Month_order, axis=0)
-  #repa = {a, b, c, e, f}
-  return f
 
-def OutputDayofWeek(Daily_Chart, filename):
+def DayOfWeek(Daily_Chart, filename):
   a = "DayOfWeek\n"
   file = open(filename, 'w')
   y = Daily_Chart.groupby("Year")
@@ -150,11 +141,6 @@ def OutputDayofWeek(Daily_Chart, filename):
   g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
   Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   g = g.reindex(Week_order, axis=0)
+  file.write("Total Breakdown for Months\n\n")
   file.write(str(g) + '\n\n')
   file.close()
-
-def DayOfWeek(Daily_Chart):
-  g = Daily_Chart.groupby("DayOfWeek")["Daily pnl"].sum()
-  Week_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-  g = g.reindex(Week_order, axis=0)
-  return g

@@ -141,7 +141,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                         exitprice = pos["OpData"].loc[idx]['open']
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
-            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]*enterprice/100*pos["Action"]), 'ExitPrice': exitprice*(1 + pos["Slippage"]*exitprice/100*pos["Action"]), 
+            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]*enterprice/100*pos["PositionConfig"]["Action"]), 'ExitPrice': exitprice*(1 + pos["Slippage"]*exitprice/100*pos["PositionConfig"]["Action"]), 
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
