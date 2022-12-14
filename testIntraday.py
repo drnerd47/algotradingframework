@@ -21,17 +21,17 @@ elif user == "RI":
   Result_path = "Results/"
 elif user == "MS":
   Root = "C:/Users/shahm/(8)Work/SRE/"
-  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/test/"
+  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/Intraday_BankNifty/Short_Straddle/One_Leg/With_Slippage"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-start_date = datetime.date(2019, 2, 1)
-end_date = datetime.date(2019, 12, 31)
+start_date = datetime.date(2022, 1, 1)
+end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.generalconfigIntradayREBN
+generalconfig = genconfigs.generalconfigIntradayBN
 positionconfig = posconfings.positionconfigShortStraddle
 
 trade = pd.DataFrame()

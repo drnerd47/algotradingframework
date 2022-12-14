@@ -147,7 +147,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                            "date": pos["date"], "symbol": pos["OpSymbol"], "Margin": margin}
+                            "date": pos["date"], "symbol": pos["OpSymbol"]}
                         
             pos["Active"] = False
 
