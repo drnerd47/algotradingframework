@@ -141,18 +141,9 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                         exitprice = pos["OpData"].loc[idx]['open']
                         exitReason = "Square Off EOD"
 
-            enterprice = pos['EnterPrice']
-            # Margin Calculation
-            if (pos["PositionConfig"]["Action"] == defs.BUY):
-                margin = enterprice*pos['Qty']
-            elif (pos["PositionConfig"]["Action"] == defs.SELL):
-                if len(pos["PositionConfig"]) == 1 :                
-                    margin = 150000*pos['NumLots']
-                elif len(pos["PositionConfig"]) == 2 :
-                    margin = 180000*pos['NumLots']
-
-            
-            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]/100*pos["PositionConfig"]["Action"]), 'ExitPrice': exitprice*(1 + pos["Slippage"]/100*pos["PositionConfig"]["Action"]), 
+            enterprice = pos['EnterPrice']                       
+           
+            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100), 'ExitPrice': exitprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100), 
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
@@ -166,6 +157,7 @@ def GetFinalTrades(positions):
         trades = trades.append(pos["trades"], ignore_index=True)
     #trades = trades.append(trades, ignore_index=True)
     return trades
+
 
 
 
