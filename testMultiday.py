@@ -11,8 +11,21 @@ import generalconfigs as genconfigs
 import warnings
 warnings.filterwarnings("ignore")
 
-Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
-Nifty_Path = '../NIFTYOptionsData/OptionsData/nifty/'
+user = "MS"
+
+if user == "SD":
+  Root = "D:/Work/Sykes and Ray/"
+  Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
+elif user == "RI":
+  Root = "../"
+  Result_path = "Results/"
+elif user == "MS":
+  Root = "C:/Users/shahm/(8)Work/SRE/"
+  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/Intraday_BankNifty/Short_Straddle/One_Leg/With_Slippage"
+
+
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 8, 31)
@@ -20,7 +33,7 @@ delta = datetime.timedelta(days=1)
 
 generalconfig = genconfigs.generalconfigExpiryBN
 
-positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 35, 50)
+positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.YES, defs.NO, 25, 50)
 positionconfigIB = posconfigs.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
 positionconfig = positionconfigSS
 trade = pd.DataFrame()
@@ -42,7 +55,7 @@ while start_date <= end_date:
     elif (generalconfig["symbol"] == defs.N):
       (trade, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig)
     elif (generalconfig["symbol"] == defs.BOTH):
-      positionconfig = st.getStatArbDef()
+      positionconfig = strategies.getStatArbDef()
       (trade1, positions) = strategies.MultiDayStrategy(masterdfBN, positions, generalconfig, positionconfig[0])
       (trade2, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig[1])
       trade.append(trade1)
