@@ -70,24 +70,29 @@ trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"],axis = 1)
 
+print("\n")
 print(trades)
-trades.to_csv("Results/trades.csv")
+trades.to_csv(Result_path + "trades.csv")
 
+print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv("Results/dailychart.csv")
+Daily_Chart.to_csv(Result_path + "DailyChart.csv")
 
+print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv("Results/report.csv")
+report.to_csv(Result_path + "Report.csv")
 
+print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
+weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+print("\n")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
 print(monthlyreport)
 
-dayofweek = rep.DayOfWeek(Daily_Chart)
+print("\n")
+dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
 print(dayofweek)
-
-

@@ -21,7 +21,7 @@ elif user == "RI":
   Result_path = "Results/"
 elif user == "MS":
   Root = "C:/Users/shahm/(8)Work/SRE/"
-  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/Intraday_BankNifty/Short_Straddle/One_Leg/With_Slippage"
+  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/Intraday_Nifty_ReExecute/Short_Straddle/One_Leg/With_Slippage/"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
@@ -31,7 +31,7 @@ end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.generalconfigIntradayBN
+generalconfig = genconfigs.generalconfigIntradayREN
 positionconfig = posconfings.positionconfigShortStraddle
 
 trade = pd.DataFrame()
@@ -83,7 +83,6 @@ weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 print("\n")
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
 print(monthlyreport)
-
 
 print("\n")
 dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
