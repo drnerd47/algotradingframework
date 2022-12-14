@@ -14,8 +14,8 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2019, 1, 1)
-end_date = datetime.date(2019, 12, 31)
+start_date = datetime.date(2021, 1, 1)
+end_date = datetime.date(2021, 1, 10)
 delta = datetime.timedelta(days=1)
 
 user = "SD"
@@ -35,9 +35,10 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
 
-generalconfig = genconfig.generalconfigNBB
-positionconfig = posconfig.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfigBB2
+generalconfig = genconfig.generalconfigBNRSI2
+positionconfig = posconfig.positionconfigsingleselldirecSL
+TIconfig = TIconfigs.TIconfig2_RSI  
+
 
 
 
@@ -102,3 +103,4 @@ print(monthlyreport)
 print("\n")
 dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
 print(dayofweek)
+
