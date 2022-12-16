@@ -14,11 +14,11 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2021, 1, 1)
-end_date = datetime.date(2021, 1, 10)
+start_date = datetime.date(2020, 1, 1)
+end_date = datetime.date(2020, 12, 31)
 delta = datetime.timedelta(days=1)
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -33,21 +33,23 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-
-
 generalconfig = genconfig.generalconfigBNRSI2
-positionconfig = posconfig.positionconfigsingleselldirecSL
-TIconfig = TIconfigs.TIconfig2_RSI  
+positionconfig = posconfig.positionconfigsinglebuydirecSL
+TIconfig = TIconfigs.TIconfig2_RSI
+#generalconfig = genconfig.generalconfigBNBB
+#positionconfig = posconfig.positionconfigsinglebuydirec
+#TIconfig = TIconfigs.TIconfigBB2
 
-
-
+#generalconfig = genconfig.generalconfigBNRSIDual
+#positionconfig = posconfig.positionconfigsinglebuydirec
+#TIconfig = TIconfigs.TIconfig_RSIDual
 
 if (generalconfig["symbol"] == defs.N):
-    data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
+    dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
 else:
-    data = direc.getMultipledayData(start_date, end_date, Banknifty_Path, defs.BN, generalconfig["Resample"])
+    dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"])
 print("\n")
-data = direc.getTI(data, TIconfig)
+data = direc.getTI(dataorig, TIconfig)
 print("\n")
 trade = pd.DataFrame()
 trades = pd.DataFrame()

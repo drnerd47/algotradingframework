@@ -80,9 +80,14 @@ generalconfigBNRSIADX = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "Exi
 generalconfigNRSIADX = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
                         "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
 
-generalconfigBNRSI2 = {"symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
+generalconfigBNRSI2 = {"symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
-generalconfigNRSI2 = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
+generalconfigNRSI2 = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '30T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                        "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+
+generalconfigBNRSIDual = {"symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": '15T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                        "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+generalconfigNRSIDual = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '15T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNBB = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
