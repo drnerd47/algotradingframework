@@ -171,11 +171,13 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       if (generalconfig["StopLoss"]):
         if (generalconfig["StopLossCond"] == "TIBased"):
           postoExitSL = direc.CheckStopLossTI(positions, currentcandle, TIconfig)
+          if (len(postoExitSL) > 0):
+            direc.ExitPosition(postoExitSL, currentcandle, defs.SL)
         elif (generalconfig["StopLossCond"] == "PremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
-        if (len(postoExitSL) > 0):
-          direc.ExitPosition(postoExitSL, currentcandle, defs.SL)
+          if (len(postoExitSL) > 0):
+            atom.ExitPosition(postoExitSL, currentcandle, defs.SL)
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
