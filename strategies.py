@@ -154,6 +154,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   spotdata = data[data.index.date == start_date]
   placedBull = False
   placedBear = False
+  exitDone = False
   positions = []
   trades = []
   for s in range(len(spotdata)): 
@@ -190,7 +191,8 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           direc.ExitPosition(postoExitTarget, currentcandle, defs.TARGET)
 
       # Square off Remaining Legs EOD
-      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+      if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
         direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
         trades = atom.GetFinalTrades(positions)
+        exitDone = True
   return trades

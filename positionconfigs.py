@@ -1,83 +1,83 @@
 import definitions as defs
 # Short Straddle
 positionconfigShortStraddle = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO}]
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
 # Long Straddle
 positionconfigLongStraddle = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":0,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO}]
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
 def getStraddles(action, SL, Target, SLPc, TargetPc):
     positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":0, "SLPc":SLPc, "TargetPc":TargetPc, "NumLots":1,
-                       "SL": SL, "Target":Target},
+                       "SL": SL, "Target":Target, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":action,"Delta":0,"SLPc":SLPc,"TargetPc":TargetPc,"NumLots":1,
-                       "SL": SL,"Target":Target}]
+                       "SL": SL,"Target":Target, "Id": 2, "HedgeId": 0}]
     return positionconfig
 
 # Short Strangle
 positionconfigShortStrangle = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":200, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":-200,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO}]
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
 # Long Strangle
 positionconfigLongStrangle = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":200, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-200,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO}]
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
 def getStrangles(action, Delta, SL, Target, SLPc, TargetPc):
     positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":Delta, "SLPc":SLPc, "TargetPc":TargetPc, "NumLots":1,
-                       "SL": SL, "Target":Target},
+                       "SL": SL, "Target":Target, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":action,"Delta":-1*Delta,"SLPc":SLPc,"TargetPc":TargetPc,"NumLots":1,
-                       "SL": SL,"Target":Target}]
+                       "SL": SL,"Target":Target, "Id": 2, "HedgeId": 0}]
     return positionconfig
 
 # Iron Butterfly
 positionconfigIronButterfly = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":1000, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1000,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO},
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0},
                       {"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
-                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO},
+                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO, "Id": 3, "HedgeId": 1},
                       {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": 25, "TargetPc": 50,
-                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO}]
+                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO, "Id": 4, "HedgeId": 2}]
 
 def getIronButterfly(Delta, SLBuy, SLSell, Target, SLPcBuy, SLPcSell, TargetPc):
     positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta, "SLPc":SLPcBuy, "TargetPc":TargetPc, "NumLots":1,
-                       "SL": SLBuy, "Target":Target},
+                       "SL": SLBuy, "Target":Target, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1*Delta,"SLPc":SLPcBuy,"TargetPc":TargetPc,"NumLots":1,
-                       "SL": SLBuy,"Target":Target},
+                       "SL": SLBuy,"Target":Target, "Id": 2, "HedgeId": 0},
                       {"Type": defs.CALL, "Action": defs.SELL, "Delta": 0, "SLPc": SLPcSell, "TargetPc": TargetPc,
-                       "NumLots": 1, "SL": SLSell, "Target": Target},
+                       "NumLots": 1, "SL": SLSell, "Target": Target, "Id": 3, "HedgeId": 1},
                       {"Type": defs.PUT, "Action": defs.SELL, "Delta": 0, "SLPc": SLPcSell, "TargetPc": TargetPc,
-                       "NumLots": 1, "SL": SLSell, "Target": Target}]
+                       "NumLots": 1, "SL": SLSell, "Target": Target, "Id": 4, "HedgeId": 2}]
     
     return positionconfig
 
 # Iron Condor
-positionconfigIronCondor = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":200, "SLPc":25, "TargetPc":50, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.NO},
-                      {"Type":defs.PUT,"Action":defs.BUY,"Delta":-200,"SLPc":25,"TargetPc":50,"NumLots":1,
-                       "SL": defs.YES,"Target":defs.NO},
-                      {"Type": defs.CALL, "Action": defs.SELL, "Delta": -100, "SLPc": 25, "TargetPc": 50,
-                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO},
-                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 100, "SLPc": 25, "TargetPc": 50,
-                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO}]
+positionconfigIronCondor = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":1000, "SLPc":25, "TargetPc":50, "NumLots":1,
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
+                      {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1000,"SLPc":25,"TargetPc":50,"NumLots":1,
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0},
+                      {"Type": defs.CALL, "Action": defs.SELL, "Delta": -200, "SLPc": 25, "TargetPc": 50,
+                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO, "Id": 3, "HedgeId": 1},
+                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": 200, "SLPc": 25, "TargetPc": 50,
+                       "NumLots": 1, "SL": defs.YES, "Target": defs.NO, "Id": 4, "HedgeId": 2}]
 
 def getIronCondor(Delta1, Delta2, SLBuy, SLSell, Target, SLPcBuy, SLPcSell, TargetPc):
     positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta1 + Delta2, "SLPc":SLPcBuy, "TargetPc":TargetPc, "NumLots":1,
-                       "SL": SLBuy, "Target":Target},
+                       "SL": SLBuy, "Target":Target, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-1*(Delta1 + Delta2),"SLPc":SLPcBuy,"TargetPc":TargetPc,"NumLots":1,
-                       "SL": SLBuy,"Target":Target},
+                       "SL": SLBuy,"Target":Target, "Id": 2, "HedgeId": 0},
                       {"Type": defs.CALL, "Action": defs.SELL, "Delta": Delta1, "SLPc": SLPcSell, "TargetPc": TargetPc,
-                       "NumLots": 1, "SL": SLSell, "Target": Target},
+                       "NumLots": 1, "SL": SLSell, "Target": Target, "Id": 3, "HedgeId": 1},
                       {"Type": defs.PUT, "Action": defs.SELL, "Delta": -1*Delta1, "SLPc": SLPcSell, "TargetPc": TargetPc,
-                       "NumLots": 1, "SL": SLSell, "Target": Target}]
+                       "NumLots": 1, "SL": SLSell, "Target": Target, "Id": 4, "HedgeId": 2}]
     return positionconfig
 
 positionconfitStatArbStraddle = [positionconfigShortStraddle, positionconfigLongStraddle]
@@ -94,27 +94,40 @@ def getStatArbDef():
 # Position Configs for Directional Strategies
 
 positionconfig21selldirec = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL},
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "Id": 1, "HedgeId": 0},
                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"NumLots":1,
-                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL}, 
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL, "Id": 2, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"NumLots":1,
-                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL},
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BULL, "Id": 3, "HedgeId": 0},
                     {"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR},
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "Id": 4, "HedgeId": 0},
                       {"Type":defs.CALL,"Action":defs.SELL,"Delta":0,"NumLots":1,
-                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}, 
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR, "Id": 5, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"NumLots":1,
-                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR}]
+                       "SL": defs.NO,"Target":defs.NO, "Stance": defs.BEAR, "Id": 6, "HedgeId": 0}]
 
 positionconfigsingleselldirec = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40},
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40, "Id": 1, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40}]
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40, "Id": 2, "HedgeId": 0}]
+
+positionconfigsingleselldirecHedged = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40, "Id": 1, "HedgeId": 3},
+                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40, "Id": 2, "HedgeId": 4},
+                        {"Type": defs.CALL, "Action": defs.BUY, "Delta": 1000, "NumLots": 1,
+                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BEAR, "SLPc": 40, "Id": 3, "HedgeId": 0},
+                        {"Type": defs.PUT, "Action": defs.BUY, "Delta": -1000, "NumLots": 1,
+                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BULL, "SLPc": 40, "Id": 4, "HedgeId": 0}]
 
 positionconfigsingleselldirecSL = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 10, "TargetPc": 80},
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 40, "Id": 1, "HedgeId": 3},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 10, "TargetPc": 80}]
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 40, "Id": 2, "HedgeId": 4},
+                        {"Type": defs.CALL, "Action": defs.BUY, "Delta": 1000, "NumLots": 1,
+                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BEAR, "SLPc": 40, "Id": 3, "HedgeId": 0},
+                        {"Type": defs.PUT, "Action": defs.BUY, "Delta": -1000, "NumLots": 1,
+                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BULL, "SLPc": 40, "Id": 4, "HedgeId": 0}]
 
 positionconfigsinglebuydirec = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "NumLots":1,
                         "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
@@ -122,6 +135,6 @@ positionconfigsinglebuydirec = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "
                         "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
 
 positionconfigsinglebuydirecSL = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 25, "TargetPc": 70},
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 25, "TargetPc": 70},
                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 25, "TargetPc": 70}]
+                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 25, "TargetPc": 70}]

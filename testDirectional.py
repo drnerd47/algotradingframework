@@ -14,8 +14,8 @@ import TIconfigs
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2020, 1, 1)
-end_date = datetime.date(2020, 12, 31)
+start_date = datetime.date(2022, 1, 1)
+end_date = datetime.date(2022, 12, 31)
 delta = datetime.timedelta(days=1)
 
 user = "RI"
@@ -33,13 +33,13 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-generalconfig = genconfig.generalconfigBNRSI2
+generalconfig = genconfig.generalconfigNRSIDual
 positionconfig = posconfig.positionconfigsinglebuydirecSL
-TIconfig = TIconfigs.TIconfig2_RSI
+TIconfig = TIconfigs.TIconfig_RSIDual
 #generalconfig = genconfig.generalconfigBNBB
 #positionconfig = posconfig.positionconfigsinglebuydirec
 #TIconfig = TIconfigs.TIconfigBB2
-
+approach = "RSIDual"
 #generalconfig = genconfig.generalconfigBNRSIDual
 #positionconfig = posconfig.positionconfigsinglebuydirec
 #TIconfig = TIconfigs.TIconfig_RSIDual
@@ -51,6 +51,7 @@ else:
 print("\n")
 data = direc.getTI(dataorig, TIconfig)
 print("\n")
+data.to_csv(Result_path + "Data_" + approach + ".csv")
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 
@@ -81,28 +82,28 @@ trades = trades.drop(["index"],axis = 1)
 
 print("\n")
 print(trades)
-trades.to_csv(Result_path + "trades.csv")
+trades.to_csv(Result_path + approach + "trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv(Result_path + "DailyChart.csv")
+Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv(Result_path + "Report.csv")
+report.to_csv(Result_path + approach + "Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
-weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
+weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + approach + "MonthlyBreakDown.txt")
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
+dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + approach + "DayOfWeek.txt")
 print(dayofweek)
 

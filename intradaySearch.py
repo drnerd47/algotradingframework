@@ -19,7 +19,6 @@ start_date = datetime.date(2022, 1, 1)
 end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
-
 def get_config_space_intraday_straddle():
     cs = sp.Space()
     SquareOffSL = sp.Int("SquareOffSL", 1, 2, default_value=1)
@@ -35,25 +34,51 @@ def get_config_space_intraday_straddle():
     cs.add_variables([SquareOffSL, SquareOffTG, ReEntrySL, ReEntryTG, MaxReEnterCounterTG, MaxReEnterCounterSL, SL, Target, SLPc, TargetPc])
     return cs
 
+def get_config_space_Iron_Butterfly():
+    cs = sp.Space()
+    SquareOffSL = sp.Int("SquareOffSL", 1, 2, default_value=1)
+    SquareOffTG = sp.Int("SquareOffTG", 1, 2, default_value=1)
+    ReEntrySL = sp.Int("ReEntrySL", 0, 1, default_value=0)
+    ReEntryTG = sp.Int("ReEntryTG", 0, 1, default_value=0)
+    MaxReEnterCounterTG = sp.Int("MaxReEnterCounterTG", 1, 10, default_value=3)
+    MaxReEnterCounterSL = sp.Int("MaxReEnterCounterSL", 1, 10, default_value=3)
+    Delta = sp.Int("Delta",0,1500,q = 100,default_value=1000)
+    SL = sp.Int("SL", 0, 1, default_value=1)
+    SLBuy = sp.Int("SLBuy", 0, 1, default_value = 1)
+    SLSell = sp.Int("SLSell", 0, 1, default_value = 1)
+    Target = sp.Int("Target", 0, 1, default_value=1)
+    TargetPc = sp.Int("TargetPc", 30, 70, q = 10, default_value=50)
+    SLPc = sp.Int("SLPc", 5, 40, q = 5, default_value=25)
+    SLPcBuy = sp.Int("SLPcBuy", 5, 40, q = 5, default_value = 25)
+    SLPcSell = sp.Int("SLPcSell", 5, 40, q = 5, default_value = 25)
+    cs.add_variables([SquareOffSL, SquareOffTG, ReEntrySL, ReEntryTG, MaxReEnterCounterTG, MaxReEnterCounterSL, Delta1, Delta2, SL, SLBuy, SLSell, SLPcBuy, SLPcSell,Target, SLPc, TargetPc])
+    return cs
+
 def get_objective_function(config):
-    Banknifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Banknifty/'
-    Nifty_Path = '/content/drive/MyDrive/NIFTYOptionsData/OptionsData/Nifty/'
+    Banknifty_Path = '../NIFTYOptionsData/OptionsData/Banknifty/'
+    Nifty_Path = '../NIFTYOptionsData/OptionsData/Nifty/'
     start_date = datetime.date(2022, 1, 1)
     end_date = datetime.date(2022, 8, 30)
     delta = datetime.timedelta(days=1)
     SquareOffSL = config['SquareOffSL']
     SquareOffTG = config['SquareOffTG']
-    # ReEntrySL = config['ReEntrySL']
-    # ReEntryTG = config['ReEntryTG']
-    # MaxReEnterCounterTG = config['MaxReEnterCounterTG']
-    # MaxReEnterCounterSL = config['MaxReEnterCounterSL']
-    ReEnterEvery = config['ReEnterEvery']
+    ReEntrySL = config['ReEntrySL']
+    ReEntryTG = config['ReEntryTG']
+    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    Delta = config["Delta"]
     SL = config['SL']
+    SLBuy = config["SLBuy"]
+    SLSell = config["SLSell"]
     Target = config['Target']
-    SLPc = config['SLPc']
     TargetPc = config['TargetPc']
-    generalconfig = genconfigs.GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, defs.BN, ReEnterEvery)
-    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
+    SLPc = config['SLPc']
+    SLPcBuy = config["SLPcBuy"]
+    SLPcSell = config["SLPcSell"]
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, defs.BN, ReEntrySL, ReEntryTG,
+                                                        MaxReEnterCounterSL, MaxReEnterCounterTG, 0.5, 1)
+    positionconfig = posconfigs.getIronButterfly(Delta, SLBuy, SLSell, Target, SLPcBuy, SLPcSell, TargetPc)
+
     trade = pd.DataFrame()
     trades = pd.DataFrame()
 

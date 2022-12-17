@@ -26,14 +26,16 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 8, 30)
+start_date = datetime.date(2021, 1, 1)
+end_date = datetime.date(2021, 12, 31)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.generalconfigIntradayREN
-positionconfig = posconfings.positionconfigShortStraddle
-
+generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.BN, defs.YES, defs.NO, 5, 5, 0.5)
+#generalconfig = genconfigs.generalconfigIntradayREBN
+#positionconfig = posconfings.getIronButterfly(1500, 0, 1, 1, 10, 35, 70)
+positionconfig = posconfings.getStraddles(defs.SELL, defs.YES, defs.NO, 25, 50)
+#positionconfig = posconfings.positionconfigShortStraddle
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 
