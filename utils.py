@@ -24,3 +24,4 @@ def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
       singlecost = 30000
       doublecost = 60000
   return min(numcalllegs, numputlegs)*doublecost + (max(numcalllegs, numputlegs) - min(numcalllegs, numputlegs))*singlecost
+

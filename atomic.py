@@ -9,6 +9,10 @@ def LoadDF(currpath):
         masterdf = masterdf.drop('datetime.1', axis=1)
         masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])
+        # masterdf['low'] = masterdf['low'].astype(float)
+        # masterdf['open'] = masterdf['open'].astype(float)
+        # masterdf['high'] = masterdf['high'].astype(float)
+        # masterdf['close'] = masterdf['close'].astype(float)
     return masterdf
 
 def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC, generalconfig):
@@ -87,6 +91,7 @@ def CheckStopLoss(positions, currentcandle):
                     posconfigtoExit.append(pos["PositionConfig"])
             elif (pos["PositionConfig"]["Action"] == defs.BUY):
                 optionprice = pos["OpData"].loc[currentcandle.name]['low']
+                optionprice = pd.to_numeric(optionprice)
                 if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice <= pos['SLCond'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
