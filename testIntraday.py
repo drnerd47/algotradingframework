@@ -31,10 +31,10 @@ end_date = datetime.date(2022, 8, 30)
 delta = datetime.timedelta(days=1)
 
 
-generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.BN, defs.YES, defs.NO, 5, 6, 0.25)
+generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ALLLEGS, defs.BN, defs.YES, defs.YES, 1, 6, 0.5)
 #generalconfig = genconfigs.generalconfigIntradayREBN
-#positionconfig = posconfings.getIronButterfly(1000, 0, 1, 0, 30, 25, 70)
-positionconfig = posconfings.getIronCondor(200, 500, 0, 1, 1, 10, 5, 70)
+#positionconfig = posconfings.getIronButterfly(1500, 0, 1, 0, 30, 35, 70)
+positionconfig = posconfings.getIronCondor(400, 500, 0, 1, 1, 20, 35, 30)
 #positionconfig = posconfings.getStraddles(defs.SELL, defs.YES, defs.NO, 25, 50)
 #positionconfig = posconfings.positionconfigShortStraddle
 trade = pd.DataFrame()

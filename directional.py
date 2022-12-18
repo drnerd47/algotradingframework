@@ -117,7 +117,8 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if currentcandle.name in opdf.index:
                 price = opdf.loc[currentcandle.name][OHLC]
-                position = {"EnterPrice": price, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
+                enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                     "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
                     "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
@@ -126,9 +127,9 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage']}
                 if (posc["SL"] == defs.YES):
-                    position["SLCond"] = price - posc["Action"]*price*posc["SLPc"]/100
+                    position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
                 if (posc["Target"] == defs.YES):
-                    position["TargetCond"] = price + posc["Action"]*price*posc["TargetPc"]/100
+                    position["TargetCond"] = enterprice + posc["Action"]*enterprice*posc["TargetPc"]/100
                 positions.append(position)
             else:
                 positionsNotPlaced.append(posc)
@@ -217,7 +218,8 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                         exitprice = pos["OpData"].loc[idx]['open']
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
-            pos["trades"] = {'EnterPrice': enterprice*(1 + pos["Slippage"]/100*pos["PositionConfig"]["Action"]), 'ExitPrice': exitprice*(1 + pos["Slippage"]/100*pos["PositionConfig"]["Action"]), 
+            exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
+            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],

@@ -33,16 +33,16 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-generalconfig = genconfig.generalconfigNRSIDual
-positionconfig = posconfig.positionconfigsinglebuydirecSL
-TIconfig = TIconfigs.TIconfig_RSIDual
+#generalconfig = genconfig.generalconfigNRSIDual
+#positionconfig = posconfig.positionconfigsinglebuydirecSL
+#TIconfig = TIconfigs.TIconfig_RSIDual
 #generalconfig = genconfig.generalconfigBNBB
 #positionconfig = posconfig.positionconfigsinglebuydirec
 #TIconfig = TIconfigs.TIconfigBB2
 approach = "RSIDual"
-#generalconfig = genconfig.generalconfigBNRSIDual
-#positionconfig = posconfig.positionconfigsinglebuydirec
-#TIconfig = TIconfigs.TIconfig_RSIDual
+generalconfig = genconfig.generalconfigBNRSIADX
+positionconfig = posconfig.positionconfigsinglebuydirec
+TIconfig = TIconfigs.TIconfigRSI_ADX
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
