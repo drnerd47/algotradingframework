@@ -33,212 +33,189 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-# strategytypes = {"IntraDayN": "IntraDayN", "IntraDayBN": "IntraDayBN", "IntradayNRE": "IntradayNRE", "IntradayBNRE": "IntradayBNRE",
-#                  "ExpiryBN":"ExpiryBN" , "ExpiryN": "ExpiryN",
-#                  "NextDayBNMW": "NextDayBNMW", "NextDayNMW": "NextDayNMW", "NextDayBNF":"NextDayBNF", "NextDayNF":"NextDayNF",
-#                  "IntradaySA": "IntradaySA", "ExpirySA":"ExpirySA", "NextDaySA":"NextDaySA",
-#                  "RSI-ADXNb": "RSI-ADXNb", "RSI2Nb": "RSI2Nb", "BB2Nb": "BB2Nb", "SupertrendNb":"SupertrendNb",
-#                  "RSI-ADXBNb": "RSI-ADXBNb", "RSI2BNb": "RSI2BNb", "BB2BNb": "BB2BNb", "SupertrendBNb":"SupertrendBNb",
-#                  "RSI-ADXNs": "RSI-ADXNs", "RSI2Ns": "RSI2Ns", "BB2Ns": "BB2Ns", "SupertrendNs":"SupertrendNs",
-#                  "RSI-ADXBNs": "RSI-ADXBNs", "RSI2BNs": "RSI2BNs", "BB2BNs": "BB2BNs", "SupertrendBNs":"SupertrendBNs" }
 
-strategytypes = {"IntraDayN": "IntraDayN", "IntraDayBN": "IntraDayBN", "IntradayNRE": "IntradayNRE", "IntradayBNRE": "IntradayBNRE",
-                 "ExpiryBN": "ExpiryBN", "ExpiryN": "ExpiryN",
-                 "NextDayBNMW": "NextDayBNMW", "NextDayNMW": "NextDayNMW", "NextDayBNF": "NextDayBNF", "NextDayNF": "NextDayNF",
-                 "IntradaySA": "IntradaySA", "ExpirySA": "ExpirySA", "NextDaySA": "NextDaySA",
-                 "RSI-ADXNb": "RSI-ADXNb", "BB2Nb": "BB2Nb", "SupertrendNb":"SupertrendNb",
-                 "RSI-ADXBNb": "RSI-ADXBNb", "BB2BNb": "BB2BNb", "SupertrendBNb":"SupertrendBNb",
-                 "RSI-ADXNs": "RSI-ADXNs", "BB2Ns": "BB2Ns", "SupertrendNs":"SupertrendNs",
-                 "RSI-ADXBNs": "RSI-ADXBNs", "BB2BNs": "BB2BNs", "SupertrendBNs":"SupertrendBNs"}
+strategytypes = [ "IntraDayN", "IntraDayBN", "IntradayNRE", "IntradayBNRE", "ExpiryBN", "ExpiryN", "NextDayBNMW", "NextDayNMW", "NextDayBNF", "NextDayNF", "IntradaySA", "ExpirySA", "NextDaySA",
+                "RSI-ADXNb", "RSIDualNb", "BB2Nb", "RSI-ADXBNb", "RSIDualBNb", "BB2BNb", "RSI-ADXNs", "RSIDualNs", "BB2Ns", "SupertrendNs", "RSI-ADXBNs", "RSIDualBNs", "BB2BNs", "SupertrendBNs"]
 
-def RunStrategy(strattypes):
-    if (strattypes == strategytypes["IntraDayN"]):
+
+
+start = datetime.date(2020, 1 , 1)
+end = datetime.date(2020, 12, 31)
+
+def RunStrategy(strattypes, start, end):
+    if (strattypes == "IntraDayN"):
         generalconfig = genconfig.generalconfigIntradayN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = True
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["IntraDayBN"]):
+    elif (strattypes == "IntraDayBN"):
         generalconfig = genconfig.generalconfigIntradayBN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = True
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["IntradayNRE"]):
+    elif (strattypes == "IntradayNRE"):
         generalconfig = genconfig.generalconfigIntradayREN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = True
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["IntradayBNRE"]):
+    elif (strattypes == "IntradayBNRE"):
         generalconfig = genconfig.generalconfigIntradayREBN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = True
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["ExpiryBN"]):
+    elif (strattypes == "ExpiryBN"):
         generalconfig = genconfig.generalconfigExpiryBN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["ExpiryN"]):
+    elif (strattypes == "ExpiryN"):
         generalconfig = genconfig.generalconfigExpiryN
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["NextDayBNMW"]):
+    elif (strattypes == "NextDayBNMW"):
         generalconfig = genconfig.generalconfigNextDayBNMW
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["NextDayNMW"]):
+    elif (strattypes == "NextDayNMW"):
         generalconfig = genconfig.generalconfigNextDayNMW
         positionconfig = posconfig.positionconfigShortStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["NextDayBNF"]):
+    elif (strattypes == "NextDayBNF"):
         generalconfig = genconfig.generalconfigNextDayBNF
         positionconfig = posconfig.positionconfigLongStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["NextDayNF"]):
+    elif (strattypes == "NextDayNF"):
         generalconfig = genconfig.generalconfigNextDayNF
         positionconfig = posconfig.positionconfigLongStraddle
         intraday = False
         Arb = False
         directional = False
-    elif (strattypes == strategytypes["IntradaySA"]):
+    elif (strattypes == "IntradaySA"):
         generalconfig = [genconfig.generalconfigIntradayBN, genconfig.generalconfigIntradayN]
         positionconfig = posconfig.positionconfitStatArbStraddle
         intraday = True
         Arb = True
         directional = False
-    elif (strattypes == strategytypes["ExpirySA"]):
+    elif (strattypes == "ExpirySA"):
         generalconfig = [genconfig.generalconfigExpiryBN, genconfig.generalconfigExpiryN]
         positionconfig = posconfig.positionconfitStatArbStraddle
         intraday = False
         Arb = True
         directional = False
-    elif (strattypes == strategytypes["NextDaySA"]):
+    elif (strattypes == "NextDaySA"):
         generalconfig = [genconfig.generalconfigNextDayBNMW, genconfig.generalconfigNextDayNMW]
         positionconfig = posconfig.positionconfitStatArbStraddle
         intraday = False
         Arb = True
         directional = False
 #######################################################################################################################################
-    elif (strattypes == strategytypes["RSI-ADXNb"]):
+    elif (strattypes == "RSI-ADXNb"):
         generalconfig = genconfig.generalconfigNRSIADX
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
-    # elif (strattypes == strategytypes["RSI2Nb"]):
-    #     generalconfig = genconfig.generalconfigNRSI2
-    #     positionconfig = posconfig.positionconfigsinglebuydirec
-    #     TIconfig = TIconfigs.TIconfig2_RSI
-    #     intraday = True
-    #     Arb = False
-    #     directional = True
-    elif (strattypes == strategytypes["BB2Nb"]):
+    elif (strattypes == "RSIDualNb"):
+        generalconfig = genconfig.generalconfigNRSIDual
+        positionconfig = posconfig.positionconfigsinglebuydirecSL
+        TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+    elif (strattypes == "BB2Nb"):
         generalconfig = genconfig.generalconfigNBB
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["SupertrendNb"]):
-        generalconfig = genconfig.generalconfigNST
-        positionconfig = posconfig.positionconfigsinglebuydirec
-        TIconfig = TIconfigs.TIconfigST
-        intraday = True
-        Arb = False
-        directional = True
-    elif (strattypes == strategytypes["RSI-ADXBNb"]):
+    elif (strattypes == "RSI-ADXBNb"):
         generalconfig = genconfig.generalconfigBNRSIADX
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
-    # elif (strattypes == strategytypes["RSI2BNb"]):
-    #     generalconfig = genconfig.generalconfigBNRSI2
-    #     positionconfig = posconfig.positionconfigsinglebuydirec
-    #     TIconfig = TIconfigs.TIconfig2_RSI
-    #     intraday = True
-    #     Arb = False
-    #     directional = True
-    elif (strattypes == strategytypes["BB2BNb"]):
+    elif (strattypes == "RSIDualBNb"):
+        generalconfig = genconfig.generalconfigBNRSIDual
+        positionconfig = posconfig.positionconfigsinglebuydirecSL
+        TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+    elif (strattypes == "BB2BNb"):
         generalconfig = genconfig.generalconfigBNBB
         positionconfig = posconfig.positionconfigsinglebuydirec
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["SupertrendBNb"]):
-        generalconfig = genconfig.generalconfigBNST
-        positionconfig = posconfig.positionconfigsinglebuydirec
-        TIconfig = TIconfigs.TIconfigST
-        intraday = True
-        Arb = False
-        directional = True
-    elif (strattypes == strategytypes["RSI-ADXNs"]):
+    elif (strattypes == "RSI-ADXNs"):
         generalconfig = genconfig.generalconfigNRSIADX
         positionconfig = posconfig.positionconfigsingleselldirec
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
-    # elif (strattypes == strategytypes["RSI2Ns"]):
-    #     generalconfig = genconfig.generalconfigNRSI2
-    #     positionconfig = posconfig.positionconfigsingleselldirec
-    #     TIconfig = TIconfigs.TIconfig2_RSI
-    #     intraday = True
-    #     Arb = False
-    #     directional = True
-    elif (strattypes == strategytypes["BB2Ns"]):
+    elif (strattypes == "RSIDualNs"):
+        generalconfig = genconfig.generalconfigNRSIDual
+        positionconfig = posconfig.positionconfigsingleselldirecSL
+        TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+    elif (strattypes == "BB2Ns"):
         generalconfig = genconfig.generalconfigNBB
         positionconfig = posconfig.positionconfigsingleselldirec
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["SupertrendNs"]):
+    elif (strattypes == "SupertrendNs"):
         generalconfig = genconfig.generalconfigNST
-        positionconfig = posconfig.positionconfigsingleselldirec
+        positionconfig = posconfig.positionconfigsingleselldirecSL
         TIconfig = TIconfigs.TIconfigST
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["RSI-ADXBNs"]):
+    elif (strattypes == "RSI-ADXBNs"):
         generalconfig = genconfig.generalconfigBNRSIADX
         positionconfig = posconfig.positionconfigsingleselldirec
         TIconfig = TIconfigs.TIconfigRSI_ADX
         intraday = True
         Arb = False
         directional = True
-    # elif (strattypes == strategytypes["RSI2BNs"]):
-    #     generalconfig = genconfig.generalconfigBNRSI2
-    #     positionconfig = posconfig.positionconfigsingleselldirec
-    #     TIconfig = TIconfigs.TIconfig2_RSI
-    #     intraday = True
-    #     Arb = False
-    #     directional = True
-    elif (strattypes == strategytypes["BB2BNs"]):
+    elif (strattypes == "RSIDualBNs"):
+        generalconfig = genconfig.generalconfigBNRSIDual
+        positionconfig = posconfig.positionconfigsingleselldirecSL
+        TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+    elif (strattypes == "BB2BNs"):
         generalconfig = genconfig.generalconfigBNBB
         positionconfig = posconfig.positionconfigsingleselldirec
         TIconfig = TIconfigs.TIconfigBB2
         intraday = True
         Arb = False
         directional = True
-    elif (strattypes == strategytypes["SupertrendBNs"]):
+    elif (strattypes == "SupertrendBNs"):
         generalconfig = genconfig.generalconfigBNST
-        positionconfig = posconfig.positionconfigsingleselldirec
+        positionconfig = posconfig.positionconfigsingleselldirecSL
         TIconfig = TIconfigs.TIconfigST
         intraday = True
         Arb = False
@@ -249,10 +226,15 @@ def RunStrategy(strattypes):
     positions = []
     positions1 = []
     positions2 = []
-    start_date = datetime.date(2022, 1, 1)
-    end_date = datetime.date(2022, 9, 30)
-    delta = datetime.timedelta(days=1)
+
+    # years = [2019, 2020, 2021, 2022]
+    # for year in years:
     
+    start_date = start
+    end_date = end
+    delta = datetime.timedelta(days=1)
+
+    # year_path = parent_dir+str(year)    
     directory = "Strategy "+str(strattypes)
     path = os.path.join(parent_dir, directory)
     
@@ -264,10 +246,10 @@ def RunStrategy(strattypes):
     
     if directional == True:
         if (generalconfig["symbol"] == defs.N):
-            data = direc.getMultipledayData(start_date, end_date, Nifty_Path, defs.N, generalconfig["Resample"])
+            data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Nifty_Path, defs.N, generalconfig["Resample"])
             data = direc.getTI(data, TIconfig)
         else:
-            data = direc.getMultipledayData(start_date, end_date, Banknifty_Path, defs.BN, generalconfig["Resample"])
+            data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"])
             data = direc.getTI(data, TIconfig)  
 
     while start_date <= end_date:
@@ -328,7 +310,7 @@ weeklyArr = pd.DataFrame()
 
 for strategy in strategytypes :
     print("Running Strategy " + strategy)
-    (daily, weekly) = RunStrategy(strategy)
+    (daily, weekly) = RunStrategy(strategy, start, end)
     dailyArr['Strategy ' + strategy] = daily
     dailyArr = dailyArr.fillna(0)
     weeklyArr['Strategy ' + strategy] = weekly
