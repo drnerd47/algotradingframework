@@ -19,6 +19,8 @@ def GetDailyChart(trades):
   return Daily_Chart
 
 
+
+
 def Report(trades, Daily_Chart):
   rep = {}
   date = trades["date"].tolist()
@@ -36,7 +38,6 @@ def Report(trades, Daily_Chart):
     counts = list(dct.values())
 
   def generate_streak_info(trades):
-
     data = shots['Reason'].to_frame()
     data['start_of_streak'] = data['Reason'].ne(data['Reason'].shift())
     data['streak_id'] = data.start_of_streak.cumsum()
@@ -47,10 +48,8 @@ def Report(trades, Daily_Chart):
   shots = trades['Reason'].to_frame()
   generate_streak_info(shots)
 
-  Max_winning_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "Time Up"][
-    "streak_counter"].max()
-  Max_Losing_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "SL HIT"][
-    "streak_counter"].max()
+  Max_winning_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "Time Up"]["streak_counter"].max()
+  Max_Losing_Streak = generate_streak_info(shots)[generate_streak_info(shots)["Reason"] == "SL HIT"]["streak_counter"].max()
 
   Zero_SL_HIT = counts.count(0)
   First_SL_HIT = counts.count(1)
@@ -72,7 +71,7 @@ def Report(trades, Daily_Chart):
   Win_Ratio = Total_no_of_win_trades / Total_no_of_trades
   Loss_Ratio = Total_no_of_bad_trades / Total_no_of_trades
   Expectancy = ((Avg_Profit_win_trades / -Avg_Loss_bad_trades) * Win_Ratio) - Loss_Ratio
-  Expiry_Date = trades["symbol"].str.slice(-14, -7)
+  Expiry_Date = trades["Expiry"]
   Daily_Chart["Expiry_Date"] = pd.to_datetime(Expiry_Date, infer_datetime_format=True)
   Expiry_info = Daily_Chart[Daily_Chart["Date"] == Daily_Chart["Expiry_Date"]]
   Expiry_Net = Expiry_info["Daily pnl"].sum()

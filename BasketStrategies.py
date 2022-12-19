@@ -270,12 +270,9 @@ def RunStrategy(strattypes, start, end, yearpath):
     positions1 = []
     positions2 = []
 
-
-
     start_date = start
     end_date = end
     delta = datetime.timedelta(days=1)
-
 
     directory = "Strategy "+str(strattypes)
     strategypath = os.path.join(yearpath, directory)
@@ -373,7 +370,7 @@ for year in years:
     weeklyArr = pd.DataFrame()
 
     for strategy in strategytypes :
-        print("Running Strategy " + strategy + " on " + str(year) + " Data.")
+        print("Running Strategy " + strategy + " from " + str(start) + " to " + str(end))
         (daily, weekly, Margin) = RunStrategy(strategy, start, end, yearpath)
         dailyArr[strategy] = daily
         dailyArr = dailyArr.fillna(0)

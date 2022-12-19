@@ -223,7 +223,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                            "date": pos["date"], "symbol": pos["OpSymbol"] }
+                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry'] }
             pos["Active"] = False
 
 
