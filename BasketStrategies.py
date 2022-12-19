@@ -379,8 +379,10 @@ for year in years:
         weeklyArr.loc['Margin', strategy] = Margin
         weeklyArr = weeklyArr.fillna(0)
         # print(weeklyArr)
-
-    weeklyCorr = weeklyArr.corr()
+    
+    temp_weeklyArr = weeklyArr.drop(['Total', 'Margin'], axis=0)
+    # print(temp_weeklyArr)
+    weeklyCorr = temp_weeklyArr.corr()
 
     col_list = list(weeklyArr)
     weeklyArr['Mean Strategy'] = weeklyArr[col_list].mean(axis=1)
