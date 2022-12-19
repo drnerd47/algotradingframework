@@ -6,7 +6,7 @@ def BuyMarginCalculator(trades, symbol):
     margin = trades.EnterPrice * defs.BNLOTSIZE
   elif symbol == defs.N :
     margin = trades.EnterPrice * defs.NLOTSIZE
-  return (margin.max(), margin.mean(), margin.min())
+  return margin.max()
 
 def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
   if (positiontype == "Naked"):
