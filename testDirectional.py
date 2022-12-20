@@ -36,13 +36,13 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #generalconfig = genconfig.generalconfigNRSIDual
 #positionconfig = posconfig.positionconfigsinglebuydirecSL
 #TIconfig = TIconfigs.TIconfig_RSIDual
-#generalconfig = genconfig.generalconfigBNBB
-#positionconfig = posconfig.positionconfigsinglebuydirec
-#TIconfig = TIconfigs.TIconfigBB2
-approach = "RSIDual"
-generalconfig = genconfig.generalconfigBNRSIADX
+generalconfig = genconfig.generalconfigBNBB
 positionconfig = posconfig.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfigRSI_ADX
+TIconfig = TIconfigs.TIconfigBB2
+approach = "BB2"
+#generalconfig = genconfig.generalconfigBNRSIADX
+#positionconfig = posconfig.positionconfigsinglebuydirec
+#TIconfig = TIconfigs.TIconfigRSI_ADX
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
@@ -78,7 +78,7 @@ while start_date <= end_date:
 
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
-trades = trades.drop(["index"],axis = 1)
+trades = trades.drop(["index"], axis = 1)
 
 print("\n")
 print(trades)
