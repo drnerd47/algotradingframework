@@ -169,8 +169,9 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         nextcandle = currentcandle
     else:
       nextcandle = currentcandle
+
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
-    # Check Enter Condition
+  # Check Enter Condition
     if bullentry and not placedBull:
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, "close", defs.BULL)
       data.loc[currentcandle.name]['Signal'] = defs.ENTERBULLPOSITION
@@ -182,8 +183,9 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
     if placedBull or placedBear:
       # Check Stop Loss Condition
       if (generalconfig["StopLoss"]):
+        # if nextcandle.name in positions['OpData'].index :
         if (generalconfig["StopLossCond"] == "TIBased"):
-          postoExitSL = direc.CheckStopLossTI(positions, currentcandle, TIconfig)
+          postoExitSL = direc.CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL)
             data.loc[currentcandle.name]['Signal'] = defs.STOPLOSSHIT

@@ -148,15 +148,16 @@ def CheckStopLossConditionStance(stance, currentcandle, TIconfig):
                 SLCondBear = SLCondBear or (t["SLBearOperator"](currentcandle[t["columnname"]], t["SLBear"]))
     return (SLCondBull, SLCondBear)      
          
-def CheckStopLossTI(positions, currentcandle, TIconfig):
+def CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index and nextcandle.name in pos['OpData'].index :
             (SLCondBull, SLCondBear) = CheckStopLossConditionStance(pos["stance"], currentcandle, TIconfig)
             if (SLCondBull and pos["Active"]):
                 positionstoExit.append(pos)
             if (SLCondBear and pos["Active"]):
                 positionstoExit.append(pos)
+
     return positionstoExit
 
 def CheckTargetConditionStance(stance, currentcandle, TIconfig):
