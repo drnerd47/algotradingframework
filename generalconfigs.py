@@ -26,88 +26,88 @@ def GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, symbol, ReEnterEvery,
 generalconfigNextDayBNMW = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.TUE, defs.WED, defs.THU], "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigNextDayBNF = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON], "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigNextDayBNMF = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED,defs.THU,defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON,defs.TUE, defs.WED, defs.THU,defs.FRI], "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0, "LotSize":50}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":50}
 
 generalconfigExpiryBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON],
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "ExitDay": [defs.THU], "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigIntradayBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigIntradayREBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
                      "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigNextDayNMW = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.TUE, defs.WED, defs.THU], "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigNextDayNF = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON], "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigNextDayNMF = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED,defs.THU,defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON,defs.TUE, defs.WED, defs.THU,defs.FRI], "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": 0, "LotSize":50}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":50}
 
 generalconfigExpiryN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON],
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "ExitDay": [defs.THU], "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigIntradayN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigIntradayREN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.N,
                      "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 # Directional Strategies config
 generalconfigBNRSIADX = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                        "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 generalconfigNRSIADX = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                        "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNRSI2 = {"symbol":defs.BN, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 generalconfigNRSI2 = {"symbol":defs.N, "EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNRSIDual = {"symbol":defs.BN, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 generalconfigNRSIDual = {"symbol":defs.N, "EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": '15T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNBB = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                    "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 generalconfigNBB = {"symbol":defs.N,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                    "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNST = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-                    "Slippage": 0.5, "LotSize":defs.BNLOTSIZE}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 generalconfigNST = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-                    "Slippage": 0.5, "LotSize":defs.NLOTSIZE}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 
 
