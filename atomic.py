@@ -1,6 +1,8 @@
 import pandas as pd
 from pathlib import Path
 import definitions as defs
+from datetime import datetime as dt
+import datetime
 
 def LoadDF(currpath):
     my_file = Path(currpath)
@@ -41,7 +43,12 @@ def GetExpiry(masterdf, symbol):
         return 0
 
 def GetSpotData(masterdf, symbol):
-    return masterdf[masterdf['symbol'] == symbol]
+    mask1 = masterdf['symbol'] == symbol
+    #print(masterdf.info())
+    mask2 = masterdf.datetime.dt.time >= datetime.time(9,15)
+    df = masterdf[mask1 & mask2]
+    df.drop_duplicates(subset=['datetime'], inplace=True)
+    return df
 
 def UpdatePosition(masterdf, positions):
     if (len(positions) > 0):

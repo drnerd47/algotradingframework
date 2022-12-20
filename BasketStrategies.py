@@ -11,6 +11,7 @@ import TIconfigs
 import directional as direc
 import os
 import utils
+import numpy as np
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -37,6 +38,8 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 strategytypes = [ "IntraDayN", "IntraDayBN", "IntradayNRE", "IntradayBNRE", "ExpiryBN", "ExpiryN", "NextDayBNMW", "NextDayNMW", "NextDayBNF", "NextDayNF", "IntradaySA", "ExpirySA", "NextDaySA",
                 "RSI-ADXNb", "RSIDualNb", "BB2Nb", "RSI-ADXBNb", "RSIDualBNb", "BB2BNb", "RSI-ADXNs", "RSIDualNs", "BB2Ns", "SupertrendNs", "RSI-ADXBNs", "RSIDualBNs", "BB2BNs", "SupertrendBNs"]
+
+   
 
 # strategytypes = ["NextDayBNF", "NextDayNF", "IntradaySA"]
 def RunStrategy(strattypes, start, end, yearpath):
@@ -289,6 +292,7 @@ def RunStrategy(strattypes, start, end, yearpath):
         else:
             data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"])              
         data = direc.getTI(data, TIconfig)
+        data['Signal'] = np.NaN
     while start_date <= end_date:
         trade = pd.DataFrame()
         date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
@@ -311,7 +315,7 @@ def RunStrategy(strattypes, start, end, yearpath):
                     (trade, positions) = strategies.MultiDayStrategy(masterdf, positions, generalconfig, positionconfig)
                 elif (intraday == True and directional == True):                    
                     trade = strategies.DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig, start_date)
-                
+                    data.to_csv(strategypath+"/signaldata.csv")                
             else:
                 if (intraday == True):
                     trade1 = strategies.IntraDayStrategy(masterdfBN, generalconfig[0], positionconfig[0])
@@ -325,7 +329,8 @@ def RunStrategy(strattypes, start, end, yearpath):
                     trade = trade.append(trade2)
             if (len(trade) > 0):
                 trades = trades.append(trade)
-        start_date += delta
+               
+        start_date += delta        
 
     trades['date'] = pd.to_datetime(trades["date"])
     trades = trades.reset_index()

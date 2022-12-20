@@ -1,4 +1,6 @@
 import definitions as defs
+import datetime
+import operator
 
 def GetRSI2ConfigsPBSell(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2):
     positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
@@ -12,7 +14,7 @@ def GetRSI2ConfigsPBSell(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, T
     if (Target == defs.YES):
         TBool = True
     generalconfig = {"symbol": defs.BN, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                           "Resample": Resample, "StopLoss": SBool, "Target": TBool, "StopLossCond": "PremiumBased",
+                           "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased",
                            "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
     ticonfig = [
@@ -36,7 +38,7 @@ def GetRSI2ConfigsPBSell(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, T
     if (Target == defs.YES):
         TBool = True
     generalconfig = {"symbol": defs.BN, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                           "Resample": Resample, "StopLoss": SBool, "Target": TBool, "StopLossCond": "PremiumBased",
+                           "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased",
                            "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
     ticonfig = [

@@ -162,19 +162,22 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
     currentcandle = spotdata.iloc[s]
     if (currentcandle.name in spotdatafull.index):
       sfull = spotdatafull.index.get_loc(currentcandle.name)
+      
       if (sfull < len(spotdatafull)-1):
-        currentcandlenext = spotdatafull.iloc[sfull+1]
+        nextcandle = spotdatafull.iloc[sfull+1]
       else:
-        currentcandlenext = currentcandle
+        nextcandle = currentcandle
     else:
-      currentcandlenext = currentcandle
+      nextcandle = currentcandle
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
     # Check Enter Condition
     if bullentry and not placedBull:
-      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandlenext, "close", defs.BULL)
+      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, "close", defs.BULL)
+      data.loc[currentcandle.name]['Signal'] = defs.ENTERBULLPOSITION
       placedBull = True
     if bearentry and not placedBear:
-      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandlenext, "close", defs.BEAR)
+      (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, "close", defs.BEAR)
+      data.loc[currentcandle.name]['Signal'] = defs.ENTERBEARPOSITION
       placedBear = True
     if placedBull or placedBear:
       # Check Stop Loss Condition
@@ -182,26 +185,30 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         if (generalconfig["StopLossCond"] == "TIBased"):
           postoExitSL = direc.CheckStopLossTI(positions, currentcandle, TIconfig)
           if (len(postoExitSL) > 0):
-            direc.ExitPosition(postoExitSL, currentcandlenext, defs.SL)
+            direc.ExitPosition(postoExitSL, nextcandle, defs.SL)
+            data.loc[currentcandle.name]['Signal'] = defs.STOPLOSSHIT
         elif (generalconfig["StopLossCond"] == "PremiumBased"):
-          (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandlenext)
+          (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
-            atom.ExitPosition(postoExitSL, currentcandlenext, defs.SL)
+            atom.ExitPosition(postoExitSL, nextcandle, defs.SL)
+            data.loc[currentcandle.name]['Signal'] = defs.STOPLOSSHIT
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
         if (generalconfig["TargetCond"] == "TIBased"):
           postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, TIconfig)
         elif (generalconfig["TargetCond"] == "PremiumBased"):
-          (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandlenext)
+          (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
         if (len(postoExitTarget) > 0):
-          direc.ExitPosition(postoExitTarget, currentcandlenext, defs.TARGET)
+          direc.ExitPosition(postoExitTarget, nextcandle, defs.TARGET)
+          data.loc[currentcandle.name]['Signal'] = defs.TARGETREACHED
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
         direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD)
+        data.loc[currentcandle.name]['Signal'] = defs.EXITTIME
         trades = atom.GetFinalTrades(positions)
         exitDone = True
   return trades

@@ -2,7 +2,6 @@ import pandas as pd
 import ta
 from pathlib import Path
 import datetime
-import time
 import atomic as atom
 import definitions as defs
 import supertrend as st
@@ -19,10 +18,10 @@ def Resample(df, freq='1T'): # freq format,  for 2min freq='2T', for 3min freq='
     return resample_df
 
 # This function gets spot data of multiple days and resamples for required frequency
-def getMultipledayData(start_date, end_date, entertime, path, symbol, freq):        
+def getMultipledayData(start_date, end_date, entertime, path, symbol, freq):    
     df_list = []
     delta = datetime.timedelta(days=1)
-    
+    # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
     while start_date <= end_date:
         date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
         currpath = path + date_string
@@ -33,8 +32,9 @@ def getMultipledayData(start_date, end_date, entertime, path, symbol, freq):
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
-            mask2 = df['symbol'] == symbol            
+            mask2 = df['symbol'] == symbol           
             spotdata = df[mask1 & mask2]
+            spotdata.drop_duplicates(subset=['datetime'], inplace=True)
             resampled = Resample(spotdata, freq)
             resampled.dropna(inplace=True)
             df_list.append(resampled)

@@ -8,17 +8,17 @@ import reporting as rep
 import generalconfigs as genconfig
 import positionconfigs as posconfig
 import directional as direc
-import operator
 import warnings
 import TIconfigs
+import numpy as np
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 12, 31)
+start_date = datetime.date(2021, 2, 1)
+end_date = datetime.date(2021, 2, 28)
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -48,10 +48,9 @@ if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
 else:
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"])
-print("\n")
 data = direc.getTI(dataorig, TIconfig)
-print("\n")
-data.to_csv(Result_path + "Data_" + approach + ".csv")
+data['Signal'] = np.nan
+
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 
@@ -61,7 +60,7 @@ while start_date <= end_date:
   NPath = Nifty_Path + date_string
   my_fileN = Path(NPath)
   my_fileBN = Path(BNPath)
-  print(date_string)
+  print("Working on file - "+date_string)
   if my_fileN.exists() and my_fileBN.exists():
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
@@ -69,13 +68,14 @@ while start_date <= end_date:
       trade = strategies.DirectionalStrategy(data, masterdfBN, generalconfig, positionconfig, TIconfig, start_date)
     elif (generalconfig["symbol"] == defs.N):
       trade = strategies.DirectionalStrategy(data, masterdfN, generalconfig, positionconfig, TIconfig, start_date)
-    print(trade)
+    #print(trade)
     if (len(trade) > 0):
       trades = trades.append(trade)
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))  
   start_date += delta
 
+data.to_csv(Result_path + "Data_" + approach + ".csv")
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"], axis = 1)
