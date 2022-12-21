@@ -190,29 +190,39 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
 #      nextcandle = currentcandle
 
 #=======
-    if (s < len(spotdata)-1):
-      nextcandle = spotdata.iloc[s+1]
+    # if (s < len(spotdata)-1):
+    #   nextcandle = spotdata.iloc[s+1]
+    # else:
+    #   nextcandle = currentcandle
+    if (currentcandle.name in spotdatafull.index):
+      
+      sfull = spotdatafull.index.get_loc(currentcandle.name)
+      if (sfull < len(spotdatafull)-1):
+        nextcandle = spotdatafull.iloc[sfull+1]
+      else:
+        nextcandle = currentcandle
     else:
       nextcandle = currentcandle
-    #if (currentcandle.name in spotdatafull.index):
-    #  sfull = spotdatafull.index.get_loc(currentcandle.name)
-    #  if (sfull < len(spotdatafull)-1):
-    #    currentcandlenext = spotdatafull.iloc[sfull+1]
-    #  else:
-    #    currentcandlenext = currentcandle
-    #else:
-    #  currentcandlenext = currentcandle
+
+    # if nextcandle.name in spotdatafull.index :
+    #   if (sfull < len(spotdatafull) - 2) :
+    #     thirdcandle = spotdatafull.iloc[sfull+2]
+    #   elif (sfull < len(spotdatafull) - 1) :
+    #     thirdcandle = spotdatafull.iloc[sfull+1]
+    #   else :
+    #     thirdcandle = nextcandle    
 
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
   # Check Enter Condition
     if bullentry and not placedBull:
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BULL)
-      data.loc[currentcandle.name]['Signal'] = defs.ENTERBULLPOSITION
+      data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBULLPOSITION
       placedBull = True
     if bearentry and not placedBear:
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BEAR)
-      data.loc[currentcandle.name]['Signal'] = defs.ENTERBEARPOSITION
+      data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBEARPOSITION
       placedBear = True
+    
     if placedBull or placedBear:
       # Check Stop Loss Condition
       if (generalconfig["StopLoss"]):
@@ -220,33 +230,38 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           postoExitSL = direc.CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
-            data.loc[currentcandle.name]['Signal'] = defs.STOPLOSSHIT
+            data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
+            exitDone = True
         elif (generalconfig["StopLossCond"] == "PremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
             atom.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
-            data.loc[currentcandle.name]['Signal'] = defs.STOPLOSSHIT
+            data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
+            exitDone = True
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
         if (generalconfig["TargetCond"] == "TIBased"):
-          postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, TIconfig)
+          postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitTarget) > 0):
-            direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitTGOHLC)
-            data.loc[currentcandle.name]['Signal'] = defs.TARGETREACHED
+            direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)            
+            data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
+            exitDone = True
         elif (generalconfig["TargetCond"] == "PremiumBased"):
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.TARGET, exitTGOHLC)
-            data.loc[currentcandle.name]['Signal'] = defs.TARGETREACHED
+            data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
+            exitDone = True
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
         direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
-        data.loc[currentcandle.name]['Signal'] = defs.EXITTIME
-        trades = atom.GetFinalTrades(positions)
+        data.loc[currentcandle.name]['ExitSignal'] = defs.EXITTIME
+        # trades = atom.GetFinalTrades(positions)
         exitDone = True
+      trades = atom.GetFinalTrades(positions)
 
   return trades

@@ -84,6 +84,8 @@ def getTI(spotdata, TIconfig):
             data = getMACD(spotdata, t['fastperiod'], t['slowperiod'])
         if t['TI'] == 'ST':
             data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'], t['columnname'])
+        data['EntrySignal'] = np.nan
+        data['ExitSignal'] = np.nan
     return data
 
 def getSuperTrendIndicator(spotdata, period, multiplier, columnname):
@@ -102,28 +104,28 @@ def CheckEntryCondition(currentcandle, TIconfig):
         bear = bear and t["BearOperator"](currentcandle[t["columnname"]], t["ThreshBear"])    
     return (bull, bear)
 
-def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLC, stance):
+def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance):
     positionsNotPlaced = []
     for posc in positionconfig:
         if (posc["Stance"] == stance):
             exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
             if generalconfig['symbol'] == defs.N :
-                cst = currentcandle[OHLC]
+                cst = nextcandle[OHLC]
                 cst = int(round(cst / 50, 0) * 50)
             elif generalconfig['symbol'] == defs.BN :
-                cst = currentcandle[OHLC]
+                cst = nextcandle[OHLC]
                 cst = int(round(cst / 100, 0) * 100)
             opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
-            if currentcandle.name in opdf.index:
-                price = opdf.loc[currentcandle.name][OHLC]
+            if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
+                price = opdf.loc[nextcandle.name][OHLC]
                 enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                     "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
-                    "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
-                    "date": currentcandle.name.date(),                    
-                    "TargetCond": posc["Target"], "EnterSpotPrice": currentcandle[OHLC],
+                    "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
+                    "date": nextcandle.name.date(),                    
+                    "TargetCond": posc["Target"], "EnterSpotPrice": nextcandle[OHLC],
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage']}
                 if (posc["SL"] == defs.YES):
@@ -173,10 +175,10 @@ def CheckTargetConditionStance(stance, currentcandle, TIconfig):
                     TargetCondBear = TargetCondBear or (t["TBearOperator"](currentcandle[t["columnname"]], t["TargetBear"]))
         return (TargetCondBull, TargetCondBear)
 
-def CheckTargetConditionTI(positions, currentcandle, TIconfig):
+def CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index and nextcandle.name in pos['OpData'].index :
             (TargetCondBull, TargetCondBear) = CheckTargetConditionStance(pos["stance"], currentcandle, TIconfig)          
             if (TargetCondBull and pos["Active"]):
                 positionstoExit.append(pos)

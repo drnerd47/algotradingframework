@@ -15,10 +15,10 @@ import numpy as np
 warnings.filterwarnings("ignore")
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 12, 31)
+end_date = datetime.date(2022, 1, 31)
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -39,17 +39,17 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #generalconfig = genconfig.generalconfigBNBB
 #positionconfig = posconfig.positionconfigsingleselldirec
 #TIconfig = TIconfigs.TIconfigBB1
-approach = "RSIADX"
-generalconfig = genconfig.generalconfigBNRSIADX
+approach = "BB2"
+generalconfig = genconfig.generalconfigBNBB
 positionconfig = posconfig.positionconfigsingleselldirec
-TIconfig = TIconfigs.TIconfigRSI_ADX
+TIconfig = TIconfigs.TIconfigBB2
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
 else:
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"])
 data = direc.getTI(dataorig, TIconfig)
-data['Signal'] = np.nan
+
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()
@@ -76,6 +76,7 @@ while start_date <= end_date:
   start_date += delta
 
 data.to_csv(Result_path + "Data_" + approach + ".csv")
+# print(trades)
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"], axis = 1)

@@ -292,7 +292,7 @@ def RunStrategy(strattypes, start, end, yearpath):
         else:
             data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"])              
         data = direc.getTI(data, TIconfig)
-        data['Signal'] = np.NaN
+        
     while start_date <= end_date:
         trade = pd.DataFrame()
         date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
