@@ -84,9 +84,9 @@ generalconfigIntradayREN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                  "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 # Directional Strategies config
-generalconfigBNRSIADX = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
+generalconfigBNRSIADX = {"symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
-generalconfigNRSIADX = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
+generalconfigNRSIADX = {"symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": '3T', "StopLoss": True, "Target": False, "StopLossCond": "TIBased", "TargetCond": "TIBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigBNRSI2 = {"symbol":defs.BN, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": '10T', "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",

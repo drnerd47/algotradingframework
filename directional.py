@@ -185,7 +185,7 @@ def CheckTargetConditionTI(positions, currentcandle, TIconfig):
     return positionstoExit
 
 
-def ExitPosition(positionstoExit, currentcandle, ExitReason):
+def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
     for pos in positionstoExit:
         if (pos["Active"]):
             Str = ""
@@ -195,28 +195,32 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                 Str = "Sell "
             Str = Str + pos["PositionConfig"]["Type"]
             if (ExitReason == defs.SL):
-                exitprice = pos["OpData"].loc[currentcandle.name]['close']
+                # OHLC = close
+                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 exitReason = "SL HIT"
             elif (ExitReason == defs.TARGET):
-                exitprice = pos["OpData"].loc[currentcandle.name]['close']
+                # OHLC = close
+                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 exitReason = "Target Hit"
             elif (ExitReason == defs.SQUAREOFF):
                 if currentcandle.name in pos["OpData"].index:
-                    exitprice = pos["OpData"].loc[currentcandle.name]['close']
+                    # OHLC = close
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                     exitReason = "Square Off"
                 else:
                     idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
                     exitprice = pos["OpData"][idx]
             elif (ExitReason == defs.SQUAREOFFEOD):
                 if currentcandle.name in pos["OpData"].index:
-                    exitprice = pos["OpData"].loc[currentcandle.name]['open']
+                    # OHLC = open
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                     exitReason = "Square Off EOD"
                 else:
                     if pos["OpData"].empty:
                         return
                     else:
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
-                        exitprice = pos["OpData"].loc[idx]['open']
+                        exitprice = pos["OpData"].loc[idx][OHLC]
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)

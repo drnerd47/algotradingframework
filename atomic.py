@@ -120,7 +120,7 @@ def CheckTargetCondition(positions, currentcandle):
                     posconfigtoExit.append(pos["PositionConfig"])
     return (positionstoExit, posconfigtoExit)
 
-def ExitPosition(positionstoExit, currentcandle, ExitReason):
+def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
     for pos in positionstoExit:
         if (pos["Active"]):
             Str = ""
@@ -137,23 +137,24 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason):
                 exitReason = "Target Hit"
             elif (ExitReason == defs.SQUAREOFF):
                 if currentcandle.name in pos["OpData"].index:
-                    exitprice = pos["OpData"].loc[currentcandle.name]['close']
+                    # OHLC = close
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                     exitReason = "Square Off"
                 else:
                     idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
                     exitprice = pos["OpData"][idx]
             elif (ExitReason == defs.SQUAREOFFEOD):
                 if currentcandle.name in pos["OpData"].index:
-                    exitprice = pos["OpData"].loc[currentcandle.name]['open']
+                    # OHLC = open
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                     exitReason = "Square Off EOD"
                 else:
                     if pos["OpData"].empty:
                         return
                     else:
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
-                        exitprice = pos["OpData"].loc[idx]['open']
+                        exitprice = pos["OpData"].loc[idx][OHLC]
                         exitReason = "Square Off EOD"
-
             enterprice = pos['EnterPrice']                       
             #enterprice = enterprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)

@@ -14,11 +14,11 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2021, 2, 1)
-end_date = datetime.date(2021, 2, 28)
+start_date = datetime.date(2022, 1, 1)
+end_date = datetime.date(2022, 12, 31)
 delta = datetime.timedelta(days=1)
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -33,16 +33,16 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-#generalconfig = genconfig.generalconfigNRSIDual
+#generalconfig = genconfig.generalconfigBNRSIDual
 #positionconfig = posconfig.positionconfigsinglebuydirecSL
 #TIconfig = TIconfigs.TIconfig_RSIDual
-generalconfig = genconfig.generalconfigBNBB
-positionconfig = posconfig.positionconfigsinglebuydirec
-TIconfig = TIconfigs.TIconfigBB2
-approach = "BB2"
-#generalconfig = genconfig.generalconfigBNRSIADX
-#positionconfig = posconfig.positionconfigsinglebuydirec
-#TIconfig = TIconfigs.TIconfigRSI_ADX
+#generalconfig = genconfig.generalconfigBNBB
+#positionconfig = posconfig.positionconfigsingleselldirec
+#TIconfig = TIconfigs.TIconfigBB1
+approach = "RSIADX"
+generalconfig = genconfig.generalconfigBNRSIADX
+positionconfig = posconfig.positionconfigsingleselldirec
+TIconfig = TIconfigs.TIconfigRSI_ADX
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
