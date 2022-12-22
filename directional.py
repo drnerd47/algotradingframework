@@ -207,17 +207,17 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
             if (ExitReason == defs.SL):
                 if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
-                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
-                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
-                spotexitprice = pos['SpotData'].loc[currentcandle.name][OHLC]
-                exitReason = "SL HIT"
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+                    spotexitprice = pos['SpotData'].loc[currentcandle.name][OHLC]
+                    exitReason = "SL HIT"
             elif (ExitReason == defs.TARGET):
                 if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
-                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
-                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
-                spotexitprice = pos['SpotData'].loc[currentcandle.name][OHLC]
-                exitReason = "Target Hit"
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+                    spotexitprice = pos['SpotData'].loc[currentcandle.name][OHLC]
+                    exitReason = "Target Hit"
             elif (ExitReason == defs.SQUAREOFF):
                 if currentcandle.name in pos["OpData"].index:
                     # OHLC = close
