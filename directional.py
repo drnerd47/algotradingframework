@@ -8,7 +8,8 @@ import supertrend as st
 import numpy as np
 
 # This function resamples data to required frequency from 1 min data
-def Resample(df, freq='1T'): # freq format,  for 2min freq='2T', for 3min freq='3T' 
+def Resample(df, f): # freq format,  for 2min freq='2T', for 3min freq='3T'
+    freq = str(f)+"T" 
     resample_df = df.resample(freq, origin='end').agg({
     'open':'first',
     'high':'max',
