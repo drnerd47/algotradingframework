@@ -229,14 +229,14 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-            exitDone = True
+      
         elif (generalconfig["StopLossCond"] == "PremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
             atom.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-            exitDone = True
+         
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
@@ -245,19 +245,21 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-            exitDone = True
+
         elif (generalconfig["TargetCond"] == "PremiumBased"):
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.TARGET, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-            exitDone = True
+    
 
       # Square off Remaining Legs EOD
+
       if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
         direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
-        data.loc[currentcandle.name]['ExitSignal'] = defs.EXITTIME
+        if direc.CheckActivePositions(positions) == True:
+          data.loc[currentcandle.name]['ExitSignal'] = defs.EXITTIME
         # trades = atom.GetFinalTrades(positions)
         exitDone = True
       trades = atom.GetFinalTrades(positions)

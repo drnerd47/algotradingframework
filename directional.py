@@ -118,23 +118,22 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
                 cst = int(round(cst / 100, 0) * 100)
             opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
             futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
-            spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
+            #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
-                spotprice = spotdf.loc[nextcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 price = opdf.loc[nextcandle.name][OHLC]
                 futprice = futdf.loc[nextcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                     "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
-                    "FutData": futdf, "SpotData": spotdf,
+                    "FutData": futdf, 
                     "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
                     "date": nextcandle.name.date(),                    
                     "TargetCond": posc["Target"], "EnterSpotPrice": nextcandle[OHLC],
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
-                    "FutEnterPrice":futprice, "SpotEnterPrice":spotprice}
+                    "FutEnterPrice":futprice }
                 if (posc["SL"] == defs.YES):
                     position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
                 if (posc["Target"] == defs.YES):
@@ -160,7 +159,7 @@ def CheckStopLossConditionStance(stance, currentcandle, TIconfig):
 def CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index and nextcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index : #and nextcandle.name in pos['OpData'].index :
             (SLCondBull, SLCondBear) = CheckStopLossConditionStance(pos["stance"], currentcandle, TIconfig)
             if (SLCondBull and pos["Active"]):
                 positionstoExit.append(pos)
@@ -185,7 +184,7 @@ def CheckTargetConditionStance(stance, currentcandle, TIconfig):
 def CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index and nextcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index : #and nextcandle.name in pos['OpData'].index :
             (TargetCondBull, TargetCondBear) = CheckTargetConditionStance(pos["stance"], currentcandle, TIconfig)          
             if (TargetCondBull and pos["Active"]):
                 positionstoExit.append(pos)
@@ -193,6 +192,14 @@ def CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig):
                 positionstoExit.append(pos)
     return positionstoExit
 
+def CheckActivePositions(positions):
+    Active = False
+    for pos in positions:
+        if pos['Active'] :
+            Active = True
+    return Active
+
+        
 
 def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
     for pos in positionstoExit:
@@ -238,15 +245,16 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
             futenterprice = pos['FutEnterPrice']
             futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-            futexitprice = futexitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
+            # futexitprice = futexitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
 
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
+                            "Spotpnl":(currentcandle['close'] - pos['EnterSpotPrice']) * pos['stance'] ,
+                            "EnterFutPrice":futenterprice, "ExitFutPrice": futexitprice,
+                            "Futpnl": (futexitprice-futenterprice) * pos['stance'] ,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry'] , 
-                            "Futpnl": (futexitprice-futenterprice) * pos['PositionConfig']['Action'] * pos['Qty'],
-                            "Spotpnl":(pos['EnterSpotPrice']-currentcandle['close']) * pos['PositionConfig']['Action'] * pos['Qty']}
+                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry'] }
             pos["Active"] = False
 
 

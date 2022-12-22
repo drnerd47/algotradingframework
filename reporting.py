@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 
 def GetDailyChart(trades):
-  Daily_Chart = pd.DataFrame(trades, columns=["date", "Daily pnl", "DayOfWeek", "Month", "Year"])
+  Daily_Chart = pd.DataFrame(trades, columns=["date", "Daily pnl", "DayOfWeek", "Month", "Year", "Spot pnl", "Fut pnl"])
+  Daily_pnl = trades.groupby("date")["pnl"].sum(np.ptp)
   Daily_pnl = trades.groupby("date")["pnl"].sum(np.ptp)
   Daily_Chart = Daily_pnl.to_frame()
   Daily_Chart["Date"] = pd.to_datetime(Daily_Chart.index)

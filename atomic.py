@@ -68,19 +68,23 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
             cst = currentcandle[OHLC]
             cst = int(round(cst / 100, 0) * 100)
         opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
+        futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
         # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
         if currentcandle.name in opdf.index:
             price = opdf.loc[currentcandle.name][OHLC]
+            futprice = futdf.loc[currentcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
             enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
             position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                   "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
+                  "FutData": futdf, 
                 "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
                   "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
-                   "date": currentcandle.name.date(), 
+                   "date": currentcandle.name.date(), "EnterSpotPrice": currentcandle[OHLC],
                   "SLCond": enterprice - posc["Action"] * enterprice * posc["SLPc"] / 100,
                   "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
                   "Active": True, "Strike": cst + posc["Delta"],
-                  "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'] }
+                  "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
+                  "FutEnterPrice":futprice }
             positions.append(position)
         else:
             positionsNotPlaced.append(posc)
@@ -155,14 +159,19 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                         idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
                         exitprice = pos["OpData"].loc[idx][OHLC]
                         exitReason = "Square Off EOD"
-            enterprice = pos['EnterPrice']                       
+            enterprice = pos['EnterPrice']   
+            futenterprice = pos['FutEnterPrice']
+            futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]                    
             #enterprice = enterprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-            pos["trades"] = {'EnterPrice': enterprice , 'ExitPrice': exitprice,
+            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
-                            'Reason': exitReason, 'Trade Type': Str,
+                            'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
+                            "Spotpnl":(currentcandle['close'] - pos['EnterSpotPrice']) * pos['stance'] ,
+                            "EnterFutPrice":futenterprice, "ExitFutPrice": futexitprice,
+                            "Futpnl": (futexitprice-futenterprice) * pos['stance'] ,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry" : pos["Expiry"] }
+                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']  }
                         
             pos["Active"] = False
 
