@@ -197,13 +197,23 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                 Str = "Sell "
             Str = Str + pos["PositionConfig"]["Type"]
             if (ExitReason == defs.SL):
+                if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
-                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
-                exitReason = "SL HIT"
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    exitReason = "SL HIT"
+                else:
+                    idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                    exitprice = pos["OpData"].loc[idx][OHLC]
+                    exitReason = "SL HIT"
             elif (ExitReason == defs.TARGET):
+                if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
-                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
-                exitReason = "Target Hit"
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    exitReason = "Target Hit"
+                else:
+                    idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                    exitprice = pos["OpData"].loc[idx][OHLC]
+                    exitReason = "Target Hit"
             elif (ExitReason == defs.SQUAREOFF):
                 if currentcandle.name in pos["OpData"].index:
                     # OHLC = close
@@ -211,7 +221,8 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                     exitReason = "Square Off"
                 else:
                     idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
-                    exitprice = pos["OpData"][idx]
+                    exitprice = pos["OpData"].loc[idx][OHLC]
+                    exitReason = "Square Off"
             elif (ExitReason == defs.SQUAREOFFEOD):
                 if currentcandle.name in pos["OpData"].index:
                     # OHLC = open

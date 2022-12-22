@@ -178,7 +178,6 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   exitSQEODOHLC = 'open'
   for s in range(len(spotdata)): 
     currentcandle = spotdata.iloc[s]
-#<<<<<<< Updated upstream
 #    if (currentcandle.name in spotdatafull.index):
 #      sfull = spotdatafull.index.get_loc(currentcandle.name)
       
@@ -189,7 +188,6 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
 #    else:
 #      nextcandle = currentcandle
 
-#=======
     # if (s < len(spotdata)-1):
     #   nextcandle = spotdata.iloc[s+1]
     # else:
@@ -245,7 +243,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         if (generalconfig["TargetCond"] == "TIBased"):
           postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitTarget) > 0):
-            direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)            
+            direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
             exitDone = True
         elif (generalconfig["TargetCond"] == "PremiumBased"):
