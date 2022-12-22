@@ -205,12 +205,14 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                 Str = "Sell "
             Str = Str + pos["PositionConfig"]["Type"]
             if (ExitReason == defs.SL):
+                if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
                 exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
                 spotexitprice = pos['SpotData'].loc[currentcandle.name][OHLC]
                 exitReason = "SL HIT"
             elif (ExitReason == defs.TARGET):
+                if currentcandle.name in pos["OpData"].index:
                 # OHLC = close
                 exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
