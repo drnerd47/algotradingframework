@@ -169,7 +169,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   spotdatafull = atom.GetSpotData(masterdf, generalconfig["symbol"])
   placedBull = False
   placedBear = False
-  exitDone = False
+  exitDone = False # if exit (EOD) is done, we do not go to the exit condition again.
   positions = []
   trades = []
   OHLCEnter = 'open'
@@ -201,14 +201,6 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         nextcandle = currentcandle
     else:
       nextcandle = currentcandle
-
-    # if nextcandle.name in spotdatafull.index :
-    #   if (sfull < len(spotdatafull) - 2) :
-    #     thirdcandle = spotdatafull.iloc[sfull+2]
-    #   elif (sfull < len(spotdatafull) - 1) :
-    #     thirdcandle = spotdatafull.iloc[sfull+1]
-    #   else :
-    #     thirdcandle = nextcandle    
 
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
   # Check Enter Condition
@@ -257,9 +249,9 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       # Square off Remaining Legs EOD
 
       if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
-        direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
         if direc.CheckActivePositions(positions) == True:
           data.loc[currentcandle.name]['ExitSignal'] = defs.EXITTIME
+        direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
         # trades = atom.GetFinalTrades(positions)
         exitDone = True
       trades = atom.GetFinalTrades(positions)

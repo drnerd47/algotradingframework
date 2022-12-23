@@ -159,13 +159,12 @@ def CheckStopLossConditionStance(stance, currentcandle, TIconfig):
 def CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index : #and nextcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index and nextcandle.name.time() != pos['Entertime']: #and nextcandle.name in pos['OpData'].index :
             (SLCondBull, SLCondBear) = CheckStopLossConditionStance(pos["stance"], currentcandle, TIconfig)
             if (SLCondBull and pos["Active"]):
                 positionstoExit.append(pos)
             if (SLCondBear and pos["Active"]):
                 positionstoExit.append(pos)
-
     return positionstoExit
 
 def CheckTargetConditionStance(stance, currentcandle, TIconfig):
@@ -184,7 +183,7 @@ def CheckTargetConditionStance(stance, currentcandle, TIconfig):
 def CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig):
     positionstoExit = []
     for pos in positions:
-        if currentcandle.name in pos['OpData'].index : #and nextcandle.name in pos['OpData'].index :
+        if currentcandle.name in pos['OpData'].index and nextcandle.name.time() != pos['Entertime']: #and nextcandle.name in pos['OpData'].index :
             (TargetCondBull, TargetCondBear) = CheckTargetConditionStance(pos["stance"], currentcandle, TIconfig)          
             if (TargetCondBull and pos["Active"]):
                 positionstoExit.append(pos)
@@ -198,8 +197,6 @@ def CheckActivePositions(positions):
         if pos['Active'] :
             Active = True
     return Active
-
-        
 
 def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
     for pos in positionstoExit:

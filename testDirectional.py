@@ -14,8 +14,8 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 12, 31)
+start_date = datetime.date(2021, 1, 1)
+end_date = datetime.date(2021, 12, 31)
 
 delta = datetime.timedelta(days=1)
 
@@ -34,14 +34,14 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "BB2"
+approach = "BB1"
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
   positionconfig = posconfig.positionconfigsinglebuydirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "BB2"):
   generalconfig = genconfig.generalconfigBNBB
-  positionconfig = posconfig.positionconfigsingleselldirec
+  positionconfig = posconfig.positionconfigsinglebuydirec
   TIconfig = TIconfigs.TIconfigBB2
 elif (approach == "BB1"):
   generalconfig = genconfig.generalconfigBNBB
@@ -114,10 +114,10 @@ print(weeklyreport)
 weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + approach + "MonthlyBreakDown.txt")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + approach + "DayOfWeek.txt")
+dayofweek = rep.DayOfWeek(Daily_Chart)
 print(dayofweek)
 
