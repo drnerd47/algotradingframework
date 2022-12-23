@@ -41,11 +41,11 @@ if (approach == "RSI-Dual"):
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "BB2"):
   generalconfig = genconfig.generalconfigBNBB
-  positionconfig = posconfig.positionconfigsinglebuydirec
+  positionconfig = posconfig.positionconfigsingleselldirec
   TIconfig = TIconfigs.TIconfigBB2
 elif (approach == "BB1"):
   generalconfig = genconfig.generalconfigBNBB
-  positionconfig = posconfig.positionconfigsinglebuydirec
+  positionconfig = posconfig.positionconfigsingleselldirec
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
