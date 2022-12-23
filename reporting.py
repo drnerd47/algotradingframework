@@ -188,7 +188,7 @@ def Report(trades, Daily_Chart):
 def WeeklyBreakDown(Daily_Chart):
   # Daily_Chart["Date"] = pd.to_datetime(Daily_Chart["Date"])
   # Daily_Chart = Daily_Chart.set_index("Date")
-  weeklybreakdown = Daily_Chart.resample('W-Fri').sum()
+  weeklybreakdown = Daily_Chart.resample('W-Fri')[['Daily pnl', 'Spot pnl', 'Fut pnl']].sum()
   
   return weeklybreakdown
 
@@ -219,7 +219,7 @@ def MonthlyBreakDown(Daily_Chart):
 
 def DayOfWeek(Daily_Chart):
   Daily_Chart.sort_values(['DayOfWeek'])
-  dayofweek = Daily_Chart.groupby(['DayOfWeek', 'Year']).sum()
+  dayofweek = Daily_Chart.groupby(['DayOfWeek', 'Year'])[['Daily pnl', 'Spot pnl', 'Fut pnl']].sum()
   return dayofweek
   
   # a = "DayOfWeek\n"
