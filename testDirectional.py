@@ -34,36 +34,33 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-#generalconfig = genconfig.generalconfigBNRSIDual
-#positionconfig = posconfig.positionconfigsinglebuydirecSL
-#TIconfig = TIconfigs.TIconfig_RSIDual
-#approach = "RSI-Dual"
-
-
-#approach = "BB2"
-#generalconfig = genconfig.generalconfigBNBB
-#positionconfig = posconfig.positionconfigsingleselldirec
-#TIconfig = TIconfigs.TIconfigBB2
-
-#approach = "BB1"
-#generalconfig = genconfig.generalconfigBNBB
-#positionconfig = posconfig.positionconfigsinglebuydirec
-#TIconfig = TIconfigs.TIconfigBB1
-
-#approach = "RSI-ADX"
-#generalconfig = genconfig.generalconfigBNRSIADX
-#positionconfig = posconfig.positionconfigsingleselldirec
-#TIconfig = TIconfigs.TIconfigRSI_ADX
-
-approach = "RSI2"
-generalconfig = genconfig.generalconfigBNRSI2
-positionconfig = posconfig.positionconfigsingleselldirecSL
-TIconfig = TIconfigs.TIconfig2_RSI
+approach = "BB2"
+if (approach == "RSI-Dual"):
+  generalconfig = genconfig.generalconfigBNRSIDual
+  positionconfig = posconfig.positionconfigsinglebuydirecSL
+  TIconfig = TIconfigs.TIconfig_RSIDual
+elif (approach == "BB2"):
+  generalconfig = genconfig.generalconfigBNBB
+  positionconfig = posconfig.positionconfigsingleselldirec
+  TIconfig = TIconfigs.TIconfigBB2
+elif (approach == "BB1"):
+  generalconfig = genconfig.generalconfigBNBB
+  positionconfig = posconfig.positionconfigsinglebuydirec
+  TIconfig = TIconfigs.TIconfigBB1
+elif (approach == "RSI-ADX"):
+  generalconfig = genconfig.generalconfigBNRSIADX
+  positionconfig = posconfig.positionconfigsingleselldirec
+  TIconfig = TIconfigs.TIconfigRSI_ADX
+elif (approach == "RSI2"):
+  generalconfig = genconfig.generalconfigBNRSI2
+  positionconfig = posconfig.positionconfigsingleselldirecSL
+  TIconfig = TIconfigs.TIconfig2_RSI
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
 else:
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"])
+
 data = direc.getTI(dataorig, TIconfig)
 
 
