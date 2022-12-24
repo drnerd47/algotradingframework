@@ -240,10 +240,12 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
             futenterprice = pos['FutEnterPrice']
-            futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+            if currentcandle.name in pos["OpData"].index:
+                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+            else:
+                idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
+                futexitprice = pos["FutData"].loc[idx][OHLC]
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-            # futexitprice = futexitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
