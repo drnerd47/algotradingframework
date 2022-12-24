@@ -167,9 +167,9 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
-                            "Spotpnl":(currentcandle['close'] - pos['EnterSpotPrice']) * pos['stance'] ,
+                            
                             "EnterFutPrice":futenterprice, "ExitFutPrice": futexitprice,
-                            "Futpnl": (futexitprice-futenterprice) * pos['stance'] ,
+                            
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                             "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']  }
                         

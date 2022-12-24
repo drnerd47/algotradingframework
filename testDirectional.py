@@ -99,25 +99,25 @@ print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
 
 print("\n")
-Daily_Chart = rep.GetDailyChart(trades)
+Daily_Chart = rep.GetDailyChartTI(trades)
 print(Daily_Chart)
 Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 print("\n")
-report = rep.Report(trades, Daily_Chart)
+report = rep.ReportTI(trades, Daily_Chart)
 print(report)
 report.to_csv(Result_path + approach + "Report.csv")
 
 print("\n")
-weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
+weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
 print(weeklyreport)
 weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart)
+dayofweek = rep.DayOfWeekTI(Daily_Chart)
 print(dayofweek)
 

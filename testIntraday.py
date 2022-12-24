@@ -11,7 +11,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -84,9 +84,9 @@ print(weeklyreport)
 weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
+dayofweek = rep.DayOfWeek(Daily_Chart)
 print(dayofweek)
