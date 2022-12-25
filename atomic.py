@@ -160,16 +160,13 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                         exitprice = pos["OpData"].loc[idx][OHLC]
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']   
-            futenterprice = pos['FutEnterPrice']
-            futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]                    
+            # futenterprice = pos['FutEnterPrice']
+            # futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]                    
             #enterprice = enterprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
-                            'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],
-                            
-                            "EnterFutPrice":futenterprice, "ExitFutPrice": futexitprice,
-                            
+                            'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"], "ExitSpotPrice": currentcandle['close'],                            
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                             "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']  }
                         
