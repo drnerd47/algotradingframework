@@ -1,7 +1,7 @@
 import operator
 import definitions as defs
 
-TIconfigRSI_ADX = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 50, "ThreshBear": 40, "Window": 14, "SL": defs.YES, "Target": defs.YES, "SLBull": 40, "SLBear": 60,
+TIconfigRSI_ADX = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": 60, "ThreshBear": 40, "Window": 14, "SL": defs.YES, "Target": defs.YES, "SLBull": 40, "SLBear": 60,
            "TargetBull": 77, "TargetBear": 18, "BullOperator": operator.gt, "BearOperator": operator.lt,
                     "SLBullOperator": operator.lt, "SLBearOperator": operator.gt,"TBullOperator": operator.gt, "TBearOperator": operator.lt},
 			{"TI": "ADX","columnname":"ADX14", "Window": 14, "ThreshBull": 20, "ThreshBear": 20, "SL": defs.NO, "Target": defs.NO, 

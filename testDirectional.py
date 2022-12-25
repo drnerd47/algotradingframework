@@ -14,8 +14,9 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-start_date = datetime.date(2021, 1, 1)
-end_date = datetime.date(2021, 12, 31)
+year = 2022
+start_date = datetime.date(year, 1, 1)
+end_date = datetime.date(year, 12, 31)
 
 delta = datetime.timedelta(days=1)
 
@@ -34,10 +35,11 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "BB1"
+approach = "RSI-Dual"
+
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
-  positionconfig = posconfig.positionconfigsinglebuydirecSL
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "BB2"):
   generalconfig = genconfig.generalconfigBNBB
