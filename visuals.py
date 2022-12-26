@@ -64,8 +64,68 @@ def plotBB(df):
     # range slider; 
     fig.update(layout_xaxis_rangeslider_visible=True)    
     fig.update_xaxes(
-        rangebreaks=[ dict(bounds=["sat", "mon"]) ,dict(bounds=[16, 9], pattern="hour")])  
+        rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])  
 
+    fig.show();
+
+# PlotSignal function takes the signal data i.e. the data where signals are generated( spot data )
+def PlotSignal(df, start, end):
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]
+
+    bearentry = df[df.EntrySignal == -2]
+    bullentry = df[df.EntrySignal == 2]
+    stoploss = df[df.ExitSignal == -1]
+    target = df[df.ExitSignal == 1]
+    eodsquareoff = df[df.ExitSignal == 0]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Line(
+        x = df.index,
+        y = df.close,
+        mode = "lines",
+        name = "Close"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x = bearentry.index,
+        y = bearentry.close,
+        mode = "markers+text",
+        name = "Bear Entry"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x = bullentry.index,
+        y = bullentry.close,
+        mode = "markers+text",
+        name = "Bull Entry"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x = stoploss.index,
+        y = stoploss.close,
+        mode = "markers+text",
+        name = "Stop Loss Hit"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x = target.index,
+        y = target.close,
+        mode = "markers+text",
+        name = " Target Hit"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x = eodsquareoff.index,
+        y = eodsquareoff.close,
+        mode = "markers+text",
+        name = "End of Day Square Off"
+    ))
+
+    fig.update(layout_xaxis_rangeslider_visible=True)    
+    fig.update_xaxes(
+        rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
 
 
