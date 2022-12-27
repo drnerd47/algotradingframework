@@ -55,6 +55,15 @@ def getADX(spotdata, columnname, period=14):
     tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
     return tempdf
 
+def getMA(spotdata, columnname, period=14, type='simple'):
+    tempdf = spotdata
+    if (type == "SMA"):
+        tempdf['MA'] = ta.trend.SMAIndicator(tempdf['close'], window=period).sma_indicator()
+    elif (type == 'EMA'):
+        tempdf['MA'] = ta.trend.EMAIndicator(tempdf['close'], window=period).ema_indicator()
+    tempdf[columnname] = (tempdf['close'] - tempdf['MA'])
+    return tempdf
+
 def getBollingerBand(spotdata,columnname, period, stddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
@@ -85,6 +94,8 @@ def getTI(spotdata, TIconfig):
             data = getMACD(spotdata, t['fastperiod'], t['slowperiod'])
         if t['TI'] == 'ST':
             data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'], t['columnname'])
+        if t['TI'] == 'MA':
+            data = getMA(spotdata, t['columnname'], t['period'], t['type'])
         data['EntrySignal'] = np.nan
         data['ExitSignal'] = np.nan
     return data
@@ -130,7 +141,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
                     "FutData": futdf, 
                     "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
                     "date": nextcandle.name.date(),                    
-                    "TargetCond": posc["Target"], "EnterSpotPrice": nextcandle[OHLC],
+                    "EnterSpotPrice": nextcandle[OHLC],
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
                     "FutEnterPrice":futprice }
@@ -253,7 +264,60 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                             "EnterFutPrice":futenterprice, "ExitFutPrice": futexitprice,
                             "Futpnl": (futexitprice-futenterprice) * pos['stance'] ,
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
-                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry'] }
+                            "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']}
             pos["Active"] = False
 
+def ExitPositionPremium(positionstoExit, currentcandle, ExitReason, OHLC):
+    for pos in positionstoExit:
+        if (pos["Active"]):
+            Str = ""
+            if (pos["PositionConfig"]["Action"] == defs.BUY):
+                Str = "Buy "
+            elif (pos["PositionConfig"]["Action"] == defs.SELL):
+                Str = "Sell "
+            Str = Str + pos["PositionConfig"]["Type"]
+            if (ExitReason == defs.SL):
+                exitprice = pos["SLCond"]
+                exitReason = "SL HIT"
+            elif (ExitReason == defs.TARGET):
+                exitprice = pos["TargetCond"]
+                exitReason = "Target Hit"
+            elif (ExitReason == defs.SQUAREOFF):
+                if currentcandle.name in pos["OpData"].index:
+                    # OHLC = close
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    exitReason = "Square Off"
+                else:
+                    idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                    exitprice = pos["OpData"][idx]
+            elif (ExitReason == defs.SQUAREOFFEOD):
+                if currentcandle.name in pos["OpData"].index:
+                    # OHLC = open
+                    exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                    exitReason = "Square Off EOD"
+                else:
+                    if pos["OpData"].empty:
+                        return
+                    else:
+                        idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                        exitprice = pos["OpData"].loc[idx][OHLC]
+                        exitReason = "Square Off EOD"
+            enterprice = pos['EnterPrice']
+            futenterprice = pos['FutEnterPrice']
+            if currentcandle.name in pos["OpData"].index:
+                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+            else:
+                idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
+                futexitprice = pos["FutData"].loc[idx][OHLC]
+            exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
+            pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
+                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
+                             'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"],
+                             "ExitSpotPrice": currentcandle['close'],
+                             "Spotpnl": (currentcandle['close'] - pos['EnterSpotPrice']) * pos['stance'],
+                             "EnterFutPrice": futenterprice, "ExitFutPrice": futexitprice,
+                             "Futpnl": (futexitprice - futenterprice) * pos['stance'],
+                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
+                             "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']}
+            pos["Active"] = False
 

@@ -35,12 +35,16 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "RSI-Dual"
+approach = "EMA"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
+elif (approach == "ST"):
+  generalconfig = genconfig.generalconfigBNST
+  positionconfig = posconfig.positionconfigsingleselldirecSL
+  TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):
   generalconfig = genconfig.generalconfigBNBB
   positionconfig = posconfig.positionconfigsingleselldirec
@@ -57,6 +61,14 @@ elif (approach == "RSI2"):
   generalconfig = genconfig.generalconfigBNRSI2
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig2_RSI
+elif (approach == "EMA"):
+  generalconfig = genconfig.generalconfigBNMA
+  positionconfig = posconfig.positionconfigsingleselldirec
+  TIconfig = TIconfigs.TIconfigEMA
+elif (approach == "SMA"):
+  generalconfig = genconfig.generalconfigBNMA
+  positionconfig = posconfig.positionconfigsingleselldirec
+  TIconfig = TIconfigs.TIconfigSMA
 
 if (generalconfig["symbol"] == defs.N):
     dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
