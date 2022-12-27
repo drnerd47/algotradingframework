@@ -178,22 +178,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   exitSQEODOHLC = 'open'
   for s in range(len(spotdata)): 
     currentcandle = spotdata.iloc[s]
-#    if (currentcandle.name in spotdatafull.index):
-#      sfull = spotdatafull.index.get_loc(currentcandle.name)
-      
-#      if (sfull < len(spotdatafull)-1):
-#        nextcandle = spotdatafull.iloc[sfull+1]
-#      else:
-#        nextcandle = currentcandle
-#    else:
-#      nextcandle = currentcandle
-
-    # if (s < len(spotdata)-1):
-    #   nextcandle = spotdata.iloc[s+1]
-    # else:
-    #   nextcandle = currentcandle
     if (currentcandle.name in spotdatafull.index):
-      
       sfull = spotdatafull.index.get_loc(currentcandle.name)
       if (sfull < len(spotdatafull)-1):
         nextcandle = spotdatafull.iloc[sfull+1]
@@ -201,7 +186,6 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         nextcandle = currentcandle
     else:
       nextcandle = currentcandle
-
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
   # Check Enter Condition
     if bullentry and not placedBull:
@@ -221,14 +205,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-      
         elif (generalconfig["StopLossCond"] == "PremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
-            atom.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
+            direc.ExitPositionPremium(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-         
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
@@ -237,14 +219,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-
         elif (generalconfig["TargetCond"] == "PremiumBased"):
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.TARGET, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-    
 
       # Square off Remaining Legs EOD
 
@@ -255,5 +235,4 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         # trades = atom.GetFinalTrades(positions)
         exitDone = True
       trades = atom.GetFinalTrades(positions)
-
   return trades
