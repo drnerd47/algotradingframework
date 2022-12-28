@@ -365,6 +365,7 @@ def RunStrategy(strattypes, start, end, yearpath):
     trades = trades.reset_index()
     trades = trades.drop(["index"],axis = 1)
     trades.to_csv(strategypath+"/trades.csv")
+    
     if directional == True:
       Daily_Chart = rep.GetDailyChartTI(trades)
       Daily_Chart.to_csv(strategypath+"/Daily_Report.csv")

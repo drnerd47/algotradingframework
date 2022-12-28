@@ -2,7 +2,9 @@ import plotly.graph_objs as go
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def plotCandlestickChart(df):
+def plotCandlestickChart(df, start, end):
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]
     # Create chart object
     chart_df = [go.Candlestick(x=df.index, 
                                 open=df['open'], 
@@ -14,11 +16,14 @@ def plotCandlestickChart(df):
     fig = go.Figure(data=chart_df)
     # Update chart layout
     fig.update_layout(xaxis_rangeslider_visible=True, xaxis_showticklabels=True, yaxis_showticklabels=True)
+    fig.update_layout(yaxis_range=[min(df.low), max(df.high)]) 
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")]) 
     # Plot chart
     fig.show();
 
-def plotBollingerBands(df):
+def plotBollingerBands(df, start, end):
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]
     
     plt.figure(figsize=(20,10))
     df['close'].plot(label='CLOSE PRICE',  color="black")
@@ -27,7 +32,9 @@ def plotBollingerBands(df):
     plt.legend(loc='upper left')
     plt.show()
 
-def plotMACD(df):
+def plotMACD(df, start, end):
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]
     
     plt.figure(figsize=(20,10))
     plt.plot(df.signal, label='signal', color='red')
@@ -35,7 +42,9 @@ def plotMACD(df):
     plt.legend()
     plt.show()
 
-def plotBB(df):   
+def plotBB(df, start, end):   
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]
     
     chart_df = [go.Candlestick(x=df.index, 
                                 open=df['open'], 
@@ -67,7 +76,8 @@ def plotBB(df):
                             name = 'lower band',
                             opacity = 0.5))
     # range slider; 
-    fig.update(layout_xaxis_rangeslider_visible=True)    
+    fig.update(layout_xaxis_rangeslider_visible=True)
+       
     fig.update_xaxes(
         rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])  
 
