@@ -1,5 +1,6 @@
 import plotly.graph_objs as go
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def plotCandlestickChart(df):
     df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
