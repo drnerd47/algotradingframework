@@ -14,6 +14,7 @@ def plotCandlestickChart(df):
     fig = go.Figure(data=chart_df)
     # Update chart layout
     fig.update_layout(xaxis_rangeslider_visible=True, xaxis_showticklabels=True, yaxis_showticklabels=True)
+    fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")]) 
     # Plot chart
     fig.show();
 
