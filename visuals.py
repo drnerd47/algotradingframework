@@ -1,46 +1,57 @@
 import plotly.graph_objs as go
 import matplotlib.pyplot as plt
 
-def plotCandlestickChart(data):
+def plotCandlestickChart(df):
+    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
+    df.set_index('datetime', inplace=True)
     # Create chart object
-    chart_data = [go.Candlestick(x=data.index[:100], 
-                                open=data['open'][:100], 
-                                high=data['high'][:100], 
-                                low=data['low'][:100],
-                                close=data['close'][:100]
+    chart_df = [go.Candlestick(x=df.index[:100], 
+                                open=df['open'][:100], 
+                                high=df['high'][:100], 
+                                low=df['low'][:100],
+                                close=df['close'][:100]
                                 )]
-    # Load chart data
-    fig = go.Figure(data=chart_data)
+    # Load chart df
+    fig = go.Figure(df=chart_df)
     # Update chart layout
     fig.update_layout(xaxis_rangeslider_visible=False, xaxis_showticklabels=True, yaxis_showticklabels=True)
     # Plot chart
     fig.show();
 
-def plotBollingerBands(data):
+def plotBollingerBands(df):
+    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
+    df.set_index('datetime', inplace=True)
+
     plt.figure(figsize=(20,10))
-    data['close'].plot(label='CLOSE PRICE',  color="black")
-    data['upband'].plot(label='UPPER BAND', linestyle = '--', linewidth = 1, color="orange")
-    data['lowband'].plot(label="LOWER BAND",linestyle = '--', linewidth = 1, color="orange")
+    df['close'].plot(label='CLOSE PRICE',  color="black")
+    df['upband'].plot(label='UPPER BAND', linestyle = '--', linewidth = 1, color="orange")
+    df['lowband'].plot(label="LOWER BAND",linestyle = '--', linewidth = 1, color="orange")
     plt.legend(loc='upper left')
     plt.show()
 
-def plotMACD(data):
+def plotMACD(df):
+    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
+    df.set_index('datetime', inplace=True)
+
     plt.figure(figsize=(20,10))
-    plt.plot(data.signal, label='signal', color='red')
-    plt.plot(data.MACD, label='MACD', color='green')
+    plt.plot(df.signal, label='signal', color='red')
+    plt.plot(df.MACD, label='MACD', color='green')
     plt.legend()
     plt.show()
 
 def plotBB(df):   
-    chart_data = [go.Candlestick(x=df.index, 
+    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
+    df.set_index('datetime', inplace=True)
+
+    chart_df = [go.Candlestick(x=df.index, 
                                 open=df['open'], 
                                 high=df['high'], 
                                 low=df['low'],
                                 close=df['close'], showlegend=False,
                                 name= 'candlestick'
                                 )]
-    # Load chart data
-    fig = go.Figure(data=chart_data)
+    # Load chart df
+    fig = go.Figure(df=chart_df)
     # Moving Average
     fig.add_trace(go.Scatter(x = df.index,
                             y = df['sma'],
@@ -68,8 +79,11 @@ def plotBB(df):
 
     fig.show();
 
-# PlotSignal function takes the signal data i.e. the data where signals are generated( spot data )
+# PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
 def PlotSignal(df, start, end):
+    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
+    df.set_index('datetime', inplace=True)
+
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]
 
