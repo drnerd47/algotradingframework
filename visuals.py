@@ -3,26 +3,22 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plotCandlestickChart(df):
-    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
-    df.set_index('datetime', inplace=True)
     # Create chart object
-    chart_df = [go.Candlestick(x=df.index[:100], 
-                                open=df['open'][:100], 
-                                high=df['high'][:100], 
-                                low=df['low'][:100],
-                                close=df['close'][:100]
+    chart_df = [go.Candlestick(x=df.index, 
+                                open=df['open'], 
+                                high=df['high'], 
+                                low=df['low'],
+                                close=df['close']
                                 )]
     # Load chart df
     fig = go.Figure(data=chart_df)
     # Update chart layout
-    fig.update_layout(xaxis_rangeslider_visible=False, xaxis_showticklabels=True, yaxis_showticklabels=True)
+    fig.update_layout(xaxis_rangeslider_visible=True, xaxis_showticklabels=True, yaxis_showticklabels=True)
     # Plot chart
     fig.show();
 
 def plotBollingerBands(df):
-    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
-    df.set_index('datetime', inplace=True)
-
+    
     plt.figure(figsize=(20,10))
     df['close'].plot(label='CLOSE PRICE',  color="black")
     df['upband'].plot(label='UPPER BAND', linestyle = '--', linewidth = 1, color="orange")
@@ -31,9 +27,7 @@ def plotBollingerBands(df):
     plt.show()
 
 def plotMACD(df):
-    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
-    df.set_index('datetime', inplace=True)
-
+    
     plt.figure(figsize=(20,10))
     plt.plot(df.signal, label='signal', color='red')
     plt.plot(df.MACD, label='MACD', color='green')
@@ -41,9 +35,7 @@ def plotMACD(df):
     plt.show()
 
 def plotBB(df):   
-    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
-    df.set_index('datetime', inplace=True)
-
+    
     chart_df = [go.Candlestick(x=df.index, 
                                 open=df['open'], 
                                 high=df['high'], 
@@ -82,9 +74,7 @@ def plotBB(df):
 
 # PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
 def PlotSignal(df, start, end):
-    df.datetime = pd.to_datetime(df.datetime, infer_datetime_format=True)
-    df.set_index('datetime', inplace=True)
-
+    
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]
 
