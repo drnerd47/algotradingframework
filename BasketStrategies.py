@@ -37,11 +37,10 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 
 strategytypes = [ "IntraDayN", "IntraDayBN", "IntradayNRE", "IntradayBNRE", "ExpiryBN", "ExpiryN", "NextDayBNMW", "NextDayNMW", "NextDayBNF", "NextDayNF", "IntradaySA", "ExpirySA", "NextDaySA",
-                "RSI-ADXNb", "RSIDualNb", "BB2Nb", "RSI-ADXBNb", "RSIDualBNb", "BB2BNb", "RSI-ADXNs", "RSIDualNs", "BB2Ns", "SupertrendNs", "RSI-ADXBNs", "RSIDualBNs", "BB2BNs", "SupertrendBNs"]
+                "RSI-ADXNb", "RSIDualNb", "BB1Nb", "BB2Nb", "RSI-ADXBNb", "RSIDualBNb", "BB1BNb", "BB2BNb", "RSI-ADXNs", "RSIDualNs", "BB1Ns", "BB2Ns", "SupertrendNs", "RSI-ADXBNs", "RSIDualBNs", "BB1BNs", "BB2BNs", "SupertrendBNs"]
 
    
 
-# strategytypes = ["NextDayBNF", "NextDayNF", "IntradaySA"]
 def RunStrategy(strattypes, start, end, yearpath):
     if (strattypes == "IntraDayN"):
         generalconfig = genconfig.generalconfigIntradayN
@@ -162,6 +161,14 @@ def RunStrategy(strattypes, start, end, yearpath):
         Arb = False
         directional = True
         buystrategy = True
+    elif (strattypes == "BB1Nb"):
+        generalconfig = genconfig.generalconfigNBB
+        positionconfig = posconfig.positionconfigsinglebuydirec
+        TIconfig = TIconfigs.TIconfigBB1
+        intraday = True
+        Arb = False
+        directional = True
+        buystrategy = True
     elif (strattypes == "BB2Nb"):
         generalconfig = genconfig.generalconfigNBB
         positionconfig = posconfig.positionconfigsinglebuydirec
@@ -182,6 +189,14 @@ def RunStrategy(strattypes, start, end, yearpath):
         generalconfig = genconfig.generalconfigBNRSIDual
         positionconfig = posconfig.positionconfigsinglebuydirecSL
         TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+        buystrategy = True
+    elif (strattypes == "BB1BNb"):
+        generalconfig = genconfig.generalconfigBNBB
+        positionconfig = posconfig.positionconfigsinglebuydirec
+        TIconfig = TIconfigs.TIconfigBB1
         intraday = True
         Arb = False
         directional = True
@@ -207,6 +222,15 @@ def RunStrategy(strattypes, start, end, yearpath):
         generalconfig = genconfig.generalconfigNRSIDual
         positionconfig = posconfig.positionconfigsingleselldirecSL
         TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+        buystrategy = False
+        margin = 110000
+    elif (strattypes == "BB1Ns"):
+        generalconfig = genconfig.generalconfigNBB
+        positionconfig = posconfig.positionconfigsingleselldirec
+        TIconfig = TIconfigs.TIconfigBB1
         intraday = True
         Arb = False
         directional = True
@@ -243,6 +267,15 @@ def RunStrategy(strattypes, start, end, yearpath):
         generalconfig = genconfig.generalconfigBNRSIDual
         positionconfig = posconfig.positionconfigsingleselldirecSL
         TIconfig = TIconfigs.TIconfig_RSIDual
+        intraday = True
+        Arb = False
+        directional = True
+        buystrategy = False
+        margin = 140000
+    elif (strattypes == "BB1BNs"):
+        generalconfig = genconfig.generalconfigBNBB
+        positionconfig = posconfig.positionconfigsingleselldirec
+        TIconfig = TIconfigs.TIconfigBB1
         intraday = True
         Arb = False
         directional = True
@@ -287,10 +320,7 @@ def RunStrategy(strattypes, start, end, yearpath):
         os.mkdir(strategypath)  
 
     if directional == True:
-        if (generalconfig["symbol"] == defs.N):
-            data = direc.getTIIndicatorData(start_date, end_date, generalconfig['EnterTime'], Nifty_Path, defs.N, generalconfig["Resample"], TIconfig)            
-        else:
-            data = direc.getTIIndicatorData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"], TIconfig)              
+            data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)            
         
     while start_date <= end_date:
         trade = pd.DataFrame()
@@ -335,21 +365,38 @@ def RunStrategy(strattypes, start, end, yearpath):
     trades = trades.reset_index()
     trades = trades.drop(["index"],axis = 1)
     trades.to_csv(strategypath+"/trades.csv")
-    Daily_Chart = rep.GetDailyChart(trades)
-    Daily_Chart.to_csv(strategypath+"/Daily_Report.csv")
-    weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
-    weeklyreport = weeklyreport.reset_index(drop=True)
-    weeklyreport.to_csv(strategypath+"/Weekly_Report.csv")
-    report = rep.Report(trades, Daily_Chart)
-    report.to_csv(strategypath + "/Report.csv")
+    if directional == True:
+      Daily_Chart = rep.GetDailyChartTI(trades)
+      Daily_Chart.to_csv(strategypath+"/Daily_Report.csv")
+      weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
+      #weeklyreport = weeklyreport.reset_index(drop=True)
+      weeklyreport.to_csv(strategypath+"/Weekly_Report.csv")
+      report = rep.ReportTI(trades, Daily_Chart)
+      report.to_csv(strategypath + "/Report.csv")
+      monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
+      monthlyreport.to_csv(strategypath +"/Monthly_Report.csv")
+      dayofweek = rep.DayOfWeekTI(Daily_Chart)
+      dayofweek.to_csv(strategypath + "/day_of_week.csv")   
+    else :   
+      Daily_Chart = rep.GetDailyChart(trades)
+      Daily_Chart.to_csv(strategypath+"/Daily_Report.csv")
+      weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
+      #weeklyreport = weeklyreport.reset_index(drop=True)
+      weeklyreport.to_csv(strategypath+"/Weekly_Report.csv")
+      report = rep.Report(trades, Daily_Chart)
+      report.to_csv(strategypath + "/Report.csv")
+      monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
+      monthlyreport.to_csv(strategypath +"/Monthly_Report.csv")
+      dayofweek = rep.DayOfWeek(Daily_Chart)
+      dayofweek.to_csv(strategypath +"/day_of_week.csv")
     if buystrategy == True:
         Margin = utils.BuyMarginCalculator(trades, generalconfig['symbol'])
     else :
         Margin = margin
         
-    return (Daily_Chart["Daily pnl"], weeklyreport["Weekly pnl"], Margin)
+    return (Daily_Chart["Daily pnl"], weeklyreport["Daily pnl"], Margin)
 
-years = [2019, 2020, 2021, 2022]
+years = [2022]
 for year in years:
     yearpath = os.path.join(parent_dir, str(year))    
     file = Path(yearpath)
@@ -407,5 +454,5 @@ for year in years:
     # print(weeklyArr)
     # print("\n")
     weeklyCorr.to_csv(yearpath+"/BasketCorr.csv")
-    weeklyArr.to_csv(yearpath+"/BasketResults.csv")
+    weeklyArr.to_csv(yearpath+"/BasketResults.csv") 
 
