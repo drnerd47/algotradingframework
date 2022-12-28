@@ -175,7 +175,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   OHLCEnter = 'open'
   exitSLOHLC = 'open'
   exitTGOHLC = 'open'
-  exitSQEODOHLC = 'open'
+  exitSQEODOHLC = 'close'
   for s in range(len(spotdata)): 
     currentcandle = spotdata.iloc[s]
     if (currentcandle.name in spotdatafull.index):
