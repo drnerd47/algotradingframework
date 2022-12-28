@@ -44,10 +44,10 @@ def getBollingerBand(spotdata,columnname, period, stddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
     tempdf['upband'] = bb.bollinger_hband()
-    #tempdf['sma'] = bb.bollinger_mavg()
+    tempdf['sma'] = bb.bollinger_mavg()
     tempdf['lowband'] = bb.bollinger_lband()
-    #tempdf['hsignal'] = bb.bollinger_hband_indicator()
-    #tempdf['lsignal'] = bb.bollinger_lband_indicator()
+    tempdf['hsignal'] = bb.bollinger_hband_indicator()
+    tempdf['lsignal'] = bb.bollinger_lband_indicator()
     tempdf[columnname] = (tempdf.close - bb.bollinger_lband())/(bb.bollinger_hband() - bb.bollinger_lband())
     return tempdf
 
