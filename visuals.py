@@ -13,7 +13,7 @@ def plotCandlestickChart(df):
                                 close=df['close'][:100]
                                 )]
     # Load chart df
-    fig = go.Figure(df=chart_df)
+    fig = go.Figure(data=chart_df)
     # Update chart layout
     fig.update_layout(xaxis_rangeslider_visible=False, xaxis_showticklabels=True, yaxis_showticklabels=True)
     # Plot chart
@@ -52,7 +52,7 @@ def plotBB(df):
                                 name= 'candlestick'
                                 )]
     # Load chart df
-    fig = go.Figure(df=chart_df)
+    fig = go.Figure(data=chart_df)
     # Moving Average
     fig.add_trace(go.Scatter(x = df.index,
                             y = df['sma'],
