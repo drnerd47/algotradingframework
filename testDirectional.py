@@ -14,13 +14,15 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2020
-start_date = datetime.date(year, 4, 5)
-end_date = datetime.date(year, 4, 10)
+year = 2022
+startmonth = 1
+endmonth = 12
+start_date = datetime.date(year, startmonth, 1)
+end_date = datetime.date(year, endmonth, 31)
 
 delta = datetime.timedelta(days=1)
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -35,7 +37,7 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "BB1b"
+approach = "EMA"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
@@ -74,11 +76,7 @@ elif (approach == "SMA"):
   positionconfig = posconfig.positionconfigsingleselldirec
   TIconfig = TIconfigs.TIconfigSMA
 
-if (generalconfig["symbol"] == defs.N):
-    data = direc.getTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"], TIconfig)
-else:
-    data = direc.getTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"], TIconfig)
-
+data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()

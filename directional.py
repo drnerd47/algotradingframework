@@ -76,8 +76,26 @@ def getTI(spotdata, TIconfig):
         data['ExitSignal'] = np.nan
     return data
 
-# This function gets spot data of multiple days and resamples for required frequency
-def getTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
+def getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig):
+    if (generalconfig["Rolling"] == defs.YES):
+        if (generalconfig["symbol"] == defs.N):
+            data = getRollingTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N,
+                                            generalconfig["Resample"], TIconfig)
+        else:
+            data = getRollingTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN,
+                                            generalconfig["Resample"], TIconfig)
+    else:
+        if (generalconfig["symbol"] == defs.N):
+            data = getIntradayTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N,
+                                            generalconfig["Resample"], TIconfig)
+        else:
+            data = getIntradayTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN,
+                                            generalconfig["Resample"], TIconfig)
+    return data
+
+
+# This function gets spot data of multiple days and resamples for required frequency on a rolling basis
+def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):
     df_list = []
     delta = datetime.timedelta(days=1)
     # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
@@ -104,7 +122,7 @@ def getTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIco
     finaldf = getTI(finaldf, TIconfig)
     return finaldf
 
-
+# This function gets the TI indicator data everyday without rolling from previous day
 def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
     df_list = []
     delta = datetime.timedelta(days=1)
