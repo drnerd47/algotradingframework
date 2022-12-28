@@ -72,6 +72,9 @@ def getTI(spotdata, TIconfig):
             data = getSuperTrendIndicator(spotdata, t['period'], t['multiplier'], t['columnname'])
         if t['TI'] == 'MA':
             data = getMA(spotdata, t['columnname'], t['period'], t['type'])
+        if t['TI'] == 'RSI-Shifted':
+            data = getRSI(spotdata, t['columnname'], t['Window'])
+            data[t['columnname']] = data[t['columnname']].shift(1)
         data['EntrySignal'] = np.nan
         data['ExitSignal'] = np.nan
     return data
