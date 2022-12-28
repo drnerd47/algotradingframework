@@ -18,32 +18,6 @@ def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
     })
     return resample_df
 
-# This function gets spot data of multiple days and resamples for required frequency
-def getMultipledayData(start_date, end_date, entertime, path, symbol, freq):    
-    df_list = []
-    delta = datetime.timedelta(days=1)
-    # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
-    while start_date <= end_date:
-        date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
-        currpath = path + date_string
-        my_file = Path(currpath)
-        if my_file.exists():
-            df = pd.read_csv(currpath)
-            df = df.drop('datetime.1', axis=1)
-            df["datetime"] = pd.to_datetime(df["datetime"])
-            df = df.set_index(df['datetime'])
-            mask1 = df.index.time >= entertime
-            mask2 = df['symbol'] == symbol           
-            spotdata = df[mask1 & mask2]
-            spotdata.drop_duplicates(subset=['datetime'], inplace=True)
-            resampled = Resample(spotdata, freq)
-            resampled.dropna(inplace=True)
-            df_list.append(resampled)
-     
-        start_date += delta
-    finaldf = pd.concat(df_list)
-    finaldf = finaldf.apply(pd.to_numeric)
-    return finaldf
 
 
 
@@ -102,7 +76,8 @@ def getTI(spotdata, TIconfig):
         data['ExitSignal'] = np.nan
     return data
 
-def getMultipledayDataNoRolling(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
+# This function gets spot data of multiple days and resamples for required frequency
+def getTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
     df_list = []
     delta = datetime.timedelta(days=1)
     # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
@@ -120,13 +95,41 @@ def getMultipledayDataNoRolling(start_date, end_date, entertime, path, symbol, f
             spotdata = df[mask1 & mask2]
             spotdata.drop_duplicates(subset=['datetime'], inplace=True)
             resampled = Resample(spotdata, freq)
+            resampled = resampled.apply(pd.to_numeric)
+            resampled.dropna(inplace=True)
+            df_list.append(resampled)
+     
+        start_date += delta
+    finaldf = pd.concat(df_list)
+    finaldf = getTI(finaldf, TIconfig)
+    return finaldf
+
+
+def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
+    df_list = []
+    delta = datetime.timedelta(days=1)
+    # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
+    while start_date <= end_date:
+        date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
+        currpath = path + date_string
+        my_file = Path(currpath)
+        if my_file.exists():
+            df = pd.read_csv(currpath)
+            df = df.drop('datetime.1', axis=1)
+            df["datetime"] = pd.to_datetime(df["datetime"])
+            df = df.set_index(df['datetime'])
+            mask1 = df.index.time >= entertime
+            mask2 = df['symbol'] == symbol           
+            spotdata = df[mask1 & mask2]
+            spotdata.drop_duplicates(subset=['datetime'], inplace=True)
+            resampled = Resample(spotdata, freq)
+            resampled = resampled.apply(pd.to_numeric)
             resampled.dropna(inplace=True)
             resampled = getTI(resampled, TIconfig)
             df_list.append(resampled)
      
         start_date += delta
     finaldf = pd.concat(df_list)
-    finaldf = finaldf.apply(pd.to_numeric)
     return finaldf
 
 

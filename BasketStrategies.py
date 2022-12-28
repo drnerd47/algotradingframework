@@ -288,10 +288,9 @@ def RunStrategy(strattypes, start, end, yearpath):
 
     if directional == True:
         if (generalconfig["symbol"] == defs.N):
-            data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Nifty_Path, defs.N, generalconfig["Resample"])            
+            data = direc.getTIIndicatorData(start_date, end_date, generalconfig['EnterTime'], Nifty_Path, defs.N, generalconfig["Resample"], TIconfig)            
         else:
-            data = direc.getMultipledayData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"])              
-        data = direc.getTI(data, TIconfig)
+            data = direc.getTIIndicatorData(start_date, end_date, generalconfig['EnterTime'], Banknifty_Path, defs.BN, generalconfig["Resample"], TIconfig)              
         
     while start_date <= end_date:
         trade = pd.DataFrame()

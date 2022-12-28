@@ -14,13 +14,13 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2022
-start_date = datetime.date(year, 1, 1)
-end_date = datetime.date(year, 12, 31)
+year = 2020
+start_date = datetime.date(year, 4, 5)
+end_date = datetime.date(year, 4, 10)
 
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -35,7 +35,7 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "EMA"
+approach = "BB1b"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
@@ -52,6 +52,10 @@ elif (approach == "BB2"):
 elif (approach == "BB1"):
   generalconfig = genconfig.generalconfigBNBB
   positionconfig = posconfig.positionconfigsingleselldirec
+  TIconfig = TIconfigs.TIconfigBB1
+elif (approach == "BB1b"):
+  generalconfig = genconfig.generalconfigBNBB
+  positionconfig = posconfig.positionconfigsinglebuydirec
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
@@ -71,11 +75,9 @@ elif (approach == "SMA"):
   TIconfig = TIconfigs.TIconfigSMA
 
 if (generalconfig["symbol"] == defs.N):
-    dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"])
+    data = direc.getTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N, generalconfig["Resample"], TIconfig)
 else:
-    dataorig = direc.getMultipledayData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"])
-
-data = direc.getTI(dataorig, TIconfig)
+    data = direc.getTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN, generalconfig["Resample"], TIconfig)
 
 
 trade = pd.DataFrame()
