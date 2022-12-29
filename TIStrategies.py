@@ -34,7 +34,7 @@ generalconfigBNBB = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9
                     "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
-def GetBB1Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
+def GetBB1Configs(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
@@ -42,7 +42,7 @@ def GetBB1Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDel
     SLBool = True
     TBool = True
 
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": defs.BN, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
                            "TargetCond": "TIBased",
                            "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
@@ -54,7 +54,7 @@ def GetBB1Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDel
             ]
     return (ticonfig, generalconfig, positionconfig)
 
-def GetBB2Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
+def GetBB2Configs(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
@@ -62,7 +62,7 @@ def GetBB2Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDel
     SLBool = True
     TBool = True
 
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": defs.BN, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
                            "TargetCond": "TIBased",
                            "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
@@ -74,7 +74,7 @@ def GetBB2Configs(symbol, period, Resample, TBull, TBear, SLBullDelta, SLBearDel
             ]
     return (ticonfig, generalconfig, positionconfig)
 
-def GetRSIADXconfigs(symbol, action, Delta, Resample, TBull, TBear, window, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, ADXTBull, ADXTBear):
+def GetRSIADXconfigs(action, Delta, Resample, TBull, TBear, window, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, ADXTBull, ADXTBear):
     
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40, "Id": 1, "HedgeId": 0},
@@ -83,7 +83,7 @@ def GetRSIADXconfigs(symbol, action, Delta, Resample, TBull, TBear, window, SLBu
     SLBool = True
     TBool = False
 
-    generalconfig = { "symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
+    generalconfig = { "symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased", "TargetCond": "TIBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO}
 
