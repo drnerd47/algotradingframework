@@ -205,12 +205,24 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
+            if (generalconfig["Reenter"] == defs.YES):
+              for pos in postoExitSL:
+                if pos["stance"] == defs.BULL:
+                  placedBull = False
+                elif pos["stance"] == defs.BEAR:
+                  placedBear = False
         if (generalconfig["StopLossCond"] == "PremiumBased") or (generalconfig["StopLossCond"] == "TIPremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
             direc.ExitPositionPremium(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
+            if (generalconfig["Reenter"] == defs.YES):
+              for pos in postoExitSL:
+                if pos["stance"] == defs.BULL:
+                  placedBull = False
+                elif pos["stance"] == defs.BEAR:
+                  placedBear = False
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
@@ -219,15 +231,26 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
+            if (generalconfig["Reenter"] == defs.YES):
+              for pos in postoExitTarget:
+                if pos["stance"] == defs.BULL:
+                  placedBull = False
+                elif pos["stance"] == defs.BEAR:
+                  placedBear = False
         if (generalconfig["TargetCond"] == "PremiumBased") or (generalconfig["TargetCond"] == "TIPremiumBased"):
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.TARGET, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
+            if (generalconfig["Reenter"] == defs.YES):
+              for pos in postoExitTarget:
+                if pos["stance"] == defs.BULL:
+                  placedBull = False
+                elif pos["stance"] == defs.BEAR:
+                  placedBear = False
 
       # Square off Remaining Legs EOD
-
       if (currentcandle.name.time() >= generalconfig["ExitTime"]) and not exitDone:
         if direc.CheckActivePositions(positions) == True:
           data.loc[currentcandle.name]['ExitSignal'] = defs.EXITTIME

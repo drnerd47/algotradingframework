@@ -14,7 +14,7 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2021
+year = 2022
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -37,31 +37,27 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "BB1"
+approach = "EMA"
 
 if (approach == "RSI-Dual"):
-  generalconfig = genconfig.generalconfigNRSIDual
-  positionconfig = posconfig.positionconfigsingleselldirecSL
+  generalconfig = genconfig.generalconfigBNRSIDual
+  positionconfig = posconfig.positionconfigsinglebuydirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
-  generalconfig = genconfig.generalconfigBNST
+  generalconfig = genconfig.generalconfigNST
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):
   generalconfig = genconfig.generalconfigBNBB
-  positionconfig = posconfig.positionconfigsingleselldirec
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigBB2
 elif (approach == "BB1"):
   generalconfig = genconfig.generalconfigBNBB
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigBB1
-elif (approach == "BB1b"):
-  generalconfig = genconfig.generalconfigBNBB
-  positionconfig = posconfig.positionconfigsinglebuydirec
-  TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
-  positionconfig = posconfig.positionconfigsinglebuydirec
+  positionconfig = posconfig.positionconfigsinglebuydirecSL
   TIconfig = TIconfigs.TIconfigRSI_ADX
 elif (approach == "RSI2"):
   generalconfig = genconfig.generalconfigBNRSI2
@@ -69,7 +65,7 @@ elif (approach == "RSI2"):
   TIconfig = TIconfigs.TIconfig2_RSI
 elif (approach == "EMA"):
   generalconfig = genconfig.generalconfigBNMA
-  positionconfig = posconfig.positionconfigsingleselldirec
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigEMA
 elif (approach == "SMA"):
   generalconfig = genconfig.generalconfigBNMA
