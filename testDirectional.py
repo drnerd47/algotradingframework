@@ -14,7 +14,7 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2022
+year = 2021
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)

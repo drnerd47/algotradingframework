@@ -187,9 +187,9 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
                 price = opdf.loc[nextcandle.name][OHLC]
-                futprice = futdf.loc[nextcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
-                enterspotprice = nextcandle[OHLC]*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                     "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
                     "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
@@ -366,8 +366,8 @@ def ExitPositionPremium(positionstoExit, currentcandle, ExitReason, OHLC):
                 idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
                 futexitprice = pos["FutData"].loc[idx][OHLC]
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-            futexitprice = futexitprice**(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
-            spotexitprice = currentcandle[OHLC]*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
+            futexitprice = futexitprice #*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
+            spotexitprice = currentcandle[OHLC] #*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                              'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
                              'Reason': exitReason, 'Trade Type': Str, 'EnterSpotPrice': pos["EnterSpotPrice"],

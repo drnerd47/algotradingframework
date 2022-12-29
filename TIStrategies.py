@@ -34,7 +34,7 @@ generalconfigBNBB = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9
                     "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
-def GetBBConfigsBBuy( period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta):
+def GetBB1ConfigsBBuy(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta):
     positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
@@ -48,8 +48,28 @@ def GetBBConfigsBBuy( period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, 
                            "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
     ticonfig = [
         {"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": TBull, "SLBear": SLBear, "TargetBull": TargetBull, "TargetBear": TargetBear, "BullOperator": operator.gt, "BearOperator": operator.lt,
+                "SLBull": TBull + SLBullDelta, "SLBear": TBear + SLBearDelta, "TargetBull": TBull + TargetBullDelta, "TargetBear": TBear + TargetBearDelta,
+                "BullOperator": operator.lt, "BearOperator": operator.gt,
                "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}
             ]
     return (ticonfig, generalconfig, positionconfig)
 
+def GetBB2ConfigsBBuy(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta):
+    positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+                       "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
+                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+                       "SL": defs.NO, "Target": defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
+    SLBool = True
+    TBool = True
+
+    generalconfig = {"symbol": defs.BN, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+                           "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
+                           "TargetCond": "TIBased",
+                           "Slippage": 0.5, "LotSize": defs.BNLOTSIZE}
+    ticonfig = [
+        {"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev":2, "SL": defs.YES, "Target": defs.YES,
+                "SLBull": TBull + SLBullDelta, "SLBear": TBear + SLBearDelta, "TargetBull": TBull + TargetBullDelta, "TargetBear": TBear + TargetBearDelta,
+                "BullOperator": operator.lt, "BearOperator": operator.gt,
+               "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}
+            ]
+    return (ticonfig, generalconfig, positionconfig)
