@@ -200,12 +200,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
     if placedBull or placedBear:
       # Check Stop Loss Condition
       if (generalconfig["StopLoss"]):
-        if (generalconfig["StopLossCond"] == "TIBased"):
+        if (generalconfig["StopLossCond"] == "TIBased") or (generalconfig["StopLossCond"] == "TIPremiumBased"):
           postoExitSL = direc.CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitSL) > 0):
             direc.ExitPosition(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-        elif (generalconfig["StopLossCond"] == "PremiumBased"):
+        if (generalconfig["StopLossCond"] == "PremiumBased") or (generalconfig["StopLossCond"] == "TIPremiumBased"):
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
         # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
@@ -214,12 +214,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
 
       # Check Target Profit Condition
       if (generalconfig["Target"]):
-        if (generalconfig["TargetCond"] == "TIBased"):
+        if (generalconfig["TargetCond"] == "TIBased") or (generalconfig["TargetCond"] == "TIPremiumBased"):
           postoExitTarget = direc.CheckTargetConditionTI(positions, currentcandle, nextcandle, TIconfig)
           if (len(postoExitTarget) > 0):
             direc.ExitPosition(postoExitTarget, nextcandle, defs.SL, exitTGOHLC)
             data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-        elif (generalconfig["TargetCond"] == "PremiumBased"):
+        if (generalconfig["TargetCond"] == "PremiumBased") or (generalconfig["TargetCond"] == "TIPremiumBased"):
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
         # We enter this loop if there is any position where target profit condition is satisfied.
           if (len(postoExitTarget) > 0):

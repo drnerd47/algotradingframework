@@ -1,7 +1,7 @@
 import definitions as defs
 import datetime
 
-def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, slippage):
+def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG):
     if (symbol == defs.BN):
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
@@ -9,10 +9,10 @@ def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntr
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
                        "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15), "symbol": symbol,
                        "ReEntrySL": ReEntrySL, "ReEntryTG": ReEntryTG, "MaxReEnterCounterSL": MaxReEnterCounterSL, "MaxReEnterCounterTG": MaxReEnterCounterTG,
-                       "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": slippage, "LotSize":lotsize}
+                       "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
     return generalconfig
 
-def GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, symbol, ReEnterEvery, slippage):
+def GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, symbol, ReEnterEvery):
     if (symbol == defs.BN):
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
@@ -20,7 +20,32 @@ def GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, symbol, ReEnterEvery,
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
                        "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15), "symbol": symbol,
                        "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                       "debug": defs.DEBUGTIME, "Timerenter": defs.YES, "ReEnterEvery": ReEnterEvery, "Slippage": slippage, "LotSize":lotsize}
+                       "debug": defs.DEBUGTIME, "Timerenter": defs.YES, "ReEnterEvery": ReEnterEvery, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
+    return generalconfig
+
+def GenGeneralConfigExpiry(SquareOffSL, SquareOffTG, symbol, EnterDay, ExitDay):
+    if (symbol == defs.BN):
+        lotsize = defs.BNLOTSIZE
+    elif (symbol == defs.N):
+        lotsize = defs.NLOTSIZE
+    generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG, "EnterDay": EnterDay,
+                             "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15),
+                             "ExitDay": ExitDay, "symbol": symbol,
+                             "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5,
+                             "MaxReEnterCounterTG": 5,
+                             "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5,
+                             "Slippage": defs.SLIPPAGE, "LotSize": lotsize}
+    return generalconfig
+
+def GenGeneralConfigNextDay(SquareOffSL, SquareOffTG, symbol, EnterDay, ExitDay):
+    if (symbol == defs.BN):
+        lotsize = defs.BNLOTSIZE
+    elif (symbol == defs.N):
+        lotsize = defs.NLOTSIZE
+    generalconfig = {"SquareOffSL":SquareOffSL,"SquareOffTG":SquareOffTG, "EnterDay": EnterDay,
+                     "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": ExitDay, "symbol":symbol,
+                     "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
     return generalconfig
 
 generalconfigNextDayBNMW = {"name":" NextdayBNMW", "SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED],
@@ -45,7 +70,7 @@ generalconfigExpiryBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "E
 
 generalconfigIntradayBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
-                     "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
+                     "ReEntrySL": 5, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
                  "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigIntradayREBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
@@ -104,10 +129,10 @@ generalconfigBNRSIDual = {"name":"BNRSIDual", "symbol":defs.BN, "EnterTime": dat
 generalconfigNRSIDual = {"name":"BNRSIDual", "symbol":defs.N, "EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": 10, "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO}
 
-generalconfigBNBB = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO}
-generalconfigNBB = {"name":"NBB","symbol":defs.N,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO}
+generalconfigBNBB = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.YES}
+generalconfigNBB = {"name":"NBB","symbol":defs.N,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.YES}
 
 generalconfigBNST = {"name":"BNST","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO}

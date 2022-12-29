@@ -18,9 +18,6 @@ def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
     })
     return resample_df
 
-
-
-
 def getRSI(spotdata, columnname, period=14):
     tempdf = spotdata
     tempdf[columnname] = ta.momentum.RSIIndicator(tempdf['close'], window=period).rsi()

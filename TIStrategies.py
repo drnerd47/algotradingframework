@@ -2,10 +2,10 @@ import definitions as defs
 import datetime
 import operator
 
-def GetRSI2ConfigsPBSell(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2):
-    positionconfig = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
+def GetRSI2Configs(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, action):
+    positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":0, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
-                       {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
+                       {"Type":defs.PUT,"Action":action,"Delta":0, "NumLots":1,
                        "SL": SL, "Target": Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc}]
     SLBool = False
     TBool = False
@@ -34,10 +34,10 @@ generalconfigBNBB = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9
                     "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
-def GetBB1ConfigsBBuy(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta):
-    positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+def GetBB1Configs(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
+    positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
-                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+                       {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
     SLBool = True
     TBool = True
@@ -54,10 +54,10 @@ def GetBB1ConfigsBBuy(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, 
             ]
     return (ticonfig, generalconfig, positionconfig)
 
-def GetBB2ConfigsBBuy(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta):
-    positionconfig = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+def GetBB2Configs(period, Resample, TBull, TBear, SLBullDelta, SLBearDelta, TargetBullDelta, TargetBearDelta, Delta, action):
+    positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 40},
-                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":Delta, "NumLots":1,
+                       {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": defs.NO, "Target": defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
     SLBool = True
     TBool = True
