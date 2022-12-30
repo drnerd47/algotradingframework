@@ -37,11 +37,11 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "EMA"
+approach = "RSI2"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
-  positionconfig = posconfig.positionconfigsinglebuydirecSL
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
   generalconfig = genconfig.generalconfigNST
