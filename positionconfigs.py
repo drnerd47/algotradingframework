@@ -80,8 +80,9 @@ def getIronCondor(Delta1, Delta2, SLBuy, SLSell, Target, SLPcBuy, SLPcSell, Targ
                        "NumLots": 1, "SL": SLSell, "Target": Target, "Id": 4, "HedgeId": 2}]
     return positionconfig
 
-positionconfitStatArbStraddle = [positionconfigShortStraddle, positionconfigLongStraddle]
-positionconfitStatArbStrangle = [positionconfigShortStrangle, positionconfigLongStrangle]
+positionconfigStatArbStraddle = [positionconfigShortStraddle, positionconfigLongStraddle]
+
+positionconfigStatArbStrangle = [positionconfigShortStrangle, positionconfigLongStrangle]
 
 def getStatArb(Delta1, Delta2, SL1, Target1, SLPc1, TargetPc1, SL2, Target2, SLPc2, TargetPc2):
     positionconfigShort = getStrangles(defs.SELL, Delta1, SL1, Target1, SLPc1, TargetPc1)
