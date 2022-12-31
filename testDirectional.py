@@ -22,7 +22,7 @@ end_date = datetime.date(year, endmonth, 31)
 
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -37,7 +37,7 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "RSI2"
+approach = "EMA"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
@@ -48,11 +48,11 @@ elif (approach == "ST"):
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):
-  generalconfig = genconfig.generalconfigBNBB
+  generalconfig = genconfig.generalconfigBNBB2
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigBB2
 elif (approach == "BB1"):
-  generalconfig = genconfig.generalconfigBNBB
+  generalconfig = genconfig.generalconfigBNBB1
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
@@ -83,7 +83,7 @@ while start_date <= end_date:
   NPath = Nifty_Path + date_string
   my_fileN = Path(NPath)
   my_fileBN = Path(BNPath)
-  print("Working on file - "+date_string)
+  # print("Working on file - "+date_string)
   if my_fileN.exists() and my_fileBN.exists():
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
@@ -94,8 +94,8 @@ while start_date <= end_date:
     #print(trade)
     if (len(trade) > 0):
       trades = trades.append(trade)
-  else:
-    print("No data for " + start_date.strftime("%Y-%m-%d"))  
+  # else:
+  #   print("No data for " + start_date.strftime("%Y-%m-%d"))  
   start_date += delta
 
 data.to_csv(Result_path + "Data_" + approach + ".csv")
@@ -105,12 +105,12 @@ trades = trades.reset_index()
 trades = trades.drop(["index"], axis = 1)
 
 print("\n")
-print(trades)
+# print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChartTI(trades)
-print(Daily_Chart)
+# print(Daily_Chart)
 Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 print("\n")
@@ -120,14 +120,14 @@ report.to_csv(Result_path + approach + "Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
-print(weeklyreport)
+# print(weeklyreport)
 weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
 monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
-print(monthlyreport)
+# print(monthlyreport)
 
 print("\n")
 dayofweek = rep.DayOfWeekTI(Daily_Chart)
-print(dayofweek)
+# print(dayofweek)
 
