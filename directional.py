@@ -72,8 +72,8 @@ def getTI(spotdata, TIconfig):
         if t['TI'] == 'RSI-Shifted':
             data = getRSI(spotdata, t['columnname'], t['Window'])
             data[t['columnname']] = data[t['columnname']].shift(1)
-        data['EntrySignal'] = np.nan
-        data['ExitSignal'] = np.nan
+    data['EntrySignal'] = np.nan
+    data['ExitSignal'] = np.nan
     return data
 
 def getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig):
@@ -111,7 +111,7 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol           
             spotdata = df[mask1 & mask2]
-            spotdata.drop_duplicates(subset=['datetime'], inplace=True)
+            spotdata = spotdata.drop_duplicates(subset=['datetime'])
             resampled = Resample(spotdata, freq)
             resampled = resampled.apply(pd.to_numeric)
             resampled.dropna(inplace=True)
