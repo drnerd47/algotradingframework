@@ -55,6 +55,12 @@ def getMACD(spotdata, fastperiod, slowperiod):
     tempdf['MACD_signal'] = macd.macd_signal()
     return tempdf
 
+def getSuperTrendIndicator(spotdata, period, multiplier, columnname):
+    tempdf = spotdata
+    df = st.SuperTrend(spotdata, period, multiplier)
+    df[columnname] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
+    return df
+
 def getTI(spotdata, TIconfig):
     for t in TIconfig:
         if t['TI'] == "RSI":
@@ -149,13 +155,6 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
         start_date += delta
     finaldf = pd.concat(df_list)
     return finaldf
-
-
-def getSuperTrendIndicator(spotdata, period, multiplier, columnname):
-    tempdf = spotdata
-    df = st.SuperTrend(tempdf, period, multiplier)
-    df[columnname] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
-    return df
 
 # Check entry condition based on the TIconfig
 def CheckEntryCondition(currentcandle, TIconfig):
