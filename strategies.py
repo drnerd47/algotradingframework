@@ -264,6 +264,7 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
   placedBull = False
   placedBear = False
+  initialized = False
   positions = []
   trades = []
   MinCounter = 0
@@ -291,8 +292,9 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
       exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
       opdfCE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikeCE) + defs.CALL]
       opdfPE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikePE) + defs.PUT]
+      initialized = True
     # Observe the highest premium in the second part
-    if (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name.time() <= generalconfig["Until"]):
+    if initialized and (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name.time() <= generalconfig["Until"]):
       if (currentcandle.name in opdfCE.index) and (highestCEPrice < opdfCE.loc[currentcandle.name][OHLCUntil]):
         highestCEPrice = opdfCE.loc[currentcandle.name][OHLCUntil]
       if (currentcandle.name in opdfPE.index) and (highestPEPrice < opdfPE.loc[currentcandle.name][OHLCUntil]):
@@ -300,7 +302,7 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
     # Look for break out signal
     breakoutCEPrice = highestCEPrice*(1 + generalconfig["BreakoutFactor"]/100)
     breakoutPEPrice = highestPEPrice*(1 + generalconfig["BreakoutFactor"]/100)
-    if currentcandle.name.time() >= generalconfig["Until"]:
+    if initialized and currentcandle.name.time() >= generalconfig["Until"]:
       if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] >= breakoutCEPrice and not placedBull:
         (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikeCE)
         placedBull = True

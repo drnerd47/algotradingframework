@@ -12,6 +12,8 @@ import warnings
 import TIconfigs
 import numpy as np
 
+import utils
+
 warnings.filterwarnings("ignore")
 
 year = 2022
@@ -22,7 +24,7 @@ end_date = datetime.date(year, endmonth, 31)
 
 delta = datetime.timedelta(days=1)
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -75,7 +77,8 @@ while start_date <= end_date:
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"], axis = 1)
-
+margin = utils.BuyMarginCalculator(trades, generalconfig["symbol"])
+print("Margin Required is " + str(margin))
 print("\n")
 print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
