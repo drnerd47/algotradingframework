@@ -259,3 +259,75 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         exitDone = True
       trades = atom.GetFinalTrades(positions)
   return trades
+
+def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
+  spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
+  placedBull = False
+  placedBear = False
+  positions = []
+  trades = []
+  MinCounter = 0
+
+  OHLCEnter = 'open'
+  OHLCUntil = 'open'
+  OHLCBreakout = 'open'
+  exitSLOHLC = 'close'
+  exitTGOHLC = 'close'
+  exitSQOHLC = 'close'
+  exitSQEODOHLC = 'open'
+  highestCEPrice = 0
+  highestPEPrice = 0
+  FoundStrikeCE = False
+  FoundStrikePE = False
+  for s in range(len(spotdata)):
+    MinCounter += 1
+    currentcandle = spotdata.iloc[s]
+    # Get Strike Prices for Closest Premium at the start
+    if currentcandle.name.time() == generalconfig["EnterTime"]:
+      (beststrikeCE, minval) = direc.FindStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.CALL, OHLCEnter, generalconfig["symbol"])
+      (beststrikePE, minval) = direc.FindStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.PUT, OHLCEnter, generalconfig["symbol"])
+      exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
+      opdfCE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikeCE) + defs.CALL]
+      opdfPE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikePE) + defs.PUT]
+    # Observe the highest premium in the second part
+    if (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name.time() <= generalconfig["Until"]):
+      if (currentcandle.name in opdfCE.index) and (highestCEPrice < opdfCE.loc[currentcandle.name][OHLCUntil]):
+        highestCEPrice = opdfCE.loc[currentcandle.name][OHLCUntil]
+      if (currentcandle.name in opdfPE.index) and (highestPEPrice < opdfPE.loc[currentcandle.name][OHLCUntil]):
+        highestPEPrice = opdfPE.loc[currentcandle.name][OHLCUntil]
+    # Look for break out signal
+    breakoutCEPrice = highestCEPrice*(1 + generalconfig["BreakoutFactor"]/100)
+    breakoutPEPrice = highestPEPrice*(1 + generalconfig["BreakoutFactor"]/100)
+    if currentcandle.name.time() >= generalconfig["Until"]:
+      if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] >= breakoutCEPrice and not placedBull:
+        (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikeCE)
+        placedBull = True
+      if (currentcandle.name in opdfPE.index) and opdfPE.loc[currentcandle.name][OHLCBreakout] >= breakoutPEPrice and not placedBear:
+        (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikePE)
+        placedBear = True
+    if placedBull or placedBear:
+      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+      # We enter this loop if there is any position where stop-loss is triggered.
+      if (len(postoExitSL) > 0):
+        direc.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+        
+      # Check Target Profit Condition
+      (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+      # We enter this loop if there is any position where target profit condition is satisfied.
+      if (len(postoExitTarget) > 0):
+        direc.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
+
+      # Square off Remaining Legs EOD
+      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+        direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+        trades = atom.GetFinalTrades(positions)  
+
+  return trades
+
+
+
+
+
+

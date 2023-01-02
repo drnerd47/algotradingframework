@@ -205,6 +205,40 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
                 positionsNotPlaced.append(posc)
     return (positions, positionsNotPlaced)
 
+def EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance, strike):
+    positionsNotPlaced = []
+    for posc in positionconfig:
+        if (posc["Stance"] == stance):
+            exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
+            opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(strike) + posc["Type"]]
+            futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
+            #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
+            # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
+            if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
+                price = opdf.loc[nextcandle.name][OHLC]
+                futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": strike,
+                    "OpSymbol": generalconfig["symbol"] + exp + str(strike) + posc["Type"],
+                    "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(strike) + posc["Type"]],
+                    "FutData": futdf, 
+                    "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
+                    "date": nextcandle.name.date(),                    
+                    "EnterSpotPrice": enterspotprice,
+                    "Active": True, "Strike": strike,
+                    "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
+                    "FutEnterPrice":futprice }
+                if (posc["SL"] == defs.YES):
+                    position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
+                if (posc["Target"] == defs.YES):
+                    position["TargetCond"] = enterprice + posc["Action"]*enterprice*posc["TargetPc"]/100
+                positions.append(position)
+            else:
+                positionsNotPlaced.append(posc)
+    return (positions, positionsNotPlaced)
+
+
 def CheckStopLossConditionStance(stance, currentcandle, TIconfig):
     SLCondBull = False
     SLCondBear = False
@@ -356,7 +390,7 @@ def ExitPositionPremium(positionstoExit, currentcandle, ExitReason, OHLC):
             enterprice = pos['EnterPrice']
             futenterprice = pos['FutEnterPrice']
             spotenterprice = pos['EnterSpotPrice']
-            if currentcandle.name in pos["OpData"].index:
+            if currentcandle.name in pos["OpData"].index :
                 futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
             else:
                 idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
@@ -375,3 +409,22 @@ def ExitPositionPremium(positionstoExit, currentcandle, ExitReason, OHLC):
                              "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']}
             pos["Active"] = False
 
+def FindStrike(masterdf, premium, time, startstrike, endstrike, optype, OHLC, symbol):
+    if symbol == defs.N :
+        inc = 50
+    elif symbol == defs.BN :
+        inc = 100
+    minval = 1000
+    #print(optype)
+    for s in range(startstrike, endstrike, inc):
+        exp = atom.GetExpiry(masterdf, symbol)
+        opsymbol = symbol + exp + str(s) + optype       
+        currprice = atom.GetOptionPrice(masterdf, opsymbol, time, OHLC)
+        if abs(currprice - premium) < minval:
+            minval = abs(currprice - premium)
+            currbeststrike = s
+            #print(minval)
+            #print(currprice)
+            #print(s)
+    return (currbeststrike, minval)
+        

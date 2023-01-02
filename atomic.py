@@ -11,18 +11,15 @@ def LoadDF(currpath):
         masterdf = masterdf.drop('datetime.1', axis=1)
         masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])
-        # masterdf['low'] = masterdf['low'].astype(float)
-        # masterdf['open'] = masterdf['open'].astype(float)
-        # masterdf['high'] = masterdf['high'].astype(float)
-        # masterdf['close'] = masterdf['close'].astype(float)
     return masterdf
 
-def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC, generalconfig):
-    exp = GetExpiry(masterdf, generalconfig["symbol"])
+def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
+    exp = GetExpiry(masterdf, symbol)
     cst = strikeprice
     cst = int(round(cst / 100, 0) * 100)
-    price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][
-        HLOC]
+    price = 0
+    if time in masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].index.time:
+        price = masterdf[masterdf['symbol'] == symbol + exp + str(cst) + type].loc[time][HLOC]
     return price
 
 def GetOptionPrice(masterdf, opsymbol, time, HLOC):
