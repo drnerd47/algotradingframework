@@ -99,13 +99,17 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     return (ticonfig, generalconfig, positionconfig)
 
 
-def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear,rolling, reenter, window):
+def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window):
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 1, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 2, "HedgeId": 0}]
-    SLBool = True
+    SLBool = False
     TBool = False
+    if (SL == defs.YES):
+        SLBool = True
+    if (Target == defs.YES):
+        TBool = True
     if symbol == defs.BN:
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
@@ -116,10 +120,10 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
 
 
-    ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull, "ThreshBear": TBear, "Window": window, "SL": defs.NO, "Target": defs.NO,
+    ticonfig = [{"TI": "RSI", "columnname": "RSI", "ThreshBull": TBull, "ThreshBear": TBear, "Window": window, "SL": defs.NO, "Target": defs.NO,
             "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
              "BullOperator": operator.gt, "BearOperator": operator.lt, "SLBullOperator": operator.lt, "SLBearOperator": operator.gt,"TBullOperator": operator.gt, "TBearOperator": operator.lt},
-			{"TI": "ADX","columnname":"ADX14", "Window": window, "ThreshBull": ADXTBull, "ThreshBear": ADXTBear, "SL": defs.NO, "Target": defs.NO,
+			{"TI": "ADX","columnname":"ADX", "Window": window, "ThreshBull": ADXTBull, "ThreshBear": ADXTBear, "SL": defs.NO, "Target": defs.NO,
            "BullOperator": operator.gt, "BearOperator": operator.gt}]
 
     return (ticonfig, generalconfig, positionconfig)
@@ -129,12 +133,18 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 1, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 2, "HedgeId": 0}]
-    if symbol == defs.BN :
+    SLBool = False
+    TBool = False
+    if (SL == defs.YES):
+        SLBool = True
+    if (Target == defs.YES):
+        TBool = True
+    if symbol == defs.BN:
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
     generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
-                    "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
 
     ticonfig = [{"TI": "MA", "columnname":"EMA", "ThreshBull": TBull, "ThreshBear": TBear, "period": period, "SL": defs.NO, "Target": defs.NO,
@@ -148,6 +158,12 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc}]
+    SLBool = False
+    TBool = False
+    if (SL == defs.YES):
+        SLBool = True
+    if (Target == defs.YES):
+        TBool = True
     if symbol == defs.BN:
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
@@ -157,7 +173,7 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
                 "BullOperator": operator.gt, "BearOperator": operator.lt}]
 
     generalconfig = {"name":"BNST","symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
-                    "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
+                    "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
     return ( ticonfig, generalconfig, positionconfig)
 
