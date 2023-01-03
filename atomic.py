@@ -3,11 +3,17 @@ from pathlib import Path
 import definitions as defs
 from datetime import datetime as dt
 import datetime
+import os
+
 
 def LoadDF(currpath):
+    extension = os.path.splitext(currpath)[1]
     my_file = Path(currpath)
     if my_file.exists():
-        masterdf = pd.read_csv(currpath)
+        if extension == ".csv":
+            masterdf = pd.read_csv(currpath)
+        elif extension == ".pkl":
+            masterdf = pd.read_pickle(currpath)
         masterdf = masterdf.drop('datetime.1', axis=1)
         masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])

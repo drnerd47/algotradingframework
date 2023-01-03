@@ -1,4 +1,6 @@
 import definitions as defs
+import glob, os
+import pandas as pd
 
 
 def BuyMarginCalculator(trades, symbol):
@@ -25,3 +27,11 @@ def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
       doublecost = 60000
   return min(numcalllegs, numputlegs)*doublecost + (max(numcalllegs, numputlegs) - min(numcalllegs, numputlegs))*singlecost
 
+def CsvToPickle(csv_folder_path, pickle_folder_path):
+  files = glob.glob(os.path.join(csv_folder_path, 'Data*.csv'))
+
+  for file in files:
+      filename = os.path.split(file)[1]
+      filename = filename[:len(filename)-4]
+      df = pd.read_csv(file)
+      df.to_pickle(pickle_folder_path + "/"+ filename + ".pkl")

@@ -109,11 +109,29 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
     totaldelta = end_date - start_date
     dates = pd.date_range(start_date, periods=totaldelta.days+1)
     for date in dates.tolist():
-        date_string = date.strftime("%Y/Data%Y%m%d.csv")
-        currpath = path + date_string
-        my_file = Path(currpath)
-        if my_file.exists():
-            df = pd.read_csv(currpath)
+        csv_date_string = date.strftime("%Y/Data%Y%m%d.csv")
+        pkl_date_string = date.strftime("%Y/Data%Y%m%d.pkl")
+        csv_currpath = path + csv_date_string
+        pkl_currpath = path + pkl_date_string
+        csv_file = Path(csv_currpath)
+        pkl_file = Path(pkl_currpath)
+        
+        if csv_file.exists():
+            df = pd.read_csv(csv_currpath)
+            df = df.drop('datetime.1', axis=1)
+            df["datetime"] = pd.to_datetime(df["datetime"])
+            df = df.set_index(df['datetime'])
+            mask1 = df.index.time >= entertime
+            mask2 = df['symbol'] == symbol           
+            spotdata = df[mask1 & mask2]
+            spotdata = spotdata.drop_duplicates(subset=['datetime'])
+            resampled = Resample(spotdata, freq)
+            resampled = resampled.apply(pd.to_numeric)
+            resampled.dropna(inplace=True)
+            df_list.append(resampled)
+
+        elif pkl_file.exists():
+            df = pd.read_pickle(pkl_currpath)
             df = df.drop('datetime.1', axis=1)
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
@@ -140,11 +158,29 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
     dates = pd.date_range(start_date, periods=totaldelta.days+1)
     
     for date in dates:
-        date_string = date.strftime("%Y/Data%Y%m%d.csv")
-        currpath = path + date_string
-        my_file = Path(currpath)
-        if my_file.exists():
-            df = pd.read_csv(currpath)
+        csv_date_string = date.strftime("%Y/Data%Y%m%d.csv")
+        pkl_date_string = date.strftime("%Y/Data%Y%m%d.pkl")
+        csv_currpath = path + csv_date_string
+        pkl_currpath = path + pkl_date_string
+        csv_file = Path(csv_currpath)
+        pkl_file = Path(pkl_currpath)
+        if csv_file.exists():
+            df = pd.read_csv(csv_currpath)
+            df = df.drop('datetime.1', axis=1)
+            df["datetime"] = pd.to_datetime(df["datetime"])
+            df = df.set_index(df['datetime'])
+            mask1 = df.index.time >= entertime
+            mask2 = df['symbol'] == symbol           
+            spotdata = df[mask1 & mask2]
+            spotdata.drop_duplicates(subset=['datetime'], inplace=True)
+            resampled = Resample(spotdata, freq)
+            resampled = resampled.apply(pd.to_numeric)
+            resampled.dropna(inplace=True)
+            resampled = getTI(resampled, TIconfig)
+            df_list.append(resampled)
+
+        elif pkl_file.exists():
+            df = pd.read_pickle(pkl_currpath)
             df = df.drop('datetime.1', axis=1)
             df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
