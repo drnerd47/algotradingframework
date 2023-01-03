@@ -6,6 +6,7 @@ import atomic as atom
 import definitions as defs
 import supertrend as st
 import numpy as np
+from numba import jit_module
 
 # This function resamples data to required frequency from 1 min data
 def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
@@ -15,7 +16,7 @@ def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
     'high':'max',
     'low':'min',
     'close':'last' 
-    })
+    }, engine='numba') 
     return resample_df
 
 def getRSI(spotdata, columnname, period=14):
@@ -103,10 +104,12 @@ def getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, general
 # This function gets spot data of multiple days and resamples for required frequency on a rolling basis
 def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):
     df_list = []
-    delta = datetime.timedelta(days=1)
+    # delta = datetime.timedelta(days=1)
     # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
-    while start_date <= end_date:
-        date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
+    totaldelta = end_date - start_date
+    dates = pd.date_range(start_date, periods=totaldelta.days+1)
+    for date in dates.tolist():
+        date_string = date.strftime("%Y/Data%Y%m%d.csv")
         currpath = path + date_string
         my_file = Path(currpath)
         if my_file.exists():
@@ -123,7 +126,7 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
             resampled.dropna(inplace=True)
             df_list.append(resampled)
      
-        start_date += delta
+        # start_date += delta
     finaldf = pd.concat(df_list)
     finaldf = getTI(finaldf, TIconfig)
     return finaldf
@@ -131,10 +134,13 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
 # This function gets the TI indicator data everyday without rolling from previous day
 def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, freq, TIconfig):    
     df_list = []
-    delta = datetime.timedelta(days=1)
+    # delta = datetime.timedelta(days=1)
     # print("Getting Data from "+ str(start_date) + " to "+ str(end_date)+ " for Directional Strategy.")
-    while start_date <= end_date:
-        date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
+    totaldelta = end_date - start_date
+    dates = pd.date_range(start_date, periods=totaldelta.days+1)
+    
+    for date in dates:
+        date_string = date.strftime("%Y/Data%Y%m%d.csv")
         currpath = path + date_string
         my_file = Path(currpath)
         if my_file.exists():
@@ -152,7 +158,7 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
             resampled = getTI(resampled, TIconfig)
             df_list.append(resampled)
      
-        start_date += delta
+        # start_date += delta
     finaldf = pd.concat(df_list)
     return finaldf
 
@@ -427,4 +433,6 @@ def FindStrike(masterdf, premium, time, startstrike, endstrike, optype, OHLC, sy
             #print(currprice)
             #print(s)
     return (currbeststrike, minval)
+
+# jit_module()
         
