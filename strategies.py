@@ -274,12 +274,9 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
   OHLCBreakout = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
-  exitSQOHLC = 'close'
   exitSQEODOHLC = 'open'
   highestCEPrice = 0
   highestPEPrice = 0
-  FoundStrikeCE = False
-  FoundStrikePE = False
   for s in range(len(spotdata)):
     MinCounter += 1
     currentcandle = spotdata.iloc[s]

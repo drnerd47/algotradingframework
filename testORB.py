@@ -44,7 +44,7 @@ approach = "ORB"
 generalconfig = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                      "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
                     "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE,
-                    "Premium": 50, "StartStrike": 30000, "EndStrikeStrike":40000, "BreakoutFactor":0, "Until":datetime.time(11,00)}
+                    "Premium": 50, "StartStrike": 30000, "EndStrikeStrike":40000, "BreakoutFactor":35, "Until":datetime.time(11,00)}
 
 
 positionconfig = posconfig.positionconfigsinglebuydirecSL
