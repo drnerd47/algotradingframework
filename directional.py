@@ -6,7 +6,7 @@ import atomic as atom
 import definitions as defs
 import supertrend as st
 import numpy as np
-from numba import jit_module
+#from numba import jit_module
 
 # This function resamples data to required frequency from 1 min data
 def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
@@ -16,7 +16,7 @@ def Resample(df, freq): # freq format,  for 2min freq='2T', for 3min freq='3T'
     'high':'max',
     'low':'min',
     'close':'last' 
-    }, engine='numba') 
+    })#, engine='numba')
     return resample_df
 
 def getRSI(spotdata, columnname, period=14):

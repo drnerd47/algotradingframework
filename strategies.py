@@ -213,8 +213,8 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
                   placedBear = False
         if (generalconfig["StopLossCond"] == "PremiumBased") or (generalconfig["StopLossCond"] == "TIPremiumBased"):
           sbegin = sfull + 1
-          nextcandlers = spotdata.iloc[s+1]
-          send = spotdatafull.index.get_loc(nextcandlers.name)
+          nextcandles = spotdata.iloc[s+1]
+          send = spotdatafull.index.get_loc(nextcandles.name)
           # We loop through every minute in full spotdata so we can check the stop loss continuously
           for smin in range(sbegin, send+1):
             mincandle = spotdatafull.iloc[smin]
