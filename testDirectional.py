@@ -37,7 +37,7 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "RSI2"
+approach = "RSI-Dual"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
