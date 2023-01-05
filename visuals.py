@@ -1,4 +1,5 @@
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -105,24 +106,62 @@ def plotBB(df, start, end):
 
 # PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
 def PlotSignal(df, start, end):
-    
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]
+
+    try:
+        df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
+        df.set_index('datetime', inplace= True)
+    except:
+        pass       
+    
+    if "RSI14" and "RSI2" in df.columns:
+        fig = make_subplots(rows=3, cols=1)
+        
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI14,
+        mode = "lines",
+        name = "RSI14"
+        ), row=2, col=1)
+
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI2,
+        mode = "lines",
+        name = "RSI2"
+        ), row=3, col=1) 
+
+    elif "RSI14" and "ADX14" in df.columns: 
+        fig = make_subplots(rows=3, cols=1)
+        
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI14,
+        mode = "lines",
+        name = "RSI14"
+        ), row=2, col=1)
+
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.ADX14,
+        mode = "lines",
+        name = "ADX14"
+        ), row=3, col=1)
 
     bearentry = df[df.EntrySignal == -2]
     bullentry = df[df.EntrySignal == 2]
     stoploss = df[df.ExitSignal == -1]
     target = df[df.ExitSignal == 1]
-    eodsquareoff = df[df.ExitSignal == 0]
-
-    fig = go.Figure()
+    eodsquareoff = df[df.ExitSignal == 0]      
+    
 
     fig.add_trace(go.Line(
         x = df.index,
         y = df.close,
         mode = "lines",
         name = "Close"
-    ))
+    ), row=1, col=1)
 
     fig.add_trace(go.Scatter(
         x = bearentry.index,
@@ -159,11 +198,10 @@ def PlotSignal(df, start, end):
         name = "End of Day Square Off"
     ))
 
-    fig.update(layout_xaxis_rangeslider_visible=True)    
+    #fig.update(layout_xaxis_rangeslider_visible=True)    
     fig.update_xaxes(
         rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
-
 # def plotOptionData(df, start, end):
 
 
