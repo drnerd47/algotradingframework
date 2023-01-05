@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 def plotChart(df, start, end):
+    try:
+        df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
+        df.set_index('datetime', inplace= True)
+    except:
+        pass
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]
     # Create chart object
@@ -106,14 +111,14 @@ def plotBB(df, start, end):
 
 # PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
 def PlotSignal(df, start, end):
-    df = df[df.index.date >= start]
-    df = df[df.index.date <= end]
-
     try:
         df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
         df.set_index('datetime', inplace= True)
     except:
-        pass       
+        pass 
+    
+    df = df[df.index.date >= start]
+    df = df[df.index.date <= end]      
     
     if "RSI14" and "RSI2" in df.columns:
         fig = make_subplots(rows=3, cols=1)
@@ -205,6 +210,7 @@ def PlotSignal(df, start, end):
     fig.update_xaxes(
         rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
+
 # def plotOptionData(df, start, end):
 
 
