@@ -14,7 +14,7 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2022
+year = 2019
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -37,14 +37,14 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "RSI-Dual"
+approach = "EMA"
 
 if (approach == "RSI-Dual"):
-  generalconfig = genconfig.generalconfigBNRSIDual
+  generalconfig = genconfig.generalconfigNRSIDual
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
-  generalconfig = genconfig.generalconfigNST
+  generalconfig = genconfig.generalconfigBNST
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):
@@ -57,7 +57,7 @@ elif (approach == "BB1"):
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
-  positionconfig = posconfig.positionconfigsinglebuydirecSL
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigRSI_ADX
 elif (approach == "RSI2"):
   generalconfig = genconfig.generalconfigBNRSI2
@@ -65,7 +65,7 @@ elif (approach == "RSI2"):
   TIconfig = TIconfigs.TIconfig2_RSI
 elif (approach == "EMA"):
   generalconfig = genconfig.generalconfigBNMA
-  positionconfig = posconfig.positionconfigsingleselldirecSL
+  positionconfig = posconfig.positionconfigsingleselldirec
   TIconfig = TIconfigs.TIconfigEMA
 elif (approach == "SMA"):
   generalconfig = genconfig.generalconfigBNMA

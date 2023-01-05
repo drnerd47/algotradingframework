@@ -1,113 +1,117 @@
+import datetime
+import atomic as atom
 import definitions as defs
+from pathlib import Path
+import pandas as pd
+import strategies
+import reporting as rep
+import generalconfigs as genconfig
+import positionconfigs as posconfig
+import directional as direc
+import warnings
+import TIconfigs
+import numpy as np
+import DefaultConfigs as defconfigs
+import TIStrategies
 
-# RSI-ADX BANKNIFTY BUY SIDE
-rsiadx_BNb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.YES, 'SLPc': 20, 'TBear': 40,
-                'TBull': 60, 'TargetPc': 90, 'reenter': 1, 'rolling': 1, 'window': 14, 'symbol': defs.BN, 'action': defs.BUY}
+warnings.filterwarnings("ignore")
 
-# RSI-ADX NIFTY BUY SIDE
-rsiadx_Nb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.YES, 'SLPc': 20, 'TBear': 40,
-                'TBull': 60, 'TargetPc': 70, 'reenter': defs.YES, 'rolling': defs.YES, 'window': 14, 'symbol': defs.N, 'action': defs.BUY}
+year = 2022
+startmonth = 1
+endmonth = 12
+start_date = datetime.date(year, startmonth, 1)
+end_date = datetime.date(year, endmonth, 31)
 
-# RSI-ADX BANKNIFTY SELL SIDE
-rsiadx_BNb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.YES, 'SLPc': 20, 'TBear': 40,
-                'TBull': 60, 'TargetPc': 90, 'reenter': 1, 'rolling': 1, 'window': 14, 'symbol': defs.BN, 'action': defs.SELL}
+delta = datetime.timedelta(days=1)
 
-# RSI-ADX NIFTY SELL SIDE
-rsiadx_Nb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.YES, 'SLPc': 20, 'TBear': 40,
-                'TBull': 60, 'TargetPc': 70, 'reenter': defs.YES, 'rolling': defs.YES, 'window': 14, 'symbol': defs.N, 'action': defs.SELL}
+user = "RI"
 
-# RSI-2 BANKNIFTY BUY SIDE
-rsi2_BNb = {"TBull1": 40, "TBear1": 60, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 10, "TBear2": 90, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.BUY, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+if user == "SD":
+  Root = "D:/Work/Sykes and Ray/"
+  Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
+elif user == "RI":
+  Root = "../"
+  Result_path = "Results/"
+elif user == "MS":
+  Root = "Moulik's File path"
+  Result_path = " Moulik's result path"
 
-# RSI-2 NIFTY BUY SIDE
-rsi2_Nb = {"TBull1": 40, "TBear1": 60, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 10, "TBear2": 90, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.BUY, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-# RSI-2 BANKNIFTY SELL SIDE
-rsi2_BNs = {"TBull1": 40, "TBear1": 60, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 10, "TBear2": 90, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.SELL, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+approach = "RSI-Dual"
+config = defconfigs.rsidual_BNs
+if (approach == "RSI-Dual"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIDualConfig(config)
+elif (approach == "ST"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetSTconfig(config)
+elif (approach == "BB2"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetBB2Config(config)
+elif (approach == "BB1"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetBB1Config(config)
+elif (approach == "RSI-ADX"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIADXconfig(config)
+elif (approach == "RSI2"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSI2Config(config)
+elif (approach == "EMA"):
+  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetEMAconfig(config)
 
-# RSI-2 NIFTY SELL SIDE
-rsi2_Ns = {"TBull1": 40, "TBear1": 60, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 10, "TBear2": 90, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.SELL, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)
 
-# RSI-Dual BANKNIFTY BUY SIDE
-rsidual_BNb = {"TBull1": 60, "TBear1": 40, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 90, "TBear2": 20, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.BUY, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+trade = pd.DataFrame()
+trades = pd.DataFrame()
 
-# RSI-Dual NIFTY BUY SIDE
-rsidual_Nb = {"TBull1": 60, "TBear1": 40, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 90, "TBear2": 20, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.BUY, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+while start_date <= end_date:
+  date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
+  BNPath = Banknifty_Path + date_string
+  NPath = Nifty_Path + date_string
+  my_fileN = Path(NPath)
+  my_fileBN = Path(BNPath)
+  # print("Working on file - "+date_string)
+  if my_fileN.exists() and my_fileBN.exists():
+    masterdfN = atom.LoadDF(NPath)
+    masterdfBN = atom.LoadDF(BNPath)
+    if (generalconfig["symbol"] == defs.BN):
+      trade = strategies.DirectionalStrategy(data, masterdfBN, generalconfig, positionconfig, TIconfig, start_date)
+    elif (generalconfig["symbol"] == defs.N):
+      trade = strategies.DirectionalStrategy(data, masterdfN, generalconfig, positionconfig, TIconfig, start_date)
+    #print(trade)
+    if (len(trade) > 0):
+      trades = trades.append(trade)
+  # else:
+  #   print("No data for " + start_date.strftime("%Y-%m-%d"))
+  start_date += delta
 
-# RSI-Dual BANKNIFTY SELL SIDE
-rsidual_BNs = {"TBull1": 60, "TBear1": 40, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 90, "TBear2": 20, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.SELL, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+data.to_csv(Result_path + "Data_" + approach + ".csv")
+# print(trades)
+trades['date'] = pd.to_datetime(trades["date"])
+trades = trades.reset_index()
+trades = trades.drop(["index"], axis = 1)
 
-# RSI-Dual NIFTY SELL SIDE
-rsidual_Ns = {"TBull1": 60, "TBear1": 40, "Window1": 14, "SL": defs.YES, "Target": defs.NO, "Window2": 2, "TBull2": 90, "TBear2": 20, 
-            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.SELL, 
-            'Rolling': defs.YES, 'Resample': defs.YES, 'Reenter': defs.YES}
+print("\n")
+# print(trades)
+trades.to_csv(Result_path + approach + "trades.csv")
 
-# BB1 BANKNIFTY BUY SIDE
-bb1_BNb = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.BUY, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.BN}
+print("\n")
+Daily_Chart = rep.GetDailyChartTI(trades)
+# print(Daily_Chart)
+Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
-# BB1 NIFTY BUY SIDE
-bb1_Nb = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.BUY, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.N}
+print("\n")
+report = rep.ReportTI(trades, Daily_Chart)
+print(report)
+report.to_csv(Result_path + approach + "Report.csv")
 
-# BB1 BANKNIFTY SELL SIDE
-bb1_BNs = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.SELL, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.BN}
+print("\n")
+weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
+# print(weeklyreport)
+weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
-# BB1 NIFTY SELL SIDE
-bb1_Ns = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.SELL, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.N}
+print("\n")
+monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
+# print(monthlyreport)
 
-# BB2 BANKNIFTY BUY SIDE
-bb2_BNb = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.BUY, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.BN}
+print("\n")
+dayofweek = rep.DayOfWeekTI(Daily_Chart)
+# print(dayofweek)
 
-# BB2 NIFTY BUY SIDE
-bb2_Nb = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.BUY, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.N}
-
-# BB2 BANKNIFTY SELL SIDE
-bb2_BNS = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.SELL, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.BN}
-
-# BB2 NIFTY SELL SIDE
-bb2_NS = {"TBull": 0, "TBear": 1, "period": 20,"stddev":2, "SL": defs.YES, "Target": defs.YES,
-                "SLBull": -0.3, "SLBear": 1.3, "TargetBull": 0.7, "TargetBear": 0.3, 'SLPc': 20, 'TargetPc': 70,
-                'action': defs.SELL, 'Rolling': defs.YES, 'Reenter': defs.YES, 'symbol': defs.N}
-
-# EMA BANKNIFTY BUY SIDE
-ema_BNb = {"TBull": 50, "TBear": -50, "period": 14, "SL": defs.YES, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70,
-                "SLBull":-50, "SLBear": 50, 'action': defs.BUY, 'Rolling': defs.NO, 'Reenter': defs.NO, 'symbol': defs.BN} 
-
-# EMA NIFTY BUY SIDE
-ema_Nb = {"TBull": 50, "TBear": -50, "period": 14, "SL": defs.YES, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70,
-                "SLBull":-50, "SLBear": 50, 'action': defs.BUY, 'Rolling': defs.NO, 'Reenter': defs.NO, 'symbol': defs.N} 
-
-# EMA BANKNIFTY SELL SIDE
-ema_BNs = {"TBull": 50, "TBear": -50, "period": 14, "SL": defs.YES, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70,
-                "SLBull":-50, "SLBear": 50, 'action': defs.SELL, 'Rolling': defs.NO, 'Reenter': defs.NO, 'symbol': defs.BN} 
-
-# EMA NIFTY SELL SIDE
-ema_Ns = {"TBull": 50, "TBear": -50, "period": 14, "SL": defs.YES, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70,
-                "SLBull":-50, "SLBear": 50, 'action': defs.SELL, 'Rolling': defs.NO, 'Reenter': defs.NO, 'symbol': defs.N} 

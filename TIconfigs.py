@@ -37,7 +37,7 @@ TIconfigBB2 = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": 1, "ThreshBea
 TIconfigST = [{"TI": "ST", "columnname":"ST", "ThreshBull": 0, "ThreshBear": 0, "period": 10,"multiplier":2, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt}]
 
-TIconfigEMA = [{"TI": "MA", "columnname":"EMA", "ThreshBull": 50, "ThreshBear": -50, "period": 14, "SL": defs.YES, "Target": defs.NO,
+TIconfigEMA = [{"TI": "MA", "columnname":"EMA", "ThreshBull": 35, "ThreshBear": -65, "period": 14, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt, "SLBull":-50, "SLBear": 50,
                 "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "type": "EMA"}]
 

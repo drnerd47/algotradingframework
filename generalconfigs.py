@@ -123,25 +123,25 @@ def GetGeneralConfigIntradaySA(symbol):
 
 generalconfigBNRSIADX = {"name":"BNRSIADX" , "symbol":defs.BN,"EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": 3, 
                         "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO, "SLTGContinuous": defs.NO}
 generalconfigNRSIADX = {"name":"NRSIADX", "symbol":defs.N, "EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": 3, 
                         "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO}
+                        "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO, "SLTGContinuous": defs.NO}
 
 
 generalconfigBNRSI2 = {"name":"NBNRSI2","symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": 10,
                     "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 generalconfigNRSI2 = {"name":"NRSI2","symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 10,
                     "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 
-generalconfigBNMA = {"name":"BNEMA","symbol":defs.BN, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": 5, 
-                    "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO}
-generalconfigNMA = {"name":"NEMA","symbol":defs.N, "EnterTime": datetime.time(9,30), "ExitTime": datetime.time(15,15), "Resample": 5, 
-                    "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.NO}
+generalconfigBNMA = {"name":"BNEMA","symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": 3,
+                    "StopLoss": False, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
+generalconfigNMA = {"name":"NEMA","symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3,
+                    "StopLoss": False, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 
 generalconfigBNRSIDual = {"name":"BNRSIDual", "symbol":defs.BN, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": 10,
                         "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
@@ -152,24 +152,24 @@ generalconfigNRSIDual = {"name":"BNRSIDual", "symbol":defs.N, "EnterTime": datet
 
 generalconfigBNBB2 = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
                     "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 generalconfigNBB2 = {"name":"NBB","symbol":defs.N,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
                     "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 
 generalconfigBNBB1 = {"name":"BNBB","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
                     "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 generalconfigNBB1 = {"name":"NBB","symbol":defs.N,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
                     "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.YES, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 
 generalconfigBNST = {"name":"BNST","symbol":defs.BN,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
                     "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES}
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 generalconfigNST = {"name":"NST","symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3, 
-                    "StopLoss": True, "Target": True, "StopLossCond": "TIBased", "TargetCond": "TIBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES}
+                    "StopLoss": True, "Target": True, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
+                    "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.NO}
 
 
 

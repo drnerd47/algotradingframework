@@ -231,9 +231,9 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
                     elif pos["stance"] == defs.BEAR:
                       placedBear = False
           else:
-            (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+            (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
             if (len(postoExitSL) > 0):
-              direc.ExitPositionPremium(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+              direc.ExitPositionPremium(postoExitSL, nextcandle, defs.SL, exitSLOHLC)
               data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
               if (generalconfig["Reenter"] == defs.YES):
                 for pos in postoExitSL:
