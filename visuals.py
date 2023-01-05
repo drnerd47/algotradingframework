@@ -148,6 +148,9 @@ def PlotSignal(df, start, end):
         mode = "lines",
         name = "ADX14"
         ), row=3, col=1)
+    
+    else:
+        fig = make_subplots(rows=1, cols=1)
 
     bearentry = df[df.EntrySignal == -2]
     bullentry = df[df.EntrySignal == 2]
