@@ -116,7 +116,7 @@ def PlotSignal(df, start, end):
         df.set_index('datetime', inplace= True)
     except:
         pass 
-    
+
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]      
     
@@ -211,7 +211,27 @@ def PlotSignal(df, start, end):
         rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
 
-# def plotOptionData(df, start, end):
+def plotOptionData(df):
+    try:
+        df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
+        df.set_index('datetime', inplace= True)
+    except:
+        pass
+    # Create chart object
+    fig = go.Figure()
+
+    fig.add_trace(go.Line(
+        x = df.index,
+        y = df.close,
+        mode = "lines",
+        name = "Close"
+    ))
+    # Update chart layout
+    fig.update_layout(xaxis_rangeslider_visible=True, xaxis_showticklabels=True, yaxis_showticklabels=True)
+    # fig.update_layout(yaxis_range=[min(dfx.low), max(df.high)]) 
+    fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")]) 
+    # Plot chart
+    fig.show();
 
 
 
