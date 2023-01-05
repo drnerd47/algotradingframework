@@ -40,7 +40,8 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 approach = "RSI-Dual"
-config = defconfigs.rsidual_BNs
+config = defconfigs.rsidual_BNb
+
 if (approach == "RSI-Dual"):
   (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIDualConfig(config)
 elif (approach == "ST"):

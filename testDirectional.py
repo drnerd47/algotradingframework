@@ -14,7 +14,7 @@ import numpy as np
 
 warnings.filterwarnings("ignore")
 
-year = 2019
+year = 2022
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -37,7 +37,7 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "EMA"
+approach = "RSI-ADX"
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigNRSIDual
@@ -57,7 +57,7 @@ elif (approach == "BB1"):
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
-  positionconfig = posconfig.positionconfigsingleselldirecSL
+  positionconfig = posconfig.positionconfigsingleselldirecSL1
   TIconfig = TIconfigs.TIconfigRSI_ADX
 elif (approach == "RSI2"):
   generalconfig = genconfig.generalconfigBNRSI2
