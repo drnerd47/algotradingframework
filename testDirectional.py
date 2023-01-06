@@ -10,7 +10,7 @@ import positionconfigs as posconfig
 import directional as direc
 import warnings
 import TIconfigs
-import numpy as np
+import time
 
 warnings.filterwarnings("ignore")
 
@@ -22,7 +22,7 @@ end_date = datetime.date(year, endmonth, 31)
 
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -36,11 +36,12 @@ elif user == "MS":
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
-
+print("Test Directional")
+tic = time.time()
 approach = "RSI-ADX"
 
 if (approach == "RSI-Dual"):
-  generalconfig = genconfig.generalconfigNRSIDual
+  generalconfig = genconfig.generalconfigBNRSIDual
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
@@ -57,7 +58,7 @@ elif (approach == "BB1"):
   TIconfig = TIconfigs.TIconfigBB1
 elif (approach == "RSI-ADX"):
   generalconfig = genconfig.generalconfigBNRSIADX
-  positionconfig = posconfig.positionconfigsingleselldirecSL1
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigRSI_ADX
 elif (approach == "RSI2"):
   generalconfig = genconfig.generalconfigBNRSI2
@@ -97,37 +98,38 @@ while start_date <= end_date:
   # else:
   #   print("No data for " + start_date.strftime("%Y-%m-%d"))  
   start_date += delta
-
+toc = time.time()
+print(" Time taken to run this strategy ", toc-tic)
 data.to_csv(Result_path + "Data_" + approach + ".csv")
 # print(trades)
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
 trades = trades.drop(["index"], axis = 1)
 
-print("\n")
+# print("\n")
 # print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
 
-print("\n")
+# print("\n")
 Daily_Chart = rep.GetDailyChartTI(trades)
 # print(Daily_Chart)
 Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
-print("\n")
+# print("\n")
 report = rep.ReportTI(trades, Daily_Chart)
 print(report)
 report.to_csv(Result_path + approach + "Report.csv")
 
-print("\n")
+# print("\n")
 weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
 # print(weeklyreport)
 weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
-print("\n")
+# print("\n")
 monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
 # print(monthlyreport)
 
-print("\n")
+# print("\n")
 dayofweek = rep.DayOfWeekTI(Daily_Chart)
 # print(dayofweek)
 
