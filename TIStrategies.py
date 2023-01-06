@@ -29,22 +29,22 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt}]
     return (ticonfig, generalconfig, positionconfig)
 def GetRSI2Config(config):
-    SL = config("SL")
-    Target = config("Target")
-    SLPc = config("SLPc")
-    window1 = config('window1')
-    window2 = config('window2')
-    TargetPc = config("TargetPc")
-    Resample = config("Resample")
-    TBull1 = config("TBull1")
-    TBear1 = config("TBear1")
-    TBull2 = config("TBull2")
-    TBear2 = config("TBear2")
-    symbol = config("symbol")
-    action = config("action")
-    rolling = config("rolling")
-    reenter = config("reenter")
-    Delta = config("Delta")
+    SL = config["SL"]
+    Target = config["Target"]
+    SLPc = config["SLPc"]
+    window1 = config['window1']
+    window2 = config['window2']
+    TargetPc = config["TargetPc"]
+    Resample = config["Resample"]
+    TBull1 = config["TBull1"]
+    TBear1 = config["TBear1"]
+    TBull2 = config["TBull2"]
+    TBear2 = config["TBear2"]
+    symbol = config["symbol"]
+    action = config["action"]
+    rolling = config["rolling"]
+    reenter = config["reenter"]
+    Delta = config["Delta"]
     return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
 
 def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
@@ -98,17 +98,21 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                        "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc },
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
                        "SL": SL, "Target": Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc }]
-    SLBool = True
-    TBool = True
+    SLBool = False
+    TBool = False
+    if (SL == defs.YES):
+        SLBool = True
+    if (Target == defs.YES):
+        TBool = True
     if symbol == defs.BN:
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                           "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
-                           "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": defs.NO}
+                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
+                    "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
+                    "SLTGContinuous": defs.NO}
 
     ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev":stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
@@ -139,22 +143,26 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                        "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc":TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
                        "SL": SL, "Target": Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc":TargetPc}]
-    SLBool = True
-    TBool = True
+    SLBool = False
+    TBool = False
+    if (SL == defs.YES):
+        SLBool = True
+    if (Target == defs.YES):
+        TBool = True
     if symbol == defs.BN:
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                           "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
-                           "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": defs.NO}
+                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
+                    "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
+                    "SLTGContinuous": defs.NO}
 
     ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear":0, "TargetBull": 0, "TargetBear": 0,
                 "BullOperator": operator.gt, "BearOperator": operator.lt,
-               "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
+                "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
 def GetBB2Config(config):
     Resample = config['Resample']
@@ -240,7 +248,7 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-    generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,30) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
+    generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.NO}
 
