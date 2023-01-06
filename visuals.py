@@ -3,14 +3,12 @@ from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def plotChart(df, start, end):
+def plotChart(df):
     try:
         df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
         df.set_index('datetime', inplace= True)
     except:
         pass
-    df = df[df.index.date >= start]
-    df = df[df.index.date <= end]
     # Create chart object
     fig = go.Figure()
 
@@ -168,7 +166,7 @@ def PlotSignal(df, start, end):
         x = df.index,
         y = df.close,
         mode = "lines",
-        name = "Close"
+        name = "Spot Close"
     ), row=1, col=1)
 
     fig.add_trace(go.Scatter(
@@ -233,6 +231,173 @@ def plotOptionData(df):
     # Plot chart
     fig.show();
 
+# input a single trade from trades file, signal data is the whole signal data df, datapath = ['Banknifty Path', 'Nifty Path']
+def plotTrade(trade, signaldata):
+    OpSymbol = trade['symbol']
+    tradedate = trade['date']
+    tradedate = pd.to_datetime(tradedate, infer_datetime_format=True).date()
+    expirydate = trade['Expiry']
+    expirydate = pd.to_datetime(expirydate, infer_datetime_format=True).date()
+    entertime = trade['EnterTime']
+    entertime = pd.to_datetime(entertime, infer_datetime_format=True).time()
+    exittime = trade['ExitTime']
+    exittime = pd.to_datetime(exittime, infer_datetime_format=True).time()
+
+    symbols = ['BANKNIFTY', 'NIFTY']
+    if OpSymbol[0:9] in symbols:
+        symbol = OpSymbol[0:9]
+    elif OpSymbol[0:5] in symbols:
+        symbol = OpSymbol[0:5]
+
+    if symbol == 'BANKNIFTY':
+        path = Banknifty_Path
+    elif symbol == 'NIFTY':
+        path = Nifty_Path
+    
+    date_path = tradedate.strftime("%Y/Data%Y%m%d.csv")
+    data_path = path + date_path
+    data = pd.read_csv(data_path)
+
+    try:
+        data['datetime'] = pd.to_datetime(data['datetime'], infer_datetime_format=True)
+        data.set_index('datetime', inplace= True)
+    except:
+        pass
+
+    spotdata = data[data.symbol == symbol]
+    opdata = data[data.symbol == OpSymbol]   
+    
+    try:
+        signaldata['datetime'] = pd.to_datetime(signaldata['datetime'], infer_datetime_format=True)
+        signaldata.set_index('datetime', inplace= True)
+    except:
+        pass 
+
+    df = signaldata[signaldata.index.date == tradedate]
+
+    bearentry = df[df.EntrySignal == -2]
+    bullentry = df[df.EntrySignal == 2]
+    stoploss = df[df.ExitSignal == -1]
+    target = df[df.ExitSignal == 1]
+    eodsquareoff = df[df.ExitSignal == 0] 
+
+    # Plotting indicators
+    if "RSI14" and "RSI2" in df.columns:
+        fig = make_subplots(rows=4, cols=1, subplot_titles=(symbol, OpSymbol, "RSI14", "RSI2"))
+        
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI14,
+        mode = "lines",
+        name = "RSI14"
+        ), row=3, col=1)
+
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI2,
+        mode = "lines",
+        name = "RSI2"
+        ), row=4, col=1) 
+
+    elif "RSI14" and "ADX14" in df.columns: 
+        fig = make_subplots(rows=4, cols=1, subplot_titles=(symbol, OpSymbol, "RSI", "ADX"))
+        
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.RSI14,
+        mode = "lines",
+        name = "RSI14"
+        ), row=3, col=1)
+
+        fig.add_trace(go.Line(
+        x = df.index,
+        y = df.ADX14,
+        mode = "lines",
+        name = "ADX14"
+        ), row=4, col=1)
+    
+    else:
+        fig = make_subplots(rows=2, cols=1, subplot_titles=(symbol, OpSymbol), shared_xaxes=True, vertical_spacing= 0.5)
+
+    # Plotting Option Close
+    fig.add_trace(go.Line(
+        x = opdata.index,
+        y = opdata.close,
+        mode = "lines",
+        name = OpSymbol + " "+ str(tradedate) + " Close"
+    ), row=2, col=1)
+
+    # Plotting Spot Close
+    fig.add_trace(go.Line(
+        x = spotdata.index,
+        y = spotdata.close,
+        mode = "lines",
+        name = symbol + " Close",
+        marker = {'color' : 'black'}
+    ), row=1, col=1)
+    
+    # Adding entry and exit points
+    fig.add_trace(go.Scatter(
+        x = bearentry.index,
+        y = bearentry.close,
+        mode = "markers+text",
+        name = "Bear Entry",
+        text=["Bear Entry"],
+        textposition="bottom center"
+    ), row=1, col=1)
+
+    fig.add_trace(go.Scatter(
+        x = bullentry.index,
+        y = bullentry.close,
+        mode = "markers+text",
+        name = "Bull Entry",
+        text=["Bull Entry"],
+        textposition="bottom center"
+    ), row=1, col=1)
+
+    fig.add_trace(go.Scatter(
+        x = stoploss.index,
+        y = stoploss.close,
+        mode = "markers+text",
+        name = "Stop Loss Hit",
+        text=["Stop Loss Hit"],
+        textposition="bottom center"
+    ), row=1, col=1)
+
+    fig.add_trace(go.Scatter(
+        x = target.index,
+        y = target.close,
+        mode = "markers+text",
+        name = "Target Hit",
+        text=["Target Hit"],
+        textposition="bottom center"
+    ), row=1, col=1)
+
+    fig.add_trace(go.Scatter(
+        x = eodsquareoff.index,
+        y = eodsquareoff.close,
+        mode = "markers+text",
+        name = "End of Day Square Off",
+        text=["EOD Square Off"],
+        textposition="bottom center"
+    ), row=1, col=1)
+
+    fig.update_layout(
+    autosize=False,
+    width=1600,
+    height=900,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ),
+    paper_bgcolor="LightSteelBlue",
+)
+    #fig.update(layout_xaxis_rangeslider_visible=True)    
+    fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
+    fig.show();
 
 
 

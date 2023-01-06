@@ -2,7 +2,7 @@ import definitions as defs
 import datetime
 import operator
 
-def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta):
+def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
 
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
@@ -23,16 +23,17 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                      "SLTGContinuous": defs.NO}
 
-    ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": 14, "SL": defs.NO,
+    ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt},
-        {"TI": "RSI", "columnname": "RSI2", "Window": 2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
+        {"TI": "RSI", "columnname": "RSI2", "Window": window2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt}]
     return (ticonfig, generalconfig, positionconfig)
-
 def GetRSI2Config(config):
     SL = config("SL")
     Target = config("Target")
     SLPc = config("SLPc")
+    window1 = config('window1')
+    window2 = config('window2')
     TargetPc = config("TargetPc")
     Resample = config("Resample")
     TBull1 = config("TBull1")
@@ -44,9 +45,9 @@ def GetRSI2Config(config):
     rolling = config("rolling")
     reenter = config("reenter")
     Delta = config("Delta")
-    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta)
+    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
 
-def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, Window1, Window2):
+def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
 
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
                        "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
@@ -67,16 +68,15 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                      "SLTGContinuous": defs.NO}
 
-    ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": Window1, "SL": defs.NO,
+    ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.gt, "BearOperator": operator.lt},
-        {"TI": "RSI", "columnname": "RSI2", "Window": Window2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
+        {"TI": "RSI", "columnname": "RSI2", "Window": window2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.gt, "BearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
-
 def GetRSIDualConfig(config):
     Resample = config['Resample']
-    Window1 = config['Window1']
-    Window2 = config['Window2']
+    window1 = config['window1']
+    window2 = config['window2']
     TBull1 = config['TBull1']
     TBear1 = config['TBear1']
     TBull2 = config['TBull2']
@@ -90,7 +90,8 @@ def GetRSIDualConfig(config):
     Delta = config["Delta"]
     SL = config['SL']
     Target = config['Target']
-    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, Window1, Window2)
+    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
+
 def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
 
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
@@ -113,7 +114,6 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                 "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
                 "BullOperator": operator.lt, "BearOperator": operator.gt, "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
-
 def GetBB1Config(config):
     Resample = config['Resample']
     period = config['period']
@@ -133,7 +133,6 @@ def GetBB1Config(config):
     (TIconfig, generalconfig, positionconfig) = GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
                                                     TargetPc, Delta, symbol, action, rolling, reenter, stddev)
     return (TIconfig, generalconfig, positionconfig)
-
 
 def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
@@ -157,7 +156,6 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                 "BullOperator": operator.gt, "BearOperator": operator.lt,
                "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
-
 def GetBB2Config(config):
     Resample = config['Resample']
     period = config['period']
@@ -207,7 +205,6 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
            "BullOperator": operator.gt, "BearOperator": operator.gt}]
 
     return (ticonfig, generalconfig, positionconfig)
-
 def GetRSIADXconfig(config):
     Resample = config['Resample']
     window = config['window']
@@ -252,7 +249,6 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
                 "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "type": "EMA"}]
 
     return (ticonfig, generalconfig, positionconfig)
-
 def GetEMAconfig(config):
     Resample = config['Resample']
     period = config['period']
@@ -292,8 +288,6 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
     return ( ticonfig, generalconfig, positionconfig)
-
-
 def GetSTconfig(config):
     action = config["action"]
     Delta = config["Delta"]
