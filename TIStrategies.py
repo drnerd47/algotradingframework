@@ -110,11 +110,11 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
         lotsize = defs.NLOTSIZE
 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
-                    "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
+                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
+                    "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                     "SLTGContinuous": defs.NO}
 
-    ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev":stddev, "SL": defs.NO, "Target": defs.NO,
+    ticonfig = [{"TI": "BB", "columnname" : "bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
                 "BullOperator": operator.lt, "BearOperator": operator.gt, "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
@@ -155,8 +155,8 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
         lotsize = defs.NLOTSIZE
 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
-                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "TIBased",
-                    "TargetCond": "TIBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
+                    "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
+                    "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                     "SLTGContinuous": defs.NO}
 
     ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
@@ -266,8 +266,8 @@ def GetEMAconfig(config):
     SLPc = config['SLPc']
     Target = config['Target']
     TargetPc = config['TargetPc']
-    symbol = defs.N
-    action = defs.BUY
+    symbol = config['symbol']
+    action = config['action']
     rolling = config['rolling']
     reenter = config['reenter']
     Delta = config["Delta"]

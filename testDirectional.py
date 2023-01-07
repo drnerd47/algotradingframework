@@ -38,7 +38,9 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 print("Test Directional")
 tic = time.time()
-approach = "RSI-ADX"
+
+approach = "BB2"
+print(approach)
 
 if (approach == "RSI-Dual"):
   generalconfig = genconfig.generalconfigBNRSIDual
@@ -66,11 +68,11 @@ elif (approach == "RSI2"):
   TIconfig = TIconfigs.TIconfig2_RSI
 elif (approach == "EMA"):
   generalconfig = genconfig.generalconfigBNMA
-  positionconfig = posconfig.positionconfigsingleselldirec
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigEMA
 elif (approach == "SMA"):
   generalconfig = genconfig.generalconfigBNMA
-  positionconfig = posconfig.positionconfigsingleselldirec
+  positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigSMA
 
 data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)

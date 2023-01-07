@@ -38,8 +38,10 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 print("Test Directional Config")
 tic = time.time()
 
-approach = "RSI-ADX"
-config = defconfigs.rsiadx_BNb
+approach = "BB2"
+config = defconfigs.bb2_BNs
+
+print( approach )
 
 if (approach == "RSI-Dual") :
   (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIDualConfig(config)
@@ -84,7 +86,7 @@ while start_date <= end_date:
 
 toc = time.time()
 print(" Time taken to run this strategy ", toc-tic)
-data.to_csv(Result_path + "Data_" + approach + ".csv")
+data.to_csv(Result_path + "Data_c" + approach + ".csv")
 # print(trades)
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
@@ -92,7 +94,7 @@ trades = trades.drop(["index"], axis = 1)
 
 # print("\n")
 # print(trades)
-trades.to_csv(Result_path + approach + "trades.csv")
+trades.to_csv(Result_path + approach + "C_trades.csv")
 
 # print("\n")
 Daily_Chart = rep.GetDailyChartTI(trades)
