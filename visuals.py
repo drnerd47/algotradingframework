@@ -151,7 +151,25 @@ def PlotSignal(df, start, end):
         mode = "lines",
         name = "ADX14"
         ), row=3, col=1)
-    
+
+    elif "upband" and "lowband" in df.columns:
+        fig = make_subplots(rows=1, cols=1)
+
+        fig.add_trace(go.Line(
+            x = df.index,
+            y = df.upband,
+            mode = "lines",
+            name = "Upper Bollinger Band",
+            marker = {'color' : 'black'}
+        ), row = 1, col = 1) 
+        fig.add_trace(go.Line(
+            x = df.index,
+            y = df.lowband,
+            mode = "lines",
+            name = "Lower Bollinger Band",
+            marker = {'color' : 'black'}
+        ), row = 1, col = 1) 
+        
     else:
         fig = make_subplots(rows=1, cols=1)
 
@@ -209,6 +227,7 @@ def PlotSignal(df, start, end):
         rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
 
+# Plots Option data and takes Option data as argument
 def plotOptionData(df):
     try:
         df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
@@ -315,6 +334,24 @@ def plotTrade(trade, signaldata, datapath):
         mode = "lines",
         name = "ADX14"
         ), row=4, col=1)
+
+    elif "upband" and "lowband" in df.columns:
+        fig = make_subplots(rows=2, cols=1)
+
+        fig.add_trace(go.Line(
+            x = df.index,
+            y = df.upband,
+            mode = "lines",
+            name = "Upper Bollinger Band",
+            marker = {'color' : 'black'}
+        ), row = 1, col = 1) 
+        fig.add_trace(go.Line(
+            x = df.index,
+            y = df.lowband,
+            mode = "lines",
+            name = "Lower Bollinger Band",
+            marker = {'color' : 'black'}
+        ), row = 1, col = 1)
     
     else:
         fig = make_subplots(rows=2, cols=1, subplot_titles=(symbol, OpSymbol), shared_xaxes=True, vertical_spacing= 0.5)
