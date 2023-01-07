@@ -232,7 +232,7 @@ def plotOptionData(df):
     fig.show();
 
 # input a single trade from trades file, signal data is the whole signal data df, datapath = ['Banknifty Path', 'Nifty Path']
-def plotTrade(trade, signaldata):
+def plotTrade(trade, signaldata, datapath):
     OpSymbol = trade['symbol']
     tradedate = trade['date']
     tradedate = pd.to_datetime(tradedate, infer_datetime_format=True).date()
@@ -250,9 +250,9 @@ def plotTrade(trade, signaldata):
         symbol = OpSymbol[0:5]
 
     if symbol == 'BANKNIFTY':
-        path = Banknifty_Path
+        path = datapath[0]
     elif symbol == 'NIFTY':
-        path = Nifty_Path
+        path = datapath[1]
     
     date_path = tradedate.strftime("%Y/Data%Y%m%d.csv")
     data_path = path + date_path
