@@ -108,15 +108,14 @@ def plotBB(df, start, end):
     fig.show();
 
 # PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
-def PlotSignal(df, start, end):
+def PlotSignal(df, date):
     try:
         df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
         df.set_index('datetime', inplace= True)
     except:
         pass 
 
-    df = df[df.index.date >= start]
-    df = df[df.index.date <= end]      
+    df = df[df.index.date == date]   
     
     if "RSI14" and "RSI2" in df.columns:
         fig = make_subplots(rows=3, cols=1)
