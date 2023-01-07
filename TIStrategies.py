@@ -3,11 +3,16 @@ import datetime
 import operator
 
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
-
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc": TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target": Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc}]
+                       "SL": SL, "Target": Target, "Stance": putstance, "SLPc": SLPc, "TargetPc": TargetPc}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -48,11 +53,16 @@ def GetRSI2Config(config):
     return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
 
 def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
-
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc": TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target": Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc}]
+                       "SL": SL, "Target": Target, "Stance": putstance, "SLPc": SLPc, "TargetPc": TargetPc}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -93,11 +103,16 @@ def GetRSIDualConfig(config):
     return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
 
 def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
-
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc },
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc": TargetPc },
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target": Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc }]
+                       "SL": SL, "Target": Target, "Stance": putstance, "SLPc": SLPc, "TargetPc": TargetPc }]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -139,10 +154,16 @@ def GetBB1Config(config):
     return (TIconfig, generalconfig, positionconfig)
 
 def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc":TargetPc},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc":TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target": Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc":TargetPc}]
+                       "SL": SL, "Target": Target, "Stance": putstance, "SLPc": SLPc, "TargetPc":TargetPc}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -185,10 +206,16 @@ def GetBB2Config(config):
     return (TIconfig, generalconfig, positionconfig)
 
 def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window):
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 1, "HedgeId": 0},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 1, "HedgeId": 0},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 2, "HedgeId": 0}]
+                       "SL": SL, "Target":Target, "Stance": putstance, "SLPc": SLPc, "TargetPc": TargetPc, "Id": 2, "HedgeId": 0}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -234,10 +261,16 @@ def GetRSIADXconfig(config):
     return (TIconfig, generalconfig, positionconfig)
 
 def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter):
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 1},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 1},
                        {"Type":defs.PUT,"Action":action,"Delta":-1*Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 2}]
+                       "SL": SL, "Target":Target, "Stance": putstance, "SLPc": SLPc, "TargetPc":TargetPc, "Id": 2}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
@@ -274,10 +307,16 @@ def GetEMAconfig(config):
     return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter)
 
 def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc):
+    if action == defs.BUY:
+        callstance = defs.BULL
+        putstance = defs.BEAR
+    elif action == defs.SELL:
+        callstance = defs.BEAR
+        putstance = defs.BULL
     positionconfig = [{"Type":defs.CALL,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BEAR, "SLPc": SLPc, "TargetPc": TargetPc},
+                       "SL": SL, "Target":Target, "Stance": callstance, "SLPc": SLPc, "TargetPc": TargetPc},
                        {"Type":defs.PUT,"Action":action,"Delta":Delta, "NumLots":1,
-                       "SL": SL, "Target":Target, "Stance": defs.BULL, "SLPc": SLPc, "TargetPc": TargetPc}]
+                       "SL": SL, "Target":Target, "Stance": putstance, "SLPc": SLPc, "TargetPc": TargetPc}]
     SLBool = False
     TBool = False
     if (SL == defs.YES):
