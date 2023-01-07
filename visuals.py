@@ -25,7 +25,6 @@ def plotChart(df):
     # Plot chart
     fig.show();
 
-
 def plotCandlestickChart(df, start, end):
     df = df[df.index.date >= start]
     df = df[df.index.date <= end]
@@ -108,7 +107,7 @@ def plotBB(df, start, end):
     fig.show();
 
 # PlotSignal function takes the signal df i.e. the df where signals are generated( spot df )
-def PlotSignal(df, date):
+def plotSignal(df, date):
     try:
         df['datetime'] = pd.to_datetime(df['datetime'], infer_datetime_format=True)
         df.set_index('datetime', inplace= True)
@@ -418,19 +417,18 @@ def plotTrade(trade, signaldata, datapath):
         textposition="bottom center"
     ), row=1, col=1)
 
-    fig.update_layout(
-    autosize=False,
-    width=1600,
-    height=900,
-    margin=dict(
-        l=50,
-        r=50,
-        b=100,
-        t=100,
-        pad=4
-    ),
-    paper_bgcolor="LightSteelBlue",
-)
+    # fig.update_layout(
+    # autosize=False,
+    # width=1600,
+    # height=900,
+    # margin=dict(
+    #     l=50,
+    #     r=50,
+    #     b=100,
+    #     t=100,
+    #     pad=4
+    # ),
+    # paper_bgcolor="LightSteelBlue")
     #fig.update(layout_xaxis_rangeslider_visible=True)    
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
