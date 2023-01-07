@@ -417,6 +417,7 @@ def plotTrade(trade, signaldata, datapath):
         textposition="bottom center"
     ), row=1, col=1)
 
+    fig.update_layout(autosize=True)
     # fig.update_layout(
     # autosize=False,
     # width=1600,
@@ -427,8 +428,7 @@ def plotTrade(trade, signaldata, datapath):
     #     b=100,
     #     t=100,
     #     pad=4
-    # ),
-    # paper_bgcolor="LightSteelBlue")
+    # ), paper_bgcolor="LightSteelBlue")
     #fig.update(layout_xaxis_rangeslider_visible=True)    
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
