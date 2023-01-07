@@ -343,14 +343,14 @@ def plotTrade(trade, signaldata, datapath):
             y = df.upband,
             mode = "lines",
             name = "Upper Bollinger Band",
-            marker = {'color' : 'black'}
+            marker = {'color' : 'grey'}
         ), row = 1, col = 1) 
         fig.add_trace(go.Line(
             x = df.index,
             y = df.lowband,
             mode = "lines",
             name = "Lower Bollinger Band",
-            marker = {'color' : 'black'}
+            marker = {'color' : 'grey'}
         ), row = 1, col = 1)
     
     else:
