@@ -38,10 +38,12 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 print("Test Directional Config")
 tic = time.time()
 
-approach = "BB2"
-config = defconfigs.bb2_BNs
+#approach = "BB2"
+#config = defconfigs.bb2_BNs
+approach = "RSI2"
+config = defconfigs.rsidual_BNs
 
-print( approach )
+print( approach)
 
 if (approach == "RSI-Dual") :
   (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIDualConfig(config)
