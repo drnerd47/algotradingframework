@@ -417,7 +417,7 @@ def plotTrade(trade, signaldata, datapath):
         textposition="bottom center"
     ), row=1, col=1)
 
-    fig.update_layout(autosize=True)
+    #fig.update_layout(autosize=True)
     fig.update_layout(
     autosize=False,
     width=1600,
