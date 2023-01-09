@@ -4,10 +4,10 @@ import operator
 import generalconfigs as genconfigs
 import positionconfigs as posconfigs
 
-def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost,
-                    SL, Target, SLPc, TargetPc):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost)
-    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
+def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery,
+                    SL, Target, SLPc, SLPcFar, TargetPc):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery)
+    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, SLPcFar, TargetPc)
     return (generalconfig, positionconfig)
 
 def GetINDStraddlesConfig(config):
@@ -23,15 +23,17 @@ def GetINDStraddlesConfig(config):
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
     SLtoCost = config['SLtoCost']
+    SLEvery = config['SLEvery']
+    SLPcFar = config['SLPcFar']
     (generalconfig, positionconfig) = GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                       SLtoCost, SL, Target, SLPc, TargetPc)
+                                                       SLtoCost, SLEvery, SL, Target, SLPc, SLPcFar, TargetPc)
                                                     
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost,
-                    SL, Target, SLPc, TargetPc, Delta):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost)
-    positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
+def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery,
+                    SL, Target, SLPc, SLPcFar, TargetPc, Delta):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery)
+    positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, SLPcFar, TargetPc)
     return (generalconfig, positionconfig)
 
 def GetINDStranglesConfig(config):
@@ -48,8 +50,10 @@ def GetINDStranglesConfig(config):
     TargetPc = config['TargetPc']
     Delta = config['Delta']
     SLtoCost = config['SLtoCost']
+    SLEvery = config['SLEvery']
+    SLPcFar = config['SLPcFar']
     (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                    SLtoCost ,SL, Target, SLPc, TargetPc, Delta)
+                                                    SLtoCost, SLEvery, SL, Target, SLPc, SLPcFar, TargetPc, Delta)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
