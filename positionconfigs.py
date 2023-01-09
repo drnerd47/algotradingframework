@@ -30,10 +30,10 @@ positionconfigLongStrangle = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":200, "
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":-200,"SLPc":25, "SLPcFar":100, "TargetPc":50,"NumLots":1,
                        "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
-def getStrangles(action, Delta, SL, Target, SLPc, TargetPc):
-    positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":Delta, "SLPc":SLPc, "SLPcFar":100, "TargetPc":TargetPc, "NumLots":1,
+def getStrangles(action, Delta, SL, Target, SLPc, SLPcFar, TargetPc):
+    positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":Delta, "SLPc":SLPc, "SLPcFar":SLPcFar, "TargetPc":TargetPc, "NumLots":1,
                        "SL": SL, "Target":Target, "Id": 1, "HedgeId": 0},
-                      {"Type":defs.PUT,"Action":action,"Delta":-1*Delta,"SLPc":SLPc, "SLPcFar":100, "TargetPc":TargetPc,"NumLots":1,
+                      {"Type":defs.PUT,"Action":action,"Delta":-1*Delta,"SLPc":SLPc, "SLPcFar":SLPcFar, "TargetPc":TargetPc,"NumLots":1,
                        "SL": SL,"Target":Target, "Id": 2, "HedgeId": 0}]
     return positionconfig
 
