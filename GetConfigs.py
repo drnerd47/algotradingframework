@@ -22,13 +22,15 @@ def GetINDStraddlesConfig(config):
     Target = config['Target']
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
+    SLtoCost = config['SLtoCost']
     (generalconfig, positionconfig) = GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                        SL, Target, SLPc, TargetPc)
+                                                       SLtoCost, SL, Target, SLPc, TargetPc)
+                                                    
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
+def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost,
                     SL, Target, SLPc, TargetPc, Delta):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost)
     positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
@@ -45,8 +47,9 @@ def GetINDStranglesConfig(config):
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
     Delta = config['Delta']
+    SLtoCost = config['SLtoCost']
     (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                        SL, Target, SLPc, TargetPc, Delta)
+                                                    SLtoCost ,SL, Target, SLPc, TargetPc, Delta)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):

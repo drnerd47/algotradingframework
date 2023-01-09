@@ -1,5 +1,21 @@
 import definitions as defs
 
+# INTRADAY STRADDLE BANKNIFTY
+ind_straddle_BN = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO,
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50}
+
+# INTRADAY STRADDLE NIFTY
+ind_straddle_N = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO,
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50}
+
+# INTRADAY STRANGLE BANKNIFTY
+ind_strangle_BN = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO,
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0}
+
+# INTRADAY STRANGLE NIFTY
+ind_strangle_N = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO,
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0}
+
 # RSI-ADX BANKNIFTY BUY SIDE
 rsiadx_BNb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.NO, 'SLPc': 20, 'TargetPc': 70 ,
                 'TBull': 60, 'TBear': 40, 'reenter': defs.YES, 'rolling': defs.NO, 'window': 14, 'symbol': defs.BN, 'action': defs.BUY,

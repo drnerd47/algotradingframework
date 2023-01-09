@@ -10,6 +10,7 @@ import positionconfigs as posconfings
 import warnings
 import GetConfigs
 import time
+import DefaultConfigs as defcon
 
 warnings.filterwarnings("ignore")
 
@@ -30,12 +31,13 @@ startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
-
 delta = datetime.timedelta(days=1)
+
+config = defcon.ind_straddle_BN
 
 tic = time.time()
 
-(generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig( )
+(generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()
