@@ -34,8 +34,10 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
       # Check Stop Loss Condition
-      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
-
+      if (MinCounter % generalconfig["SLEvery"] == 0):
+        (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+      else:
+        (postoExitSL, posConfigtoExitSL) = atom.CheckStopLossFar(positions, currentcandle)
       # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
       if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL):
         ReEnterNextSL = False

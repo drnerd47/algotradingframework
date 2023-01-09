@@ -84,7 +84,8 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                   "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
                    "date": currentcandle.name.date(), "EnterSpotPrice": currentcandle[OHLC],
                   "SLCond": enterprice - posc["Action"] * enterprice * posc["SLPc"] / 100,
-                  "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
+                  "SLCondFar": enterprice - posc["Action"] * enterprice * posc["SLPcFar"] / 100,
+                        "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
                   "Active": True, "Strike": cst + posc["Delta"],
                   "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
                   "FutEnterPrice":futprice }
@@ -97,6 +98,7 @@ def StopLossToCost(positions):
     for pos in positions:
         if (pos["Active"]) and pos["PositionConfig"]["SL"] == defs.YES:
             pos["SLCond"] = pos["EnterPrice"]
+
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
     posconfigtoExit = []
@@ -111,6 +113,24 @@ def CheckStopLoss(positions, currentcandle):
                 optionprice = pos["OpData"].loc[currentcandle.name]['low']
                 optionprice = pd.to_numeric(optionprice)
                 if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice <= pos['SLCond'] and pos['Active']:
+                    positionstoExit.append(pos)
+                    posconfigtoExit.append(pos["PositionConfig"])
+    return (positionstoExit, posconfigtoExit)
+
+def CheckStopLossFar(positions, currentcandle):
+    positionstoExit = []
+    posconfigtoExit = []
+    for pos in positions:
+        if currentcandle.name in pos['OpData'].index :
+            if (pos["PositionConfig"]["Action"] == defs.SELL):
+                optionprice = pos["OpData"].loc[currentcandle.name]['high']
+                if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice >= pos['SLCondFar'] and pos['Active']:
+                    positionstoExit.append(pos)
+                    posconfigtoExit.append(pos["PositionConfig"])
+            elif (pos["PositionConfig"]["Action"] == defs.BUY):
+                optionprice = pos["OpData"].loc[currentcandle.name]['low']
+                optionprice = pd.to_numeric(optionprice)
+                if (pos["PositionConfig"]["SL"] == defs.YES) and optionprice <= pos['SLCondFar'] and pos['Active']:
                     positionstoExit.append(pos)
                     posconfigtoExit.append(pos["PositionConfig"])
     return (positionstoExit, posconfigtoExit)
