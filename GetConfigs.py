@@ -1,6 +1,20 @@
 import definitions as defs
 import datetime
 import operator
+import generalconfigs as genconfigs
+import positionconfigs as posconfigs
+
+def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
+                    SL, Target, SLPc, TargetPc):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
+    return (generalconfig, positionconfig)
+
+def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
+                    SL, Target, SLPc, TargetPc, Delta):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
+    positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
+    return (generalconfig, positionconfig)
 
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
     if action == defs.BUY:

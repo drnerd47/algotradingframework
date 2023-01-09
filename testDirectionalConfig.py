@@ -8,7 +8,7 @@ import reporting as rep
 import directional as direc
 import warnings
 import DefaultConfigs as defconfigs
-import TIStrategies
+import GetConfigs
 import time
 
 warnings.filterwarnings("ignore")
@@ -46,19 +46,19 @@ config = defconfigs.rsidual_BNs
 print( approach)
 
 if (approach == "RSI-Dual") :
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIDualConfig(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSIDualConfig(config)
 elif (approach == "ST"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetSTconfig(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetSTconfig(config)
 elif (approach == "BB2"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetBB2Config(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetBB2Config(config)
 elif (approach == "BB1"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetBB1Config(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetBB1Config(config)
 elif (approach == "RSI-ADX"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSIADXconfig(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSIADXconfig(config)
 elif (approach == "RSI2"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetRSI2Config(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSI2Config(config)
 elif (approach == "EMA"):
-  (TIconfig, generalconfig, positionconfig) = TIStrategies.GetEMAconfig(config)
+  (TIconfig, generalconfig, positionconfig) = GetConfigs.GetEMAconfig(config)
 
 data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)
 
