@@ -10,12 +10,45 @@ def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxR
     positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
+def GetINDStraddlesConfig(config):
+    SquareOffSL = config['SquareOffSL']
+    SquareOffTG = config['SquareOffTG']
+    symbol = config['symbol']
+    ReEntrySL = config['ReEntrySL']
+    ReEntryTG = config['ReEntryTG']
+    MaxReEnterCounterSL = config['MaxReEnterCounterSL'] 
+    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    SL = config['SL']
+    Target = config['Target']
+    SLPc = config['SLPc']
+    TargetPc = config['TargetPc']
+    (generalconfig, positionconfig) = GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
+                                                        SL, Target, SLPc, TargetPc)
+    return (generalconfig, positionconfig)
+##############################################################################################################################
 def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
                     SL, Target, SLPc, TargetPc, Delta):
     generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG)
     positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
+def GetINDStranglesConfig(config):
+    SquareOffSL = config['SquareOffSL']
+    SquareOffTG = config['SquareOffTG']
+    symbol = config['symbol']
+    ReEntrySL = config['ReEntrySL']
+    ReEntryTG = config['ReEntryTG']
+    MaxReEnterCounterSL = config['MaxReEnterCounterSL'] 
+    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    SL = config['SL']
+    Target = config['Target']
+    SLPc = config['SLPc']
+    TargetPc = config['TargetPc']
+    Delta = config['Delta']
+    (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
+                                                        SL, Target, SLPc, TargetPc, Delta)
+    return (generalconfig, positionconfig)
+##############################################################################################################################
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -47,6 +80,7 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
         {"TI": "RSI", "columnname": "RSI2", "Window": window2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt}]
     return (ticonfig, generalconfig, positionconfig)
+
 def GetRSI2Config(config):
     SL = config["SL"]
     Target = config["Target"]
@@ -65,7 +99,7 @@ def GetRSI2Config(config):
     reenter = config["reenter"]
     Delta = config["Delta"]
     return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
-
+##############################################################################################################################
 def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -97,6 +131,7 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
         {"TI": "RSI", "columnname": "RSI2", "Window": window2, "ThreshBull": TBull2, "ThreshBear": TBear2, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.gt, "BearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
+
 def GetRSIDualConfig(config):
     Resample = config['Resample']
     window1 = config['window1']
@@ -115,7 +150,7 @@ def GetRSIDualConfig(config):
     SL = config['SL']
     Target = config['Target']
     return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
-
+##############################################################################################################################
 def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -147,6 +182,7 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                 "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
                 "BullOperator": operator.lt, "BearOperator": operator.gt, "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
+
 def GetBB1Config(config):
     Resample = config['Resample']
     period = config['period']
@@ -166,7 +202,7 @@ def GetBB1Config(config):
     (TIconfig, generalconfig, positionconfig) = GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
                                                     TargetPc, Delta, symbol, action, rolling, reenter, stddev)
     return (TIconfig, generalconfig, positionconfig)
-
+##############################################################################################################################
 def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -199,6 +235,7 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
                 "BullOperator": operator.gt, "BearOperator": operator.lt,
                 "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "TBullOperator": operator.gt, "TBearOperator": operator.lt}]
     return (ticonfig, generalconfig, positionconfig)
+
 def GetBB2Config(config):
     Resample = config['Resample']
     period = config['period']
@@ -218,7 +255,7 @@ def GetBB2Config(config):
     (TIconfig, generalconfig, positionconfig) = GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
                                                     TargetPc, Delta, symbol, action, rolling, reenter, stddev)
     return (TIconfig, generalconfig, positionconfig)
-
+##############################################################################################################################
 def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -246,7 +283,6 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter,
                       "SLTGContinuous": defs.NO}
 
-
     ticonfig = [{"TI": "RSI", "columnname": "RSI", "ThreshBull": TBull, "ThreshBear": TBear, "Window": window, "SL": defs.NO, "Target": defs.NO,
             "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
              "BullOperator": operator.gt, "BearOperator": operator.lt, "SLBullOperator": operator.lt, "SLBearOperator": operator.gt,"TBullOperator": operator.gt, "TBearOperator": operator.lt},
@@ -254,6 +290,7 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
            "BullOperator": operator.gt, "BearOperator": operator.gt}]
 
     return (ticonfig, generalconfig, positionconfig)
+
 def GetRSIADXconfig(config):
     Resample = config['Resample']
     window = config['window']
@@ -273,7 +310,7 @@ def GetRSIADXconfig(config):
     (TIconfig, generalconfig, positionconfig) = GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear,
                                                 SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window)
     return (TIconfig, generalconfig, positionconfig)
-
+##############################################################################################################################
 def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -304,6 +341,7 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
                 "SLBullOperator": operator.lt, "SLBearOperator": operator.gt, "type": "EMA"}]
 
     return (ticonfig, generalconfig, positionconfig)
+
 def GetEMAconfig(config):
     Resample = config['Resample']
     period = config['period']
@@ -319,7 +357,7 @@ def GetEMAconfig(config):
     reenter = config['reenter']
     Delta = config["Delta"]
     return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter)
-
+##############################################################################################################################
 def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc):
     if action == defs.BUY:
         callstance = defs.BULL
@@ -349,6 +387,7 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
     return ( ticonfig, generalconfig, positionconfig)
+
 def GetSTconfig(config):
     action = config["action"]
     Delta = config["Delta"]
