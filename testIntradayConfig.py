@@ -11,6 +11,7 @@ import warnings
 import GetConfigs
 import time
 import DefaultConfigs as defcon
+import OptimizedConfigs as opcon
 
 warnings.filterwarnings("ignore")
 
@@ -26,14 +27,17 @@ elif user == "RI":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-year = 2021
+year = 2022
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
-config = defcon.ind_straddle_BN
+# Default Config
+# config = defcon.ind_strangle_BN
+# Optimized Config
+config = opcon.ind_strangle_BN_1
 
 tic = time.time()
 
