@@ -93,6 +93,10 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
             positionsNotPlaced.append(posc)
     return (positions, positionsNotPlaced)
 
+def StopLossToCost(positions):
+    for pos in positions:
+        if (pos["Active"]) and pos["PositionConfig"]["SL"] == defs.YES:
+            pos["SLCond"] = pos["EnterPrice"]
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
     posconfigtoExit = []

@@ -51,6 +51,8 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         ReEnterNextSL = True
         posConfigtoExitSLNext = posConfigtoExitSL
         atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+        if (generalconfig["SLToCost"] == defs.YES):
+          atom.StopLossToCost(positions)
         if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
           atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
 
@@ -60,10 +62,10 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
       # We enter the loop below if re-entry is true and target profit condition was triggered the previous minute.
       if (generalconfig["ReEntryTG"] == defs.YES) and (ReEnterCounterTG <= generalconfig["MaxReEnterCounterTG"]) and (ReEnterNextTG):
         ReEnterCounterTG += 1
-        if (generalconfig["SquareOffSL"] == defs.ONELEG):
+        if (generalconfig["SquareOffTG"] == defs.ONELEG):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitTGNext, masterdf, positions,
                                                                currentcandle, OHLCEnter)
-        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+        elif (generalconfig["SquareOffTG"] == defs.ALLLEGS):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
 

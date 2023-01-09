@@ -11,7 +11,7 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -26,12 +26,13 @@ elif user == "MS":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 9, 30)
+year = 2020
+
+start_date = datetime.date(year, 1, 1)
+end_date = datetime.date(year, 12, 31 )
 delta = datetime.timedelta(days=1)
 
-
-generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ALLLEGS, defs.BN, defs.NO, defs.NO, 1, 6, 0.5)
+generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.BN, defs.NO, defs.NO, 1, 6, defs.NO)
 #generalconfig = genconfigs.generalconfigIntradayREBN
 #positionconfig = posconfings.getIronButterfly(1500, 0, 1, 0, 30, 35, 70)
 #ositionconfig = posconfings.getIronCondor(400, 500, 0, 0, 1, 20, 35, 30)
