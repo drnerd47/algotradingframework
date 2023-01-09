@@ -418,17 +418,17 @@ def plotTrade(trade, signaldata, datapath):
     ), row=1, col=1)
 
     fig.update_layout(autosize=True)
-    # fig.update_layout(
-    # autosize=False,
-    # width=1600,
-    # height=900,
-    # margin=dict(
-    #     l=50,
-    #     r=50,
-    #     b=100,
-    #     t=100,
-    #     pad=4
-    # ), paper_bgcolor="LightSteelBlue")
+    fig.update_layout(
+    autosize=False,
+    width=1600,
+    height=900,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ), paper_bgcolor="LightSteelBlue")
     #fig.update(layout_xaxis_rangeslider_visible=True)    
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
