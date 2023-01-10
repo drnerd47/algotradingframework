@@ -35,7 +35,7 @@ end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
 # Default Config
-config = defcon.ind_strangle_BN
+config = opcon.ind_straddle_N_2
 # Optimized Config
 
 tic = time.time()
