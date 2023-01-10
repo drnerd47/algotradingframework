@@ -4,6 +4,22 @@ import definitions as defs
 ind_strangle_BN_1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":13, "SLPcFar":100,
             "MaxReEnterCounterSL": 2, "MaxReEnterCounterTG": 7, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.YES, "SLPc":25, "TargetPc":70, "Delta":1100}
 
+ind_strangle_BN_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":14, "SLPcFar":100,
+            "MaxReEnterCounterSL": 7, "MaxReEnterCounterTG": 7, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":70, "Delta":1200}
+
+ind_strangle_BN_3 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":14, "SLPcFar":100,
+            "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 8, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.YES, "SLPc":25, "TargetPc":70, "Delta":1100}
+
+# INTRADAY STRANGLE SEARCH NIFTY
+ind_strangle_N_1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":13, "SLPcFar":100,
+            "MaxReEnterCounterSL": 2, "MaxReEnterCounterTG": 7, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.YES, "SLPc":25, "TargetPc":70, "Delta":1100}
+
+ind_strangle_N_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":14, "SLPcFar":100,
+            "MaxReEnterCounterSL": 7, "MaxReEnterCounterTG": 7, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":70, "Delta":1200}
+
+ind_strangle_N_3 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":14, "SLPcFar":100,
+            "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 8, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.YES, "SLPc":25, "TargetPc":70, "Delta":1100}
+
 # INTRADAY STRADDLE SEARCH BANKNIFTY
 ind_straddle_BN_1 = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":15, "SLPcFar":100,
                 "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 3, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":30, "TargetPc":50}
