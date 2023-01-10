@@ -4,3 +4,9 @@ import definitions as defs
 ind_strangle_BN_1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":13, "SLPcFar":100,
             "MaxReEnterCounterSL": 2, "MaxReEnterCounterTG": 7, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.YES, "SLPc":25, "TargetPc":70, "Delta":1100}
 
+# INTRADAY STRADDLE SEARCH BANKNIFTY
+ind_straddle_BN_1 = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":15, "SLPcFar":100,
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 3, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":30, "TargetPc":50}
+
+ind_straddle_BN_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "SLEvery":20, "SLPcFar":100,
+                "MaxReEnterCounterSL": 10, "MaxReEnterCounterTG": 1, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":30, "TargetPc":50}
