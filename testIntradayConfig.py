@@ -15,7 +15,7 @@ import OptimizedConfigs as opcon
 
 warnings.filterwarnings("ignore")
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -35,9 +35,8 @@ end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
 # Default Config
-# config = defcon.ind_strangle_BN
+config = defcon.ind_strangle_BN
 # Optimized Config
-config = opcon.ind_strangle_BN_1
 
 tic = time.time()
 

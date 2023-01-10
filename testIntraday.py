@@ -23,7 +23,7 @@ elif user == "RI":
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-year = 2022
+year = 2021
 
 start_date = datetime.date(year, 1, 1)
 end_date = datetime.date(year, 12, 31)
