@@ -9,7 +9,7 @@ from Utility import *
 # -----------------------
 
 strat_title = " * Strangle-Straddle * BankNifty CODE "
-strategy_name= 'IND_OL' # sys.argv[2] ; 
+strategy_name= 'IND_AL' # sys.argv[2] ; 
 strat_id= sys.argv[1]
 strategy_name = strategy_name + strat_id
 inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
