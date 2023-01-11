@@ -13,6 +13,8 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
   ReEnterCounterTG = 0
   ReEnterNextSL = False
   ReEnterNextTG = False
+  CallActive = True
+  PutActive = True
 
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
@@ -27,6 +29,8 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
     if currentcandle.name.time() == generalconfig["EnterTime"] and not placed:
       (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCEnter)
       placed = True
+      CallActive = True
+      PutActive = True
     if placed:
       # Check time based re-entry. If true, re-enter every "ReEnterEvery" number of minutes.
       if (generalconfig["Timerenter"] == defs.YES):
@@ -48,9 +52,22 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
+        elif (generalconfig["SquareOffSL"] == defs.ONELEGSL):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, OHLCEnter)
+          CallActive = True
+          PutActive = True
       # We enter this loop if there is any position where stop-loss is triggered.
       if (len(postoExitSL) > 0):
-        ReEnterNextSL = True
+        if (posConfigtoExitSL[0]["Type"] == defs.CALL):
+          CallActive = False
+        else:
+          PutActive = False
+        if(generalconfig["SquareOffSL"] == defs.ONELEGSL):
+          if (CallActive == False) and (PutActive == False):
+            ReEnterNextSL = True
+        else:
+          ReEnterNextSL = True
         posConfigtoExitSLNext = posConfigtoExitSL
         atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
         if (generalconfig["SLToCost"] == defs.YES):
@@ -93,7 +110,6 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   ReEnterCounterTG = 0
   ReEnterNextSL = False
   ReEnterNextTG = False
-
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'

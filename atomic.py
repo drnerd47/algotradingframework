@@ -102,6 +102,7 @@ def StopLossToCost(positions):
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []
     posconfigtoExit = []
+    ExitType = "None"
     for pos in positions:
         if currentcandle.name in pos['OpData'].index :
             if (pos["PositionConfig"]["Action"] == defs.SELL):

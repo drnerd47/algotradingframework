@@ -35,9 +35,9 @@ end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
 # Default Config
-config = opcon.ind_straddle_N_2
+config = opcon.ind_straddle_BN_1
 # Optimized Config
-
+approach = ""
 tic = time.time()
 
 (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
@@ -74,22 +74,22 @@ trades = trades.drop(["index"],axis = 1)
 
 print("\n")
 print(trades)
-trades.to_csv(Result_path + "trades.csv")
+trades.to_csv(Result_path + approach + "trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv(Result_path + "DailyChart.csv")
+Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv(Result_path + "Report.csv")
+report.to_csv(Result_path + approach + "Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
-weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
+weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
 monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
