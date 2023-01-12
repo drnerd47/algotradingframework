@@ -8,7 +8,7 @@ rRr = redis.Redis(host='127.0.0.1', port=6379, db=0)
 from utility_main import *
 # -----------------------
 
-strat_id= sys.argv[1]
+strat_id= 'BN' #sys.argv[1]
 if strat_id == 'BN':
     inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
     name = 'BANK NIFTY'
@@ -26,7 +26,7 @@ print("#####------------------------------#####")
 
 
 ##### Get inputs
-input = ind_straddle_BN_3 = {'TRADE':True, "EntryTime": datetime.time(15, 17, 0), "ExitTime": datetime.time(15, 15, 0), "Delta":0, "SquareOffSL": 2, "SquareOffTG": 1, "symbol": 'BANKNIFTY', 
+input = ind_straddle_BN_3 = {'TRADE':True, "EntryTime": datetime.time(9, 29, 0), "ExitTime": datetime.time(15, 15, 0), "Delta":0, "SquareOffSL": 2, "SquareOffTG": 1, "symbol": 'BANKNIFTY', 
                               "ReEntrySL": 1, "ReEntryTG": 1, "SLEvery":2, "SLPcFar":100, 'TradingAmount':100000, 'TradingQty':1, 
                               "MaxReEnterCounterSL": 6, "MaxReEnterCounterTG": 2, "SLtoCost":0, "SL":1, "Target":0, "SLPc":5, "TargetPc":100}
 
@@ -49,7 +49,7 @@ while True:
 # -----------------------
 
 ########### Sync with Zerodha #############
-sleep_secs = wake_up_time(wakeup_at = datetime.time(9, 0, 0))
+sleep_secs = wake_up_time(wakeup_at = datetime.time(9, 28, 0))
 time.sleep(sleep_secs)
 login_credentials = pickle.loads(rRr.get('login_credentials'))
 inst = pickle.loads(rRr.get('inst_df'))
