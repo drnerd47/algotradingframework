@@ -35,9 +35,9 @@ end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
 # Default Config
-config = opcon.ind_straddle_BN_2
+config = opcon.ind_straddle_BN_4
 # Optimized Config
-approach = ""
+approach = "INDAL"
 tic = time.time()
 
 (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)

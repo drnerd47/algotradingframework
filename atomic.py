@@ -164,6 +164,9 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
             if (ExitReason == defs.SL):
                 exitprice = pos["SLCond"]
                 exitReason = "SL HIT"
+            if (ExitReason == defs.SLFar):
+                exitprice = pos["SLCondFar"]
+                exitReason = "FAR SL HIT"
             elif (ExitReason == defs.TARGET):
                 exitprice = pos["TargetCond"]
                 exitReason = "Target Hit"

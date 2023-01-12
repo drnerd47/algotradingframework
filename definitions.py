@@ -36,6 +36,7 @@ N = 'NIFTY'
 BN = 'BANKNIFTY'
 BOTH = "BOTH"
 
+SLFar = 0
 SL = 1
 TARGET = 2
 SQUAREOFF = 3
