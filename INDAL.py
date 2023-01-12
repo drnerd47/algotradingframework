@@ -7,25 +7,27 @@ import definitions as defs
 rRr = redis.Redis(host='127.0.0.1', port=6379, db=0)
 from Utility import *
 # -----------------------
-
-strat_title = " * Strangle-Straddle * BankNifty CODE "
-strategy_name= 'IND_AL' # sys.argv[2] ; 
 strat_id= sys.argv[1]
+if strat_id == 'BN':
+    inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
+    name = 'BANK NIFTY'
+else:
+    inst_base='NIFTY'; inst_name='NIFTY 50'; strikes=50; lot_size=50; hedge_far_strike_perc=1/100
+    name = 'NIFTY'
+strat_title = " * IND AL * " + name
+strategy_name= 'IND_AL' # sys.argv[2] ; 
 strategy_name = strategy_name + strat_id
-inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
 print("#####------------------------------#####")
 print("STARTING",strat_title)
 print("#####------------------------------#####")
 
-
-
 ##### Get inputs
-input = ind_straddle_BN_3 = {"EntryTime": datetime.time(13, 38, 0), "ExitTime": datetime.time(15, 15, 0), "Delta":0, "SquareOffSL": 2, "SquareOffTG": 1, "symbol": 'BANKNIFTY', 
-                              "ReEntrySL": 1, "ReEntryTG": 1, "SLEvery":20, "SLPcFar":100, 'TradingAmount':100000, 'TradingQty':1, 
+input = ind_straddle_3 = {"EntryTime": datetime.time(9, 30, 0), "ExitTime": datetime.time(15, 15, 0), "Delta":0, "SquareOffSL": 2, "SquareOffTG": 1, 
+                              "ReEntrySL": 1, "ReEntryTG": 1, "SLEvery":20, "SLPcFar":500, 'TradingAmount':100000, 'TradingQty':1, 
                               "MaxReEnterCounterSL": 6, "MaxReEnterCounterTG": 2, "SLtoCost":0, "SL":1, "Target":0, "SLPc":30, "TargetPc":70}
 
 if (input["SquareOffSL"] != defs.ALLLEGS):
-    print("ERROR: Incorrect Config provided. The config should have SquareOffSL as ONELEG")
+    print("ERROR: Incorrect Config provided. The config should have SquareOffSL as ALLLEG")
 
 # expiry_wise_inputs = {1:{'trade_start_time':datetime.time(9, 20, 0), 'trade_close_time':datetime.time(15, 14, 0),'strike_away_from_atm':0,
 #                          'trading_amount':100000, 'trading_qty':1, 'stop_loss_decimal':10/100, 'TRADE':True, 'move_to_cost':True, 're_entry_count':1},
@@ -44,6 +46,7 @@ if (input["SquareOffSL"] != defs.ALLLEGS):
 #----------------------------
 
 market_close_time = datetime.time(15, 29, 0)   # Let's NOT change it
+market_start_time = datetime.time(9, 14, 0)
 #---------------
 
 while True:
@@ -223,7 +226,7 @@ for item in pubsub.listen():
    if datetime.datetime.today().time() > market_close_time:
         pubsub.unsubscribe()
         break
-   if item['channel'].decode() == 'ZERODHA_TICKS_UPDATE' and TRADE_TODAY:
+   if item['channel'].decode() == 'ZERODHA_TICKS_UPDATE' :
       try:data = pickle.loads(item['data'])
       except:continue
       try:call_option_price = [x['last_price'] for x in data if x['instrument_token']==call_option_token][0]
@@ -234,190 +237,132 @@ for item in pubsub.listen():
       print("CALL OPTION : %f, PUT OPTION : %f"%(call_option_price,put_option_price),sep='',end="\r",flush=True)
 
       CurrentTime = datetime.datetime.today().time()
-      Delta = CurrentTime.hour*60 + CurrentTime.minute - aiv['EntryTime'].hour*60 - aiv['EntryTime'].minute
+      Delta = CurrentTime.hour*60 + CurrentTime.minute - market_start_time.hour*60 - market_start_time.minute
 
 
 ############################################################################################################
 
 
-# # CODE FOR BOTH LEGS
-# placed = False
-# ReEnterCounterSL = 0
-# ReEnterCounterTG = 0
-# ReEnter = False
-# Active = False
+# CODE FOR BOTH LEGS
+placed = False
+ReEnterCounterSL = 0
+ReEnterCounterTG = 0
+ReEnter = False
+Active = False
 
-# if aiv['EntryTime'] < datetime.datetime.today().time() < aiv['ExitTime'] :
-#    CurrentTime = datetime.datetime.today().time()
-#    Delta = CurrentTime.hour*60 + CurrentTime.minute - aiv['EntryTime'].hour*60 - aiv['EntryTime'].minute
-#    # PLACING TH ORDER FOR THE FIRST TIME
-#    if not placed:
-#       # Getting Option token and price
-#       call_option_token, put_option_token, call_option_price, put_option_price = get_straddle_strangle_pair()
-#       # Getting option symbol
-#       call_sell_trading_symbol = token_info_req_index[call_option_token]['tradingsymbol']
-#       put_sell_trading_symbol = token_info_req_index[put_option_token]['tradingsymbol']
-#       # Creating a signal list to send to Order Managment system
-#       signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
-#                      ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
-#       # Creating notification message 
-#       notification_msg = strategy_name +  " :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-#       print(notification_msg,' :: ', CurrentTime)
-#       # Sending signals to Order Managment System
-#       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-#       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+if aiv['EntryTime'] < datetime.datetime.today().time() < aiv['ExitTime'] :
+    CurrentTime = datetime.datetime.today().time()
+    Delta = CurrentTime.hour*60 + CurrentTime.minute - aiv['EntryTime'].hour*60 - aiv['EntryTime'].minute
+    # PLACING THE ORDER FOR THE FIRST TIME
+    if not placed:
+        # Getting Option token and price
+        call_option_token, put_option_token, call_option_price, put_option_price = get_straddle_strangle_pair()
+        # Getting option symbol
+        call_sell_trading_symbol = token_info_req_index[call_option_token]['tradingsymbol']
+        put_sell_trading_symbol = token_info_req_index[put_option_token]['tradingsymbol']
+        # Creating a signal list to send to Order Managment system
+        signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
+                        ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
+        # Creating notification message 
+        notification_msg = strategy_name +  " :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
+        # Sending signals to Order Managment System
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
 
-#       call_sell_entry_price = call_option_price
-#       put_sell_entry_price = put_option_price
-#       # Calculating Near Stop Loss for call and put
-#       call_buy_sl_price = call_option_price * (1+aiv['SLPc']/100)
-#       put_buy_sl_price = put_option_price * (1+aiv['SLPc']/100)
-#       # Calculating Far Stop loss for call and put
-#       call_SLPcFar = call_option_price * (1+aiv['SLPcFar']/100)
-#       put_SLPcFar = put_option_price * (1+aiv['SLPcFar']/100)
-#       # Calculating Target for call and put
-#       call_Target = call_option_price * (1+aiv['TargetPc']/100)
-#       put_Target = put_option_price * (1+aiv['TargetPc']/100)
-#       print("SL for Call is %f and Put is %f"%(call_buy_sl_price, put_buy_sl_price))
-#       placed = True
+        call_sell_entry_price = call_option_price
+        put_sell_entry_price = put_option_price
+        # Calculating Near Stop Loss for call and put
+        call_buy_sl_price = call_option_price * (1+aiv['SLPc']/100)
+        put_buy_sl_price = put_option_price * (1+aiv['SLPc']/100)
+        # Calculating Far Stop loss for call and put
+        call_SLPcFar = call_option_price * (1+aiv['SLPcFar']/100)
+        put_SLPcFar = put_option_price * (1+aiv['SLPcFar']/100)
+        # Calculating Target for call and put
+        call_Target = call_option_price * (1-aiv['TargetPc']/100)
+        put_Target = put_option_price * (1-aiv['TargetPc']/100)
+        print("SL for Call is %f and Put is %f"%(call_buy_sl_price, put_buy_sl_price))
+        placed = True
 
-#    # CHECKING FOR STOP LOSS RE-ENTRY
-#    if (ReEnter == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']):
-#       # Sending order to Order Managment system
-#       signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
-#                      ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
-#       # Creating notification message 
-#       notification_msg = strategy_name +  " STOP LOSS RE-ENTRY :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-#       print(notification_msg,' :: ', CurrentTime)
-#       # Sending signals to Order Managment System
-#       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-#       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-#       ReEnter = False
-#       ReEnterCounterSL = ReEnterCounterSL + 1
-#       Active = True
+   # CHECKING FOR STOP LOSS RE-ENTRY
+    if (ReEnter == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']):
+        # Sending order to Order Managment system
+        signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
+                        ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
+        # Creating notification message 
+        notification_msg = strategy_name +  " STOP LOSS RE-ENTRY :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
+        # Sending signals to Order Managment System
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+        ReEnter = False
+        ReEnterCounterSL = ReEnterCounterSL + 1
+        Active = True
 
-#    # CHECKING FOR STOP LOSS
-#    if (aiv['SL'] == defs.YES) and placed and (((call_option_price >= call_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and call_option_price >= call_buy_sl_price)) or ((put_option_price >= put_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and put_option_price >= put_buy_sl_price) )):
+    # CHECKING FOR STOP LOSS
+    if placed and (aiv['SL'] == defs.YES) and Active and (((call_option_price >= call_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and call_option_price >= call_buy_sl_price)) or ((put_option_price >= put_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and put_option_price >= put_buy_sl_price) )):
 
-#       signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
-#                      ["BUY", put_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
+        signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
+                        ["BUY", put_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
 
-#       notification_msg = strategy_name +  " STOP LOSS :: Squaring off %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-#       print(notification_msg,' :: ', CurrentTime)
+        notification_msg = strategy_name +  " STOP LOSS :: Squaring off %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
 
-#       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-#       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-#       ReEnter = True
-#       Active = False
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+        ReEnter = True
+        Active = False
 
-#    # CHECKING FOR TARGET RE-ENTRY
-#    if (ReEnter == True) and (ReEnterCounterTG < aiv['MaxReEnterCounterTG']):
-#       # Sending order to Order Managment system
-#       signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
-#                      ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
-#       # Creating notification message 
-#       notification_msg = strategy_name +  " TARGET RE-ENTRY :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-#       print(notification_msg,' :: ', CurrentTime)
-#       # Sending signals to Order Managment System
-#       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-#       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-#       ReEnter = False
-#       ReEnterCounterTG = ReEnterCounterTG + 1
-#       Active = True
+   # CHECKING FOR TARGET RE-ENTRY
+    if (ReEnter == True) and (ReEnterCounterTG < aiv['MaxReEnterCounterTG']):
+        # Sending order to Order Managment system
+        signal_list=[["SELL", call_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW'],
+                        ["SELL", put_sell_trading_symbol, aiv['TradingQty'], 'NFO', 'MIS', 'TRADE_NEW']]
+        # Creating notification message 
+        notification_msg = strategy_name +  " TARGET RE-ENTRY :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
+        # Sending signals to Order Managment System
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+        ReEnter = False
+        ReEnterCounterTG = ReEnterCounterTG + 1
+        Active = True
 
-#    # CHECKING FOR TARGET
-#    if (aiv['Target'] == defs.YES) and placed and ((call_option_price <= call_Target ) or (put_option_price <= call_Target )):
+    # CHECKING FOR TARGET
+    if placed and (aiv['Target'] == defs.YES) and Active and ((call_option_price <= call_Target ) or (put_option_price <= call_Target )):
 
-#       signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
-#                      ["BUY", put_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
+        signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
+                        ["BUY", put_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
 
-#       notification_msg = strategy_name +  " TARGET :: Squaring off %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-#       print(notification_msg,' :: ', CurrentTime)
+        notification_msg = strategy_name +  " TARGET :: Squaring off Call %s & Put %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
 
-#       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-#       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-#       ReEnter = True
-#       Active = False
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+        ReEnter = True
+        Active = False
 
-      
+# END OF DAY SQUARE OFF
+if aiv['ExitTime'] < datetime.datetime.today().time() :
+    if Active:
+        signal_list = [["BUY",put_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
+                        ["BUY",call_sell_trading_symbol, aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
 
-   
+        notification_msg = strategy_name +  " EOD :: Squaring off %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
 
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      #   # Entry
-      #  if strangle_pos==0 and TRADE_call and TRADE_put and RE_ENTRY_actual<=RE_ENTRY_COUNT and aiv['trade_start_time']<datetime.datetime.today().time()<aiv['trade_close_time']:
-      #       call_option_token, put_option_token, call_option_price, put_option_price = get_straddle_strangle_pair()
-      #       call_sell_trading_symbol = token_info_req_index[call_option_token]['tradingsymbol']
-      #       put_sell_trading_symbol = token_info_req_index[put_option_token]['tradingsymbol']
-
-      #       signal_list=[["SELL",call_sell_trading_symbol,aiv['trading_qty'],'NFO','MIS','TRADE_NEW'],
-      #                    ["SELL",put_sell_trading_symbol,aiv['trading_qty'],'NFO','MIS','TRADE_NEW']]
-      #       notification_msg = strategy_name +  " :: Selling %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
-      #       print(notification_msg,' :: ', time_now())
-      #       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-      #       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-      #       call_sell_entry_price = call_option_price
-      #       put_sell_entry_price = put_option_price
-      #       call_buy_sl_price = call_option_price * (1+aiv['stop_loss_decimal'])
-      #       put_buy_sl_price = put_option_price * (1+aiv['stop_loss_decimal'])
-      #       print("SL for Call is %f and Put is %f"%(call_buy_sl_price, put_buy_sl_price))
-      #       call_pos=-1; put_pos=-1; strangle_pos=-1; RE_ENTRY_actual+=1; print('-'*30)
-
-      #   if strangle_pos==-1 and call_pos==-1 and TRADE_call and (call_option_price>=call_buy_sl_price or datetime.datetime.today().time()>aiv['trade_close_time']):
-      #       signal_list=[["BUY",call_sell_trading_symbol,aiv['trading_qty'],'NFO','MIS','SQ.OFF']]
-      #       notification_msg = strategy_name +  " :: Squaring off %s"%(call_sell_trading_symbol)
-      #       print(notification_msg,' :: ', time_now())
-      #       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-      #       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-      #       call_pos=0
-      #       if aiv['move_to_cost'] and put_pos==-1:
-      #           put_buy_sl_price = put_sell_entry_price
-      #           print("Put SL moved to Cost")
-
-      #   if strangle_pos==-1 and put_pos==-1 and TRADE_put and (put_option_price>=put_buy_sl_price or datetime.datetime.today().time()>aiv['trade_close_time']):
-      #       signal_list=[["BUY",put_sell_trading_symbol,aiv['trading_qty'],'NFO','MIS','SQ.OFF']]
-      #       notification_msg = strategy_name +  " :: Squaring off %s"%(put_sell_trading_symbol)
-      #       print(notification_msg,' :: ', time_now())
-      #       signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-      #       rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-      #       put_pos=0
-      #       if aiv['move_to_cost'] and call_pos==-1:
-      #           call_buy_sl_price = call_sell_entry_price
-      #           print("Call SL moved to Cost")
-
-      #   if call_pos==0 and put_pos==0 and strangle_pos==-1:
-      #       if RE_ENTRY_actual<=RE_ENTRY_COUNT and aiv['trade_start_time']<datetime.datetime.today().time()<aiv['trade_close_time']:
-      #           strangle_pos=0; print("Strangle Re-entry")
-      #       else:
-      #           TRADE_call=False; TRADE_put=False
-      #           if HEDGE:
-      #               signal_list=[["SELL",call_hedge_trading_symbol,aiv['trading_qty'],'NFO','MIS','SQ.OFF'],
-      #                            ["SELL",put_hedge_trading_symbol,aiv['trading_qty'],'NFO','MIS','SQ.OFF']]
-      #               notification_msg = strategy_name +  " :: Squaring off Hedge %s & %s"%(call_hedge_trading_symbol, put_hedge_trading_symbol)
-      #               print(notification_msg,' :: ', time_now())
-      #               signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
-      #               rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
-      #               HEDGE=False
+    # SQUARING OFF HEDGE
+    if HEDGE:
+        signal_list=[["SELL",call_hedge_trading_symbol,aiv['TradingQty'],'NFO','MIS','SQ.OFF'],
+                    ["SELL",put_hedge_trading_symbol,aiv['TradingQty'],'NFO','MIS','SQ.OFF']]
+        notification_msg = strategy_name +  " :: Squaring off Hedge %s & %s"%(call_hedge_trading_symbol, put_hedge_trading_symbol)
+        print(notification_msg,' :: ', CurrentTime)
+        signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
+        rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+        HEDGE=False
 
 print("#####------------------------------#####")
 print("CLOSING CODE")
