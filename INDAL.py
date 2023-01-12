@@ -218,9 +218,6 @@ for item in pubsub.listen():
         CurrentTime = datetime.datetime.today().time()
         Delta = CurrentTime.hour*60 + CurrentTime.minute - market_start_time.hour*60 - market_start_time.minute
 
-
-############################################################################################################
-
         if aiv['EntryTime'] < datetime.datetime.today().time() < aiv['ExitTime'] :
             # PLACING THE ORDER FOR THE FIRST TIME
             if not placed:
@@ -258,7 +255,7 @@ for item in pubsub.listen():
                 Active = True
 
         # CHECKING FOR STOP LOSS RE-ENTRY
-            if (ReEnterSL == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']):
+            if (ReEnterSL == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']) and ((Delta-1) % aiv['SLEvery'] == 0):
                 # Getting Option token and price
                 call_option_token, put_option_token, call_option_price, put_option_price = get_straddle_strangle_pair()
                 # Getting option symbol

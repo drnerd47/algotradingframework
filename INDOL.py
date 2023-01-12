@@ -31,7 +31,7 @@ if Test:
     EnterTime = datetime.time(CurrentTime.hour, CurrentTime.minute + 2, CurrentTime.second)
 else:
     EnterTime = datetime.time(9, 30, 0)
-    StartTime = datetime.time(9,0,0)
+    StartTime = datetime.time(9, 0, 0)
 
 
 
@@ -321,7 +321,7 @@ for item in pubsub.listen():
             PEActive = True
 
         # CHECKING FOR CALL STOP LOSS RE-ENTRY CONDITION
-        if (ReEnterCE == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']):
+        if (ReEnterCE == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']) and ((Delta-1) % aiv['SLEvery'] == 0):
             # Getting current ATM option symbol and price
             call_option_token, call_option_price = get_Call()
             call_sell_entry_price = call_option_price
@@ -356,11 +356,12 @@ for item in pubsub.listen():
 
                 signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
                 rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+                SLTime = CurrentTime
                 ReEnterCE = True
                 CEActive = False
 
         # CHECKING FOR PUT STOP LOSS RE-ENTRY CONDITION
-        if (ReEnterPE == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']):
+        if (ReEnterPE == True) and (ReEnterCounterSL < aiv['MaxReEnterCounterSL']) and (CurrentTime - SLTime).minute == 1:
             # Getting current ATM Option symbol and price
             put_option_token, put_option_price = get_Put()
             put_sell_entry_price = put_option_price
@@ -396,6 +397,7 @@ for item in pubsub.listen():
 
                 signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
                 rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
+                SLTime = CurrentTime
                 ReEnterPE = True
                 PEActive = False
 
@@ -406,7 +408,7 @@ for item in pubsub.listen():
         #     call_sell_entry_price = call_option_price
         #     call_sell_trading_symbol = token_info_req_index[call_option_token]['tradingsymbol']
         #     # Sending order to Order Managment system
-        #     signal_list = ["SELL", call_sell_trading_symbol, aiv['TradingQty'], lot_size, call_option_price, 'NFO', 'MIS', 'TRADE_NEW']
+        #     signal_list = [["SELL", call_sell_trading_symbol, aiv['TradingQty'], lot_size, call_option_price, 'NFO', 'MIS', 'TRADE_NEW']]
         #     signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
         #     rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
         #     # Creating notification message
@@ -443,7 +445,7 @@ for item in pubsub.listen():
         #     put_sell_entry_price = put_option_price
         #     put_sell_trading_symbol = token_info_req_index[put_option_token]['tradingsymbol']
         #     # Sending order to Order Managment system
-        #     signal_list = ["SELL", put_sell_trading_symbol, aiv['TradingQty'], lot_size, put_sell_entry_price, 'NFO', 'MIS', 'TRADE_NEW']
+        #     signal_list = [["SELL", put_sell_trading_symbol, aiv['TradingQty'], lot_size, put_sell_entry_price, 'NFO', 'MIS', 'TRADE_NEW']]
         #     signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }
         #     rRr.publish('ORDER_MGMT_SYS', json.dumps(signal_info))
         #     # Creating notification message
