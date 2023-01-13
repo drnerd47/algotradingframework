@@ -433,5 +433,76 @@ def plotTrade(trade, signaldata, datapath):
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
 
+# input a single trade from trades file, signal data is the whole signal data df, datapath = ['Banknifty Path', 'Nifty Path']
+def plotINDTrade(trade, datapath):
+    OpSymbol = trade['symbol']
+    tradedate = trade['date']
+    tradedate = pd.to_datetime(tradedate, infer_datetime_format=True).date()
+    expirydate = trade['Expiry']
+    expirydate = pd.to_datetime(expirydate, infer_datetime_format=True).date()
+    entertime = trade['EnterTime']
+    entertime = pd.to_datetime(entertime, infer_datetime_format=True).time()
+    exittime = trade['ExitTime']
+    exittime = pd.to_datetime(exittime, infer_datetime_format=True).time()
+
+    symbols = ['BANKNIFTY', 'NIFTY']
+    if OpSymbol[0:9] in symbols:
+        symbol = OpSymbol[0:9]
+    elif OpSymbol[0:5] in symbols:
+        symbol = OpSymbol[0:5]
+
+    if symbol == 'BANKNIFTY':
+        path = datapath[0]
+    elif symbol == 'NIFTY':
+        path = datapath[1]
+    
+    date_path = tradedate.strftime("%Y/Data%Y%m%d.csv")
+    data_path = path + date_path
+    data = pd.read_csv(data_path)
+
+    try:
+        data['datetime'] = pd.to_datetime(data['datetime'], infer_datetime_format=True)
+        data.set_index('datetime', inplace= True)
+    except:
+        pass
+
+    spotdata = data[data.symbol == symbol]
+    opdata = data[data.symbol == OpSymbol]   
+    
+    fig = make_subplots(rows=2, cols=1, subplot_titles=(symbol, OpSymbol), shared_xaxes=True, vertical_spacing= 0.5)
+
+    # Plotting Option Close
+    fig.add_trace(go.Line(
+        x = opdata.index,
+        y = opdata.close,
+        mode = "lines",
+        name = OpSymbol + " "+ str(tradedate) + " Close"
+    ), row=2, col=1)
+
+    # Plotting Spot Close
+    fig.add_trace(go.Line(
+        x = spotdata.index,
+        y = spotdata.close,
+        mode = "lines",
+        name = symbol + " Close",
+        marker = {'color' : 'black'}
+    ), row=1, col=1)
+    
+    
+    #fig.update_layout(autosize=True)
+    fig.update_layout(
+    autosize=False,
+    width=1600,
+    height=900,
+    margin=dict(
+        l=50,
+        r=50,
+        b=100,
+        t=100,
+        pad=4
+    ), paper_bgcolor="LightSteelBlue")
+    #fig.update(layout_xaxis_rangeslider_visible=True)    
+    fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
+    fig.show();
 
 
