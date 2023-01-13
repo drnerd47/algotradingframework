@@ -4,18 +4,19 @@ import pandas as pd, numpy as np, math
 import pickle, redis, telegram, random
 import sys
 import definitions as defs
-rRr = redis.Redis(host='127.0.0.1', port=6379, db=0)
 from utility_main import *
+rRr = redis.Redis(host='127.0.0.1', port=6379, db=0)
 # -----------------------
+
 strat_id= sys.argv[1]
 if strat_id == 'BN':
     inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
     name = 'BANK NIFTY'
-else:
+elif strat_id == 'N':
     inst_base='NIFTY'; inst_name='NIFTY 50'; strikes=50; lot_size=50; hedge_far_strike_perc=1/100
     name = 'NIFTY'
 strat_title = " * IND AL * " + name
-strategy_name= 'IND_AL' # sys.argv[2] ;
+strategy_name= ' IND_AL ' # sys.argv[2] ;
 strategy_name = strategy_name + strat_id
 print("#####------------------------------#####")
 print("STARTING",strat_title)
@@ -294,8 +295,8 @@ for item in pubsub.listen():
             # CHECKING FOR STOP LOSS
             if placed and (aiv['SL'] == defs.YES) and Active and (((call_option_price >= call_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and call_option_price >= call_buy_sl_price)) or ((put_option_price >= put_SLPcFar) or ( Delta % aiv['SLEvery'] == 0 and put_option_price >= put_buy_sl_price) )):
 
-                signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'], lot_size, 'NFO','MIS','SQ.OFF'],
-                                ["BUY", put_sell_trading_symbol, aiv['TradingQty'],lot_size, 'NFO','MIS','SQ.OFF']]
+                signal_list = [["BUY", call_sell_trading_symbol, aiv['TradingQty'], lot_size, 'NFO', 'MIS', 'SQ.OFF'],
+                                ["BUY", put_sell_trading_symbol, aiv['TradingQty'], lot_size, 'NFO', 'MIS', 'SQ.OFF']]
 
                 notification_msg = strategy_name +  " STOP LOSS :: Squaring off %s & %s"%(call_sell_trading_symbol, put_sell_trading_symbol)
                 print(notification_msg,' :: ', CurrentTime)
@@ -358,11 +359,10 @@ for item in pubsub.listen():
                 print("Estimated PNL Put Leg at EOD is ", lot_size*(put_sell_entry_price - put_option_price)*aiv["TradingQty"])
                 Active = False
 
-
             # SQUARING OFF HEDGE
             if HEDGE:
-                signal_list=[["SELL",call_hedge_trading_symbol,aiv['TradingQty'],lot_size,'NFO','MIS','SQ.OFF'],
-                            ["SELL",put_hedge_trading_symbol,aiv['TradingQty'],lot_size,'NFO','MIS','SQ.OFF']]
+                signal_list=[["SELL", call_hedge_trading_symbol, aiv['TradingQty'], lot_size, 'NFO', 'MIS','SQ.OFF'],
+                            ["SELL", put_hedge_trading_symbol, aiv['TradingQty'], lot_size, 'NFO', 'MIS', 'SQ.OFF']]
                 notification_msg = strategy_name +  " :: Squaring off Hedge %s & %s"%(call_hedge_trading_symbol, put_hedge_trading_symbol)
                 print(notification_msg,' :: ', CurrentTime)
                 signal_info = {"ALGO":strategy_name, "telegram_msg":notification_msg, "SIGNALS":signal_list }

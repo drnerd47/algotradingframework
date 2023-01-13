@@ -2,6 +2,7 @@ import definitions as defs
 import glob, os
 import pandas as pd
 import functools
+import datetime
 
 
 def BuyMarginCalculator(trades, symbol):
@@ -72,6 +73,25 @@ def EnsureTimeContinuity(df):
   replaced_date = str(date) + " 09:59:00"
   df['datetime'] = df['datetime'].replace([custom_date], replaced_date)  
   return df
+
+# Compiles tick by tick data from Zerodha, it takes token info and folder path where data from the day is stored 
+def CompileData(tokenpath, file_path ):
+    tokeninfo = pd.read_csv(tokenpath)
+    list_of_files = glob.glob(os.path.join(file_path, 'Data*.pkl'))
+    df_list = []
+    for file in list_of_files:
+        df = pd.read_pickle(file)
+        filename = os.path.split(file)[1]
+        format = "Data_%H_%M_%S_%f.pkl"
+        timestamp = datetime.datetime.strptime(filename, format)
+        timestamp = timestamp.time()
+        df['time'] = timestamp
+        df_list.append(df)
+
+    data = pd.concat(df_list)
+    final_df = data.merge(tokeninfo, on='instrument_token').sort_values(by=['instrument_token', 'time'])
+    return final_df
+    
 
   
 

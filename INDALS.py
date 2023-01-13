@@ -7,11 +7,11 @@ import definitions as defs
 rRr = redis.Redis(host='127.0.0.1', port=6379, db=0)
 from utility_main import *
 # -----------------------
-strat_id= 'BN' #sys.argv[1]
+strat_id= sys.argv[1]
 if strat_id == 'BN':
     inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
     name = 'BANK NIFTY'
-else:
+elif strat_id == 'N':
     inst_base='NIFTY'; inst_name='NIFTY 50'; strikes=50; lot_size=50; hedge_far_strike_perc=1/100
     name = 'NIFTY'
 strat_title = " * IND ALS * " + name

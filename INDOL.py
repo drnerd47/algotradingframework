@@ -12,19 +12,20 @@ strat_id= sys.argv[1]
 if strat_id == 'BN':
     inst_base='BANKNIFTY'; inst_name='NIFTY BANK'; strikes=100; lot_size=25; hedge_far_strike_perc=1/100
     name = 'BANK NIFTY'
-else:
+elif strat_id == 'N':
     inst_base='NIFTY'; inst_name='NIFTY 50'; strikes=50; lot_size=50; hedge_far_strike_perc=1/100
     name = 'NIFTY'
 strat_title = " * IND OL * " + name
-strategy_name= 'IND_OL' # sys.argv[2] ;
+strategy_name= ' IND_OL ' # sys.argv[2] ;
 strategy_name = strategy_name + strat_id
 
 print("#####------------------------------#####")
-print("STARTING",strat_title)
+print("STARTING", strat_title)
 print("#####------------------------------#####")
 
 CurrentTime = datetime.datetime.today().time()
 time_change = datetime.timedelta(minutes=1)
+
 Test = True
 if Test:
     StartTime = datetime.time(CurrentTime.hour, CurrentTime.minute + 1, CurrentTime.second)
@@ -37,7 +38,7 @@ else:
 
 ##### Get inputs
 input = ind_straddle_BN_2 = {"EntryTime": EnterTime, "ExitTime": datetime.time(15, 15, 0), "Delta":0, 'TradingAmount':100000, 'TradingQty':1,
-                              "SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "SLEvery":5, "SLPcFar":500,
+                            "SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "SLEvery":5, "SLPcFar":500,
                 "MaxReEnterCounterSL": 10, "MaxReEnterCounterTG": 1, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":10, "TargetPc":50}
 
 if (input["SquareOffSL"] != defs.ONELEG):

@@ -19,7 +19,7 @@ market_close_time = datetime.time(15, 29, 0)   # Let's NOT change it
 while True:
     decision = market_hours(open_time = datetime.time(9, 5, 0))
     if decision=='OPEN':
-        print('##### MARKET OPEN :: Sync in Strategy #####')
+        print('##### MARKET OPEN :: Storing Data #####')
         break
     get_up_time=datetime.datetime.fromtimestamp(decision+time.time()).strftime('%H:%M:%S %A, %d-%b-%Y')
     print('Login Credentials will be updated again @ ',get_up_time)
