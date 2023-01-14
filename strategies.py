@@ -4,7 +4,7 @@ import directional as direc
 import time
 
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
-  spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
+  spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
   placed = False
   positions = []
   trades = []
@@ -38,16 +38,9 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
       # Check Stop Loss Condition
-      if (MinCounter % generalconfig["SLEvery"] == 0):
-        (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
-      else:
-        (postoExitSL, posConfigtoExitSL) = atom.CheckStopLossFar(positions, currentcandle)
-        if (len(postoExitSL) > 0):
-          SLFar = True
-        else:
-          SLFar = False
+      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
       # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
-      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL):
+      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL) and (MinCounter % generalconfig["SLEvery"] == 0):
         ReEnterNextSL = False
         ReEnterCounterSL += 1
         if (generalconfig["SquareOffSL"] == defs.ONELEG):
@@ -73,10 +66,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         else:
           ReEnterNextSL = True
         posConfigtoExitSLNext = posConfigtoExitSL
-        if (SLFar == False):
-          atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
-        else:
-          atom.ExitPosition(postoExitSL, currentcandle, defs.SLFar, exitSLOHLC)
+        atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
         if (generalconfig["SLToCost"] == defs.YES):
           atom.StopLossToCost(positions)
         if (generalconfig["SquareOffSL"] == defs.ALLLEGS):

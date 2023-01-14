@@ -24,7 +24,7 @@ ind_strangle_N_3 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symb
 ind_straddle_BN_1 = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":15, "SLPcFar":100,
                 "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 3, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":30, "TargetPc":50}
 
-ind_straddle_BN_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "SLEvery":20, "SLPcFar":500,
+ind_straddle_BN_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "SLEvery":5, "SLPcFar":100,
                 "MaxReEnterCounterSL": 10, "MaxReEnterCounterTG": 1, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":30, "TargetPc":50}
 
 ind_straddle_BN_3 = {"SquareOffSL": defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.YES, "SLEvery":20, "SLPcFar":500,

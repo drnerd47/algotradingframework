@@ -163,6 +163,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
             Str = Str + pos["PositionConfig"]["Type"]
             if (ExitReason == defs.SL):
                 exitprice = pos["SLCond"]
+                #exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 exitReason = "SL HIT"
             if (ExitReason == defs.SLFar):
                 exitprice = pos["SLCondFar"]
