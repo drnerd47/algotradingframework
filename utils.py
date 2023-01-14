@@ -3,6 +3,8 @@ import glob, os
 import pandas as pd
 import functools
 import datetime
+import time
+from pathlib import Path
 
 
 def BuyMarginCalculator(trades, symbol):
@@ -75,22 +77,51 @@ def EnsureTimeContinuity(df):
   return df
 
 # Compiles tick by tick data from Zerodha, it takes token info and folder path where data from the day is stored 
-def CompileData(tokenpath, file_path ):
+def CompileData(file_path):
+    tokenpath = r'C:\Data Storage Code\Zerodha instrument tokens.csv'
     tokeninfo = pd.read_csv(tokenpath)
     list_of_files = glob.glob(os.path.join(file_path, 'Data*.pkl'))
     df_list = []
     for file in list_of_files:
         df = pd.read_pickle(file)
         filename = os.path.split(file)[1]
-        format = "Data_%H_%M_%S_%f.pkl"
+        print("Working on file ", filename)
+        format = "Data_%H:%M:%S.%f.pkl"
         timestamp = datetime.datetime.strptime(filename, format)
         timestamp = timestamp.time()
-        df['time'] = timestamp
+        df['actual_time'] = timestamp
         df_list.append(df)
 
     data = pd.concat(df_list)
-    final_df = data.merge(tokeninfo, on='instrument_token').sort_values(by=['instrument_token', 'time'])
-    return final_df
+    final_df = data.merge(tokeninfo, on='instrument_token').sort_values(by=['instrument_token', 'actual_time'])
+
+    time.sleep(4)
+    print("\n NOW PROCESSING DATA \n")
+    time.sleep(4)
+
+    parent_dir = 'C:\Processed Data'
+    datepath = os.path.join(parent_dir, str(datetime.datetime.today().date()))    
+    datefile = Path(datepath)
+
+    if datefile.exists():
+        pass
+    else:
+        os.mkdir(datepath) 
+
+    tradingsymbols = final_df.tradingsymbol.unique()
+
+    for tradingsymbol in tradingsymbols :
+        tradingsymbolpath = os.path.join(datepath, tradingsymbol)
+        tradingsymbolfile = Path(tradingsymbolpath)
+
+        if tradingsymbolfile.exists():
+            pass
+        else:
+            os.mkdir(tradingsymbolpath)
+
+        processed_data = final_df[final_df.tradingsymbol == tradingsymbol]
+        print("Saving data for ", tradingsymbol)
+        processed_data.to_pickle(tradingsymbolpath + '.pkl')
     
 
   
