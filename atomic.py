@@ -14,7 +14,7 @@ def LoadDF(currpath):
             masterdf = pd.read_csv(currpath)
         elif extension == ".pkl":
             masterdf = pd.read_pickle(currpath)
-        # masterdf = masterdf.drop('datetime.1', axis=1)
+        masterdf = masterdf.drop('datetime.1', axis=1)
         masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])
     return masterdf
