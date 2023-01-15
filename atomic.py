@@ -84,8 +84,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                   "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
                    "date": currentcandle.name.date(), "EnterSpotPrice": currentcandle[OHLC],
                   "SLCond": enterprice - posc["Action"] * enterprice * posc["SLPc"] / 100,
-                  "SLCondFar": enterprice - posc["Action"] * enterprice * posc["SLPcFar"] / 100,
-                        "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
+                  "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
                   "Active": True, "Strike": cst + posc["Delta"],
                   "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
                   "FutEnterPrice":futprice }

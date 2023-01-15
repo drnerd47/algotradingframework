@@ -11,10 +11,10 @@ positionconfigLongStraddle = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "SL
                       {"Type":defs.PUT,"Action":defs.BUY,"Delta":0,"SLPc":25, "SLPcFar":100, "TargetPc":50,"NumLots":1,
                        "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
 
-def getStraddles(action, SL, Target, SLPc, SLPcFar, TargetPc):
-    positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":0, "SLPc":SLPc, "SLPcFar":SLPcFar, "TargetPc":TargetPc, "NumLots":1,
+def getStraddles(action, SL, Target, SLPc, TargetPc):
+    positionconfig = [{"Type":defs.CALL,"Action":action, "Delta":0, "SLPc":SLPc, "TargetPc":TargetPc, "NumLots":1,
                        "SL": SL, "Target":Target, "Id": 1, "HedgeId": 0},
-                      {"Type":defs.PUT,"Action":action,"Delta":0,"SLPc":SLPc, "SLPcFar":SLPcFar, "TargetPc":TargetPc,"NumLots":1,
+                      {"Type":defs.PUT,"Action":action,"Delta":0,"SLPc":SLPc, "TargetPc":TargetPc,"NumLots":1,
                        "SL": SL,"Target":Target, "Id": 2, "HedgeId": 0}]
     return positionconfig
 
