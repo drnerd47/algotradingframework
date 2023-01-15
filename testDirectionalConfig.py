@@ -21,7 +21,7 @@ end_date = datetime.date(year, endmonth, 31)
 
 delta = datetime.timedelta(days=1)
 
-user = "SD"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -40,7 +40,7 @@ tic = time.time()
 
 #approach = "BB2"
 #config = defconfigs.bb2_BNs
-approach = "RSI2"
+approach = "RSI-Dual"
 config = defconfigs.rsidual_BNs
 
 print( approach)

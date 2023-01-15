@@ -239,7 +239,7 @@ def plotOptionData(df):
         x = df.index,
         y = df.close,
         mode = "lines",
-        name = "Close"
+        name = "Open"
     ))
     # Update chart layout
     fig.update_layout(xaxis_rangeslider_visible=True, xaxis_showticklabels=True, yaxis_showticklabels=True)

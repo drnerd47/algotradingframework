@@ -40,7 +40,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
       # Check Stop Loss Condition
       (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
       # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
-      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL) and (MinCounter % generalconfig["SLEvery"] == 0):
+      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL < generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL) and (MinCounter % generalconfig["SLEvery"] == 0):
         ReEnterNextSL = False
         ReEnterCounterSL += 1
         if (generalconfig["SquareOffSL"] == defs.ONELEG):
@@ -91,7 +91,7 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         posConfigtoExitTGNext = posConfigtoExitTG
         atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
         if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
-          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
+          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]):
@@ -190,8 +190,8 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   positions = []
   trades = []
   OHLCEnter = 'open'
-  exitSLOHLC = 'open'
-  exitTGOHLC = 'open'
+  exitSLOHLC = 'close'
+  exitTGOHLC = 'close'
   exitSQEODOHLC = 'close'
   for s in range(len(spotdata)): 
     currentcandle = spotdata.iloc[s]
