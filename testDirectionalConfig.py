@@ -40,8 +40,8 @@ tic = time.time()
 
 #approach = "BB2"
 #config = defconfigs.bb2_BNs
-approach = "RSI-Dual"
-config = defconfigs.rsidual_BNs
+approach = "RSI2"
+config = defconfigs.rsi2_BNs
 
 print( approach)
 

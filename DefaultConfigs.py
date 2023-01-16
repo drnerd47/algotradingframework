@@ -21,16 +21,16 @@ ind_straddle_BN_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "s
                 "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
 
 # INTRADAY STRADDLE OL NIFTY
-ind_straddle_N_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
+ind_straddle_N_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14,
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
 
 # INTRADAY STRADDLE AL BANKNIFTY
-ind_straddle_BN_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+ind_straddle_BN_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1,
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50}
 
 # INTRADAY STRADDLE AL NIFTY
 ind_straddle_N_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc": 55, "TargetPc":50}
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs BANKNIFTY
 ind_straddle_BN_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
@@ -38,7 +38,7 @@ ind_straddle_BN_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs NIFTY
 ind_straddle_N_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":35, "TargetPc":50}
 
 ind_strangle_BN = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":5, 
                 "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0}
@@ -70,7 +70,7 @@ rsiadx_Ns = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': de
 # RSI-2 BANKNIFTY BUY SIDE
 rsi2_BNb = {"TBull1": 40, "TBear1": 60, "window1": 14, "TBull2": 10, "TBear2": 90, "window2":2,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.BUY,
-            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.NO, 'Delta': 0}
+            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0}
 
 # RSI-2 NIFTY BUY SIDE
 rsi2_Nb = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
@@ -80,7 +80,7 @@ rsi2_Nb = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 9
 # RSI-2 BANKNIFTY SELL SIDE
 rsi2_BNs = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.SELL,
-            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.NO, 'Delta': 0}
+            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0}
 
 # RSI-2 NIFTY SELL SIDE
 rsi2_Ns = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
@@ -90,22 +90,22 @@ rsi2_Ns = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 9
 # RSI-Dual BANKNIFTY BUY SIDE
 rsidual_BNb = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2": 90, "TBear2": 10,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.BUY,
-            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.NO}
+            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
 # RSI-Dual NIFTY BUY SIDE
 rsidual_Nb = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2": 90, "TBear2": 10,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.BUY,
-            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.NO}
+            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
 # RSI-Dual BANKNIFTY SELL SIDE
 rsidual_BNs = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2": 90, "TBear2": 10,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.SELL,
-            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.NO}
+            'rolling': defs.NO, 'Resample': 7, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
 # RSI-Dual NIFTY SELL SIDE
 rsidual_Ns = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2": 90, "TBear2": 10,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.SELL,
-            'rolling': defs.NO, 'Resample': 10, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.NO}
+            'rolling': defs.NO, 'Resample': 7, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
 # BB1 BANKNIFTY BUY SIDE
 bb1_BNb = {"TBull": 0, "TBear": 1, "period": 20, "stddev":2, "Delta": 0, "SL": defs.YES, "Target": defs.YES, 'SLPc': 20, 'TargetPc': 70, 

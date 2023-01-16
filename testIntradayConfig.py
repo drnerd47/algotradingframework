@@ -36,9 +36,9 @@ delta = datetime.timedelta(days=1)
 
 # Default Config
 # config = opcon.ind_straddle_BN_2
-config = defcon.ind_straddle_BN_ALS
+config = defcon.ind_straddle_N_OL_RE
 # Optimized Config
-approach = "INDOLRE"
+approach = "INDALS"
 tic = time.time()
 
 (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)

@@ -232,21 +232,22 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
           if (generalconfig["SLTGContinuous"] == defs.YES):
             sbegin = sfull + 1
             nextcandles = spotdata.iloc[s+1]
-            send = spotdatafull.index.get_loc(nextcandles.name)
-            # We loop through every minute in full spotdata so we can check the stop loss continuously
-            for smin in range(sbegin, send+1):
-              mincandle = spotdatafull.iloc[smin]
-              (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, mincandle)
+            if nextcandles.name in spotdatafull.index:
+              send = spotdatafull.index.get_loc(nextcandles.name)
+              # We loop through every minute in full spotdata so we can check the stop loss continuously
+              for smin in range(sbegin, send+1):
+                mincandle = spotdatafull.iloc[smin]
+                (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, mincandle)
             # We enter this loop if there is any position where stop-loss is triggered.
-              if (len(postoExitSL) > 0):
-                direc.ExitPositionPremium(postoExitSL, mincandle, defs.SL, exitSLOHLC)
-                data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
-                if (generalconfig["Reenter"] == defs.YES):
-                  for pos in postoExitSL:
-                    if pos["stance"] == defs.BULL:
-                      placedBull = False
-                    elif pos["stance"] == defs.BEAR:
-                      placedBear = False
+                if (len(postoExitSL) > 0):
+                  direc.ExitPositionPremium(postoExitSL, mincandle, defs.SL, exitSLOHLC)
+                  data.loc[currentcandle.name]['ExitSignal'] = defs.STOPLOSSHIT
+                  if (generalconfig["Reenter"] == defs.YES):
+                    for pos in postoExitSL:
+                      if pos["stance"] == defs.BULL:
+                        placedBull = False
+                      elif pos["stance"] == defs.BEAR:
+                        placedBear = False
           else:
             (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, nextcandle)
             if (len(postoExitSL) > 0):

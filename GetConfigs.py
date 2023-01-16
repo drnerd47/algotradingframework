@@ -55,7 +55,7 @@ def GetINDStranglesConfig(config):
                                                     SLtoCost, SLEvery, SL, Target, SLPc, SLPcFar, TargetPc, Delta)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
+def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -79,7 +79,7 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": defs.NO}
+                     "SLTGContinuous": SLTGContinuous}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt},
@@ -104,9 +104,10 @@ def GetRSI2Config(config):
     rolling = config["rolling"]
     reenter = config["reenter"]
     Delta = config["Delta"]
-    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
+    SLTGContinuous = config["SLTGContinuous"]
+    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous)
 ##############################################################################################################################
-def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2):
+def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -130,7 +131,7 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": defs.YES}
+                     "SLTGContinuous": SLTGContinuous}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.gt, "BearOperator": operator.lt},
@@ -155,7 +156,8 @@ def GetRSIDualConfig(config):
     Delta = config["Delta"]
     SL = config['SL']
     Target = config['Target']
-    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2)
+    SLTGContinuous = config["SLTGContinuous"]
+    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous)
 ##############################################################################################################################
 def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
     if action == defs.BUY:
