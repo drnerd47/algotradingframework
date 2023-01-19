@@ -110,7 +110,6 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
-  exitSQOHLC = 'close'
   exitSQEODOHLC = 'open'
 
   # Check if there is any position where there is a "SL" or "Target" Condition. If not, there is no need to
@@ -148,10 +147,7 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
         #print("SL Hit, Entering the exit and reentry loop")
         ReEnterNextSL = True
         posConfigtoExitSLNext = posConfigtoExitSL
-        atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
-        if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
-
+        atom.ExitPosition(postoExitSL, currentcandle, defs.SLPos, exitSLOHLC)
       # Check Target Profit Condition
       (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
 
@@ -170,8 +166,6 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
         ReEnterNextTG = True
         posConfigtoExitTGNext = posConfigtoExitTG
         atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
-        if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
-          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
 
     # Square off Remaining Legs EOD
     if (currentcandle.name.time() == generalconfig['ExitTime']) and (currentcandle.name.weekday() in generalconfig["ExitDay"]):
@@ -276,19 +270,23 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
         if (generalconfig["TargetCond"] == "PremiumBased") or (generalconfig["TargetCond"] == "TIPremiumBased"):
           # We loop through every minute in full spotdata so we can check the target condition continuously
           if (generalconfig["SLTGContinuous"] == defs.YES):
-            for smin in range(sbegin, send+1):
-              mincandle = spotdatafull.iloc(smin)
-              (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, mincandle)
-              # We enter this loop if there is any position where target profit condition is satisfied.
-              if (len(postoExitTarget) > 0):
-                direc.ExitPosition(postoExitTarget, mincandle, defs.TARGET, exitTGOHLC)
-                data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
-                if (generalconfig["Reenter"] == defs.YES):
-                  for pos in postoExitTarget:
-                    if pos["stance"] == defs.BULL:
-                      placedBull = False
-                    elif pos["stance"] == defs.BEAR:
-                      placedBear = False
+            sbegin = sfull + 1
+            nextcandles = spotdata.iloc[s + 1]
+            if nextcandles.name in spotdatafull.index:
+              send = spotdatafull.index.get_loc(nextcandles.name)
+              for smin in range(sbegin, send+1):
+                mincandle = spotdatafull.iloc[smin]
+                (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, mincandle)
+                # We enter this loop if there is any position where target profit condition is satisfied.
+                if (len(postoExitTarget) > 0):
+                  direc.ExitPosition(postoExitTarget, mincandle, defs.TARGET, exitTGOHLC)
+                  data.loc[currentcandle.name]['ExitSignal'] = defs.TARGETREACHED
+                  if (generalconfig["Reenter"] == defs.YES):
+                    for pos in postoExitTarget:
+                      if pos["stance"] == defs.BULL:
+                        placedBull = False
+                      elif pos["stance"] == defs.BEAR:
+                        placedBear = False
           else:
             (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, nextcandle)
             if (len(postoExitTarget) > 0):

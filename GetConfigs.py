@@ -211,7 +211,7 @@ def GetBB1Config(config):
                                                     TargetPc, Delta, symbol, action, rolling, reenter, stddev)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
+def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -236,7 +236,7 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                    "SLTGContinuous": defs.NO}
+                    "SLTGContinuous": SLTGContinuous}
 
     ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear":0, "TargetBull": 0, "TargetBear": 0,
@@ -259,12 +259,12 @@ def GetBB2Config(config):
     reenter = config['reenter']
     Delta = config["Delta"]
     stddev = config["stddev"]
-
+    SLTGContinuous = config["SLTGContinuous"]
     (TIconfig, generalconfig, positionconfig) = GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
-                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev)
+                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window):
+def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -289,7 +289,7 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
     generalconfig = { "symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter,
-                      "SLTGContinuous": defs.NO}
+                      "SLTGContinuous": SLTGContinuous}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI", "ThreshBull": TBull, "ThreshBear": TBear, "Window": window, "SL": defs.NO, "Target": defs.NO,
             "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
@@ -315,8 +315,9 @@ def GetRSIADXconfig(config):
     rolling = config['rolling']
     reenter = config['reenter']
     Delta = config["Delta"]
+    SLTGContinuous = config["SLTGContinuous"]
     (TIconfig, generalconfig, positionconfig) = GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear,
-                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window)
+                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
 def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter):
@@ -366,7 +367,7 @@ def GetEMAconfig(config):
     Delta = config["Delta"]
     return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter)
 ##############################################################################################################################
-def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc):
+def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -393,7 +394,7 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
 
     generalconfig = {"name":"BNST","symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter}
+                    "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": SLTGContinuous}
     return ( ticonfig, generalconfig, positionconfig)
 
 def GetSTconfig(config):
@@ -409,4 +410,5 @@ def GetSTconfig(config):
     SLPc = config["SLPc"]
     Target = config["Target"]
     TargetPc = config["TargetPc"]
-    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc)
+    SLTGContinuous = config["SLTGContinuous"]
+    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous)

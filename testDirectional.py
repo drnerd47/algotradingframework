@@ -39,7 +39,7 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 print("Test Directional")
 tic = time.time()
 
-approach = "BB2"
+approach = "ST"
 print(approach)
 
 if (approach == "RSI-Dual"):
@@ -47,7 +47,7 @@ if (approach == "RSI-Dual"):
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
-  generalconfig = genconfig.generalconfigBNST
+  generalconfig = genconfig.generalconfigNST
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):

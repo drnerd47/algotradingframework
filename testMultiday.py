@@ -11,7 +11,7 @@ import generalconfigs as genconfigs
 import warnings
 warnings.filterwarnings("ignore")
 
-user = "MS"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -28,14 +28,16 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 8, 31)
+end_date = datetime.date(2022, 9, 30)
 delta = datetime.timedelta(days=1)
 
-generalconfig = genconfigs.generalconfigExpiryBN
-
-positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.YES, defs.NO, 25, 50)
-positionconfigIB = posconfigs.getIronButterfly(1000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
-positionconfig = positionconfigSS
+generalconfig = genconfigs.generalconfigNextDayBNMW
+#generalconfig = genconfigs.generalconfigExpiryBN
+# positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 25, 50)
+positionconfigIB = posconfigs.getIronButterfly(2000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
+positionconfigIC = posconfigs.getIronCondor(500, 3000, defs.NO, defs.YES, defs.NO, 35, 100, 50)
+positionconfigSS = posconfigs.getStrangles(500, defs.SELL, defs.YES, defs.NO, 25, 50, 50)
+positionconfig = positionconfigIC
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 positions = []
@@ -89,10 +91,11 @@ weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
 weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
 
+
 print("\n")
-monthlyreport = rep.MonthlyBreakDown(Daily_Chart,filename = Result_path + "MonthlyBreakDown.txt")
+monthlyreport = rep.MonthlyBreakDown(Daily_Chart)
 print(monthlyreport)
 
 print("\n")
-dayofweek = rep.DayOfWeek(Daily_Chart,filename = Result_path + "DayOfWeek.txt")
+dayofweek = rep.DayOfWeek(Daily_Chart)
 print(dayofweek)

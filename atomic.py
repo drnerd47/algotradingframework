@@ -164,6 +164,9 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                 exitprice = pos["SLCond"]
                 #exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
                 exitReason = "SL HIT"
+            if (ExitReason == defs.SLPos):
+                exitprice = pos["OpData"].loc[currentcandle.name][OHLC]
+                exitReason = "SL HIT"
             if (ExitReason == defs.SLFar):
                 exitprice = pos["SLCondFar"]
                 exitReason = "FAR SL HIT"
@@ -201,6 +204,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                             "pnl": (exitprice - enterprice) * pos["PositionConfig"]["Action"] * pos["Qty"],
                             "date": pos["date"], "symbol": pos["OpSymbol"], "Expiry": pos['Expiry']}
             pos["Active"] = False
+
 
 def GetFinalTrades(positions):
     trades = pd.DataFrame()

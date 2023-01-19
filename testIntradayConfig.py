@@ -5,8 +5,6 @@ from pathlib import Path
 import pandas as pd
 import strategies
 import reporting as rep
-import generalconfigs as genconfigs
-import positionconfigs as posconfings
 import warnings
 import GetConfigs
 import time
@@ -22,10 +20,7 @@ if user == "SD":
   Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
 elif user == "RI":
   Root = "../"
-  Result_path = "Results/"
-
-Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+  Result_path = "Results/INDStrategies/"
 
 year = 2022
 startmonth = 1
@@ -36,43 +31,49 @@ delta = datetime.timedelta(days=1)
 
 # Default Config
 # config = opcon.ind_straddle_BN_2
-config = defcon.ind_straddle_N_OL_RE
+config = defcon.ind_straddle_BN_OL_RE
 # Optimized Config
-approach = "INDALS"
+approach = ""
 tic = time.time()
 
-(generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
+def RunStrategy(start_date, end_date, config):
+  Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+  Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-trade = pd.DataFrame()
-trades = pd.DataFrame()
+  (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
 
-while start_date <= end_date:
-  date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
-  BNPath = Banknifty_Path + date_string
-  NPath = Nifty_Path + date_string
-  my_fileN = Path(NPath)
-  my_fileBN = Path(BNPath)
-  print(date_string)
-  if my_fileN.exists() and my_fileBN.exists():
-    masterdfN = atom.LoadDF(NPath)
-    masterdfBN = atom.LoadDF(BNPath)
-    if (generalconfig["symbol"] == defs.BN):
-      trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
-    elif (generalconfig["symbol"] == defs.N):
-      trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
-    if (len(trade) > 0):
-      trades = trades.append(trade)
-  else:
-    print("No data for " + start_date.strftime("%Y-%m-%d"))
-  start_date += delta
+  trade = pd.DataFrame()
+  trades = pd.DataFrame()
 
-toc = time.time()
-print("Time taken to run this Strategy ", toc-tic)
+  while start_date <= end_date:
+    date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
+    BNPath = Banknifty_Path + date_string
+    NPath = Nifty_Path + date_string
+    my_fileN = Path(NPath)
+    my_fileBN = Path(BNPath)
+    print(date_string)
+    if my_fileN.exists() and my_fileBN.exists():
+      masterdfN = atom.LoadDF(NPath)
+      masterdfBN = atom.LoadDF(BNPath)
+      if (generalconfig["symbol"] == defs.BN):
+        trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+      elif (generalconfig["symbol"] == defs.N):
+        trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
+      if (len(trade) > 0):
+        trades = trades.append(trade)
+    else:
+      print("No data for " + start_date.strftime("%Y-%m-%d"))
+    start_date += delta
 
-trades['date'] = pd.to_datetime(trades["date"])
-trades = trades.reset_index()
-trades = trades.drop(["index"],axis = 1)
+  toc = time.time()
+  print("Time taken to run this Strategy ", toc-tic)
 
+  trades['date'] = pd.to_datetime(trades["date"])
+  trades = trades.reset_index()
+  trades = trades.drop(["index"],axis = 1)
+  return trades
+
+trades = RunStrategy(start_date, end_date, config)
 print("\n")
 print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
