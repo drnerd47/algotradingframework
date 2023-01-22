@@ -43,7 +43,10 @@ config = defconfigs.rsi2_BNb
 print(approach)
 print(config)
 
-trades = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path)
+(data, trades) = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path)
+
+data.to_csv(Result_path + "Data_" + approach + ".csv")
+
 # print("\n")
 # print(trades)
 trades.to_csv(Result_path + approach + "_trades.csv")

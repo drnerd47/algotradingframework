@@ -52,12 +52,11 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
 
   toc = time.time()
   print(" Time taken to run this strategy ", toc-tic)
-  data.to_csv(Result_path + "Data_" + approach + ".csv")
   # print(trades)
   trades['date'] = pd.to_datetime(trades["date"])
   trades = trades.reset_index()
   trades = trades.drop(["index"], axis = 1)
-  return trades
+  return (data, trades)
 
 def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path):
   (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
