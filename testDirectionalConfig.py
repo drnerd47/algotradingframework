@@ -1,16 +1,9 @@
 import datetime
-import atomic as atom
-import definitions as defs
-from pathlib import Path
-import pandas as pd
-import strategies
 import reporting as rep
-import directional as direc
 import warnings
 import DefaultConfigs as defconfigs
-import GetConfigs
 import time
-
+import RunStrategy
 warnings.filterwarnings("ignore")
 
 year = 2022
@@ -18,8 +11,6 @@ startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
-
-delta = datetime.timedelta(days=1)
 
 user = "RI"
 
@@ -34,75 +25,25 @@ elif user == "MS":
   Result_path = " Moulik's result path"
 
 print("Test Directional Config")
-tic = time.time()
+
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 #approach = "BB2"
 #config = defconfigs.bb2_Ns
 #approach = "RSI-Dual"
-#config = defconfigs.rsidual_BNs
+#config = defconfigs.rsidual_Nb
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
-approach = "EMA"
-config = defconfigs.ema_BNb
-#approach = "RSI2"
-#config = defconfigs.rsi2_BNs
+#approach = "EMA"
+#config = defconfigs.ema_Ns
+approach = "RSI2"
+config = defconfigs.rsi2_BNb
 
 print(approach)
 print(config)
-def RunStrategy(start_date, end_date, approach, config):
-  if (approach == "RSI-Dual"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSIDualConfig(config)
-  elif (approach == "ST"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetSTconfig(config)
-  elif (approach == "BB2"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetBB2Config(config)
-  elif (approach == "BB1"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetBB1Config(config)
-  elif (approach == "RSI-ADX"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSIADXconfig(config)
-  elif (approach == "RSI2"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSI2Config(config)
-  elif (approach == "EMA"):
-    (TIconfig, generalconfig, positionconfig) = GetConfigs.GetEMAconfig(config)
 
-  Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-  Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
-  data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)
-
-  trade = pd.DataFrame()
-  trades = pd.DataFrame()
-
-  while start_date <= end_date:
-    date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
-    BNPath = Banknifty_Path + date_string
-    NPath = Nifty_Path + date_string
-    my_fileN = Path(NPath)
-    my_fileBN = Path(BNPath)
-    # print("Working on file - "+date_string)
-    if my_fileN.exists() and my_fileBN.exists():
-      masterdfN = atom.LoadDF(NPath)
-      masterdfBN = atom.LoadDF(BNPath)
-      if (generalconfig["symbol"] == defs.BN):
-        trade = strategies.DirectionalStrategy(data, masterdfBN, generalconfig, positionconfig, TIconfig, start_date)
-      elif (generalconfig["symbol"] == defs.N):
-        trade = strategies.DirectionalStrategy(data, masterdfN, generalconfig, positionconfig, TIconfig, start_date)
-      #print(trade)
-      if (len(trade) > 0):
-        trades = trades.append(trade)
-    # else:
-    #   print("No data for " + start_date.strftime("%Y-%m-%d"))
-    start_date += delta
-
-  toc = time.time()
-  print(" Time taken to run this strategy ", toc-tic)
-  data.to_csv(Result_path + "Data_" + approach + ".csv")
-  # print(trades)
-  trades['date'] = pd.to_datetime(trades["date"])
-  trades = trades.reset_index()
-  trades = trades.drop(["index"], axis = 1)
-  return trades
-
-trades = RunStrategy(start_date, end_date, approach, config)
+trades = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path)
 # print("\n")
 # print(trades)
 trades.to_csv(Result_path + approach + "_trades.csv")

@@ -1,4 +1,6 @@
 import datetime
+
+import RunStrategy
 import atomic as atom
 import definitions as defs
 from pathlib import Path
@@ -29,6 +31,9 @@ start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
 delta = datetime.timedelta(days=1)
 
+Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+
 # Default Config
 # config = opcon.ind_straddle_BN_2
 config = defcon.ind_straddle_BN_OL_RE
@@ -36,44 +41,7 @@ config = defcon.ind_straddle_BN_OL_RE
 approach = ""
 tic = time.time()
 
-def RunStrategy(start_date, end_date, config):
-  Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-  Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
-
-  (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
-
-  trade = pd.DataFrame()
-  trades = pd.DataFrame()
-
-  while start_date <= end_date:
-    date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
-    BNPath = Banknifty_Path + date_string
-    NPath = Nifty_Path + date_string
-    my_fileN = Path(NPath)
-    my_fileBN = Path(BNPath)
-    print(date_string)
-    if my_fileN.exists() and my_fileBN.exists():
-      masterdfN = atom.LoadDF(NPath)
-      masterdfBN = atom.LoadDF(BNPath)
-      if (generalconfig["symbol"] == defs.BN):
-        trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
-      elif (generalconfig["symbol"] == defs.N):
-        trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
-      if (len(trade) > 0):
-        trades = trades.append(trade)
-    else:
-      print("No data for " + start_date.strftime("%Y-%m-%d"))
-    start_date += delta
-
-  toc = time.time()
-  print("Time taken to run this Strategy ", toc-tic)
-
-  trades['date'] = pd.to_datetime(trades["date"])
-  trades = trades.reset_index()
-  trades = trades.drop(["index"],axis = 1)
-  return trades
-
-trades = RunStrategy(start_date, end_date, config)
+trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
 print("\n")
 print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")
