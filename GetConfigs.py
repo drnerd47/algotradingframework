@@ -343,7 +343,7 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
         lotsize = defs.NLOTSIZE
     generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.NO}
+                        "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.YES}
 
     ticonfig = [{"TI": "MA", "columnname":"EMA", "ThreshBull": TBull, "ThreshBear": TBear, "period": period, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt, "SLBull":0 , "SLBear": 0,

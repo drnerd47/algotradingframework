@@ -49,13 +49,13 @@ ind_strangle_N = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol
 
 # RSI-ADX BANKNIFTY BUY SIDE
 rsiadx_BNb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.NO, 'SLPc': 20, 'TargetPc': 70 ,
-                'TBull': 60, 'TBear': 40, 'reenter': defs.YES, 'rolling': defs.NO, 'window': 14, 'symbol': defs.BN, 'action': defs.BUY,
-                 "SLTGContinuous": defs.NO}
+                'TBull': 60, 'TBear': 40, 'reenter': defs.NO, 'rolling': defs.NO, 'window': 14, 'symbol': defs.BN, 'action': defs.BUY,
+                 "SLTGContinuous": defs.YES}
 
 # RSI-ADX NIFTY BUY SIDE
 rsiadx_Nb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.NO, 'SLPc': 20, 'TargetPc': 70,
                 'TBull': 60, 'TBear': 40, 'reenter': defs.YES, 'rolling': defs.NO, 'window': 14, 'symbol': defs.N, 'action': defs.BUY,
-                 "SLTGContinuous": defs.NO}
+                 "SLTGContinuous": defs.YES}
 
 # RSI-ADX BANKNIFTY SELL SIDE
 rsiadx_BNs = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.NO, 'SLPc': 20, 'TargetPc': 70,
@@ -140,11 +140,11 @@ bb2_Ns = {"TBull": 1, "TBear": 0, "period": 20, "stddev":2, "Delta": 0, "SL": de
             'action': defs.SELL, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.N, "SLTGContinuous": defs.YES, 'Resample': 3}
 
 # EMA BANKNIFTY BUY SIDE
-ema_BNb = {"TBull": 35, "TBear": -65, "period": 14, "SL": defs.NO, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
+ema_BNb = {"TBull": 35, "TBear": -65, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
             'action': defs.BUY, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.BN, "SLTGContinuous": defs.YES}
 
 # EMA NIFTY BUY SIDE
-ema_Nb = {"TBull": 20, "TBear": -30, "period": 14, "SL": defs.NO, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
+ema_Nb = {"TBull": 20, "TBear": -30, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
             'action': defs.BUY, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.N, "SLTGContinuous": defs.YES}
 
 # EMA BANKNIFTY SELL SIDE

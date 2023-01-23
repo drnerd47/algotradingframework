@@ -42,3 +42,6 @@ ind_straddle_N_2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ALLLEGS, "sym
 
 ind_straddle_N_3 = {"SquareOffSL": 2, "SquareOffTG": 1, "symbol": defs.N, "ReEntrySL": 1, "ReEntryTG": 1, "SLEvery":20, "SLPcFar":100,
                 "MaxReEnterCounterSL": 6, "MaxReEnterCounterTG": 2, "SLtoCost":0, "SL":1, "Target":0, "SLPc":30, "TargetPc":70}
+
+rsi2Nb1 = {'Delta': 1200, 'Resample': 4, 'SLPc': 15, 'TBear1': 65, 'TBear2': 85, 'TBull1': 20, 'TBull2': 10, 'TargetPc': 80, 'SL': defs.NO, 'Target': defs.NO,
+            'reenter': 0, 'rolling': 1, 'window1': 18, 'window2': 4, 'action': defs.BUY, 'symbol': defs.N, 'SLTGContinuous': defs.YES}
