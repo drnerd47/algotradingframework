@@ -63,15 +63,15 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
   delta = datetime.timedelta(days=1)
   trade = pd.DataFrame()
   trades = pd.DataFrame()
-
+  tic = time.time()
   while start_date <= end_date:
     date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
     BNPath = Banknifty_Path + date_string
     NPath = Nifty_Path + date_string
     my_fileN = Path(NPath)
     my_fileBN = Path(BNPath)
-    print(date_string)
-    if my_fileN.exists() and my_fileBN.exists():
+    runToday = (not config["OnlyThu"]) or (start_date.weekday() == defs.THU)
+    if my_fileN.exists() and my_fileBN.exists() and runToday:
       masterdfN = atom.LoadDF(NPath)
       masterdfBN = atom.LoadDF(BNPath)
       if (generalconfig["symbol"] == defs.BN):
@@ -80,8 +80,6 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
         trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
       if (len(trade) > 0):
         trades = trades.append(trade)
-    else:
-      print("No data for " + start_date.strftime("%Y-%m-%d"))
     start_date += delta
 
   toc = time.time()

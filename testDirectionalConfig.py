@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 import utils
 import definitions as defs
 import OptimizedConfigs as opconfigs
-year = 2021
+year = 2022
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -34,20 +34,20 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #approach = "BB2"
 #config = defconfigs.bb2_Ns
 #approach = "RSI-Dual"
-#config = defconfigs.rsidual_Nb
+#config = defconfigs.rsidual_BNs
 #approach = "RSI-ADX"
-#config = defconfigs.rsiadx_Nb
+#config = defconfigs.rsiadx_BNs
 approach = "EMA"
-config = defconfigs.ema_Nb
+config = defconfigs.ema_Ns
+#approach = "ST"
+#config = defconfigs.st_Nb
 #approach = "RSI2"
 #config = defconfigs.rsi2_BNb
 #config = opconfigs.rsi2Nb1
 
 print(approach)
 print(config)
-
 (data, trades) = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path)
-
 if (config["action"] == defs.BUY):
   margin = utils.BuyMarginCalculator(trades, config["symbol"])
 else:

@@ -47,7 +47,7 @@ if (approach == "RSI-Dual"):
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfig_RSIDual
 elif (approach == "ST"):
-  generalconfig = genconfig.generalconfigNST
+  generalconfig = genconfig.generalconfigBNST
   positionconfig = posconfig.positionconfigsingleselldirecSL
   TIconfig = TIconfigs.TIconfigST
 elif (approach == "BB2"):

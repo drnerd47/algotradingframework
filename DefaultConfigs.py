@@ -2,50 +2,50 @@ import definitions as defs
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL_RE = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":10,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL_RE = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":10, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
+                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
+                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE AL BANKNIFTY
 ind_straddle_BN_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50, "OnlyThu": True}
 
 # INTRADAY STRADDLE AL NIFTY
 ind_straddle_N_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc": 55, "TargetPc":50}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc": 55, "TargetPc":50, "OnlyThu": True}
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs BANKNIFTY
 ind_straddle_BN_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50}
+                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs NIFTY
 ind_straddle_N_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":35, "TargetPc":50}
+                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":35, "TargetPc":50, "OnlyThu": False}
 
 ind_strangle_BN = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":5, 
-                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0}
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRANGLE NIFTY
 ind_strangle_N = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":5, 
-                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0}
+                "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # RSI-ADX BANKNIFTY BUY SIDE
 rsiadx_BNb = {'ADXTBear': 20, 'ADXTBull': 20, 'Delta': 0, 'Resample': 3, 'SL': defs.YES, 'Target': defs.NO, 'SLPc': 20, 'TargetPc': 70 ,
@@ -103,7 +103,7 @@ rsidual_BNs = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2"
             'rolling': defs.NO, 'Resample': 7, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
 # RSI-Dual NIFTY SELL SIDE
-rsidual_Ns = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 2, "TBull2": 90, "TBear2": 10,
+rsidual_Ns = {"TBull1": 60, "TBear1": 40, "window1": 14, "window2": 5, "TBull2": 90, "TBear2": 10,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.SELL,
             'rolling': defs.NO, 'Resample': 7, 'reenter': defs.YES, "Delta": 0, "SLTGContinuous": defs.YES}
 
@@ -148,9 +148,21 @@ ema_Nb = {"TBull": 20, "TBear": -30, "period": 14, "SL": defs.YES, "Delta": 0, "
             'action': defs.BUY, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.N, "SLTGContinuous": defs.YES}
 
 # EMA BANKNIFTY SELL SIDE
-ema_BNs = {"TBull": 35, "TBear": -65, "period": 14, "SL": defs.NO, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
+ema_BNs = {"TBull": 35, "TBear": -65, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
             'action': defs.SELL, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.BN, "SLTGContinuous": defs.YES}
 
 # EMA NIFTY SELL SIDE
-ema_Ns = {"TBull": 20, "TBear": -30, "period": 14, "SL": defs.NO, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
+ema_Ns = {"TBull": 20, "TBear": -30, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
             'action': defs.SELL, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.N, "SLTGContinuous": defs.YES}
+
+st_BNs = {"action": defs.SELL, "Delta": 0, "symbol": defs.BN, "period": 10, "multiplier": 2, "Resample": 3, "rolling": defs.NO, "reenter": defs.YES,
+          "SL": defs.YES, "SLPc": 20, "Target": defs.YES, "TargetPc": 70, "SLTGContinuous": defs.YES}
+
+st_Ns = {"action": defs.SELL, "Delta": 0, "symbol": defs.N, "period": 10, "multiplier": 2, "Resample": 3, "rolling": defs.NO, "reenter": defs.YES,
+          "SL": defs.YES, "SLPc": 20, "Target": defs.YES, "TargetPc": 70, "SLTGContinuous": defs.YES}
+
+st_BNb = {"action": defs.BUY, "Delta": 0, "symbol": defs.BN, "period": 10, "multiplier": 2, "Resample": 3, "rolling": defs.NO, "reenter": defs.YES,
+          "SL": defs.YES, "SLPc": 20, "Target": defs.NO, "TargetPc": 70, "SLTGContinuous": defs.YES}
+
+st_Nb = {"action": defs.BUY, "Delta": 0, "symbol": defs.N, "period": 10, "multiplier": 2, "Resample": 3, "rolling": defs.NO, "reenter": defs.YES,
+          "SL": defs.YES, "SLPc": 20, "Target": defs.NO, "TargetPc": 70, "SLTGContinuous": defs.YES}
