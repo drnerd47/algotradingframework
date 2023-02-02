@@ -50,13 +50,20 @@ def GetGeneralConfigNextDay(SquareOffSL, SquareOffTG, symbol, EnterDay, ExitDay)
                  "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
     return generalconfig
 
-
-
-
-generalconfigNextDayBNMW = {"name":" NextdayBNMW", "SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED],
-                     "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.TUE, defs.WED, defs.THU], "symbol":defs.BN,
+generalconfigNextDayBNMW = {"name":" NextdayBNMW", "SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED, defs.FRI],
+                     "EnterTime":datetime.time(15,20),"ExitTime":datetime.time(9,20), "ExitDay": [defs.TUE, defs.WED, defs.THU, defs.MON], "symbol":defs.BN,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
                     "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
+
+generalconfigOverNightDirBNMW = {"name":" OverNightDir", "EnterDay": [defs.MON, defs.TUE, defs.WED, defs.FRI],
+                     "EnterTime":datetime.time(15,20),"ExitTime":datetime.time(9,20), "ExitDay": [defs.TUE, defs.WED, defs.THU, defs.MON],
+                     "StartCheckTime": datetime.time(9,30), "EndCheckTime": datetime.time(15,10), "SType": "Trend",
+                     "symbol":defs.BN, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
+
+generalconfigOverNightDirNMW = {"name":" OverNightDir", "EnterDay": [defs.MON, defs.TUE, defs.WED, defs.FRI],
+                     "EnterTime":datetime.time(15,20),"ExitTime":datetime.time(9,20), "ExitDay": [defs.TUE, defs.WED, defs.THU, defs.MON],
+                     "StartCheckTime": datetime.time(9,30), "EndCheckTime": datetime.time(15,10), "SType": "Trend",
+                     "symbol":defs.N, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigNextDayBNF = {"name":"NextDayBNF" ,"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON], "symbol":defs.BN,
@@ -84,7 +91,7 @@ generalconfigIntradayREBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG
                     "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
 
 generalconfigNextDayNMW = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED],
-                     "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.TUE, defs.WED, defs.THU], "symbol":defs.N,
+                     "EnterTime":datetime.time(15,20),"ExitTime":datetime.time(9,20), "ExitDay": [defs.TUE, defs.WED, defs.THU], "symbol":defs.N,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
                     "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 

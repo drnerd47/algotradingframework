@@ -2,43 +2,43 @@ import definitions as defs
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL_RE = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":10,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL_RE = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":10, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, 
-                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL NIFTY
 ind_straddle_N_OL1 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":0, "OnlyThu": False}
 
 # INTRADAY STRADDLE AL BANKNIFTY
 ind_straddle_BN_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1,
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50, "OnlyThu": True}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50, "Delta":0, "OnlyThu": True}
 
 # INTRADAY STRADDLE AL NIFTY
 ind_straddle_N_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc": 55, "TargetPc":50, "OnlyThu": True}
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc": 55, "TargetPc":50, "Delta":0, "OnlyThu": True}
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs BANKNIFTY
 ind_straddle_BN_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":25, "TargetPc":50, "Delta":500, "OnlyThu": False}
 
 # INTRADAY STRADDLE OL Reentry on Closing Both Legs NIFTY
 ind_straddle_N_ALS = {"SquareOffSL":defs.ONELEGSL, "SquareOffTG": defs.ONELEGSL, "symbol": defs.N, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, 
-                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":35, "TargetPc":50, "OnlyThu": False}
+                "MaxReEnterCounterSL": 4, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":35, "TargetPc":50, "Delta":300, "OnlyThu": False}
 
 ind_strangle_BN = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":5, 
                 "MaxReEnterCounterSL": 1, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":50, "TargetPc":50, "Delta":0, "OnlyThu": False}

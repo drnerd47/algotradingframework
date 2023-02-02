@@ -208,6 +208,14 @@ def CheckEntryCondition(currentcandle, TIconfig):
         bear = bear and t["BearOperator"](currentcandle[t["columnname"]], t["ThreshBear"])    
     return (bull, bear)
 
+def UpdatePosition(masterdf, positions):
+    if (len(positions) > 0):
+        for pos in positions:
+            if (pos["Active"]):
+                pos["OpData"] = masterdf[masterdf['symbol'] == pos["OpSymbol"]]
+                pos["FutData"] = masterdf[masterdf['symbol'] == pos['symbol'] + "-I"]
+    return positions
+
 def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance):
     positionsNotPlaced = []
     for posc in positionconfig:
@@ -236,7 +244,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
                     "date": nextcandle.name.date(),                    
                     "EnterSpotPrice": enterspotprice,
                     "Active": True, "Strike": cst + posc["Delta"],
-                    "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
+                    "symbol": generalconfig['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
                     "FutEnterPrice":futprice }
                 if (posc["SL"] == defs.YES):
                     position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100

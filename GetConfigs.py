@@ -29,9 +29,9 @@ def GetINDStraddlesConfig(config):
                                                     
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery,
+def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
                     SL, Target, SLPc, TargetPc, Delta):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, SLEvery)
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery)
     positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
@@ -47,12 +47,11 @@ def GetINDStranglesConfig(config):
     Target = config['Target']
     SLPc = config['SLPc']
     TargetPc = config['TargetPc']
-    Delta = config['Delta']
     SLtoCost = config['SLtoCost']
-    SLEvery = config['SLEvery']
-    SLPcFar = config['SLPcFar']
+    REEvery = config['REEvery']
+    Delta = config["Delta"]
     (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                    SLtoCost, SLEvery, SL, Target, SLPc, SLPcFar, TargetPc, Delta)
+                                                    SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous):

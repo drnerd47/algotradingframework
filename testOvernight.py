@@ -28,16 +28,13 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 9, 30)
+end_date = datetime.date(2022, 12, 31)
 delta = datetime.timedelta(days=1)
 
-generalconfig = genconfigs.generalconfigNextDayNMW
-#generalconfig = genconfigs.generalconfigExpiryBN
-# positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 25, 50)
-positionconfigIB = posconfigs.getIronButterfly(2000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
-positionconfigIC = posconfigs.getIronCondor(500, 3000, defs.NO, defs.YES, defs.NO, 35, 100, 50)
-positionconfigSS = posconfigs.getStrangles(500, defs.SELL, defs.YES, defs.NO, 25, 50, 50)
-positionconfig = positionconfigIC
+generalconfig = genconfigs.generalconfigOverNightDirBNMW
+#positionconfig = posconfigs.positionconfigsingleselldirec
+positionconfig = posconfigs.positionconfigsingleselldirecHedged
+#positionconfig = posconfigs.positionconfigsinglebuydirec
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 positions = []
@@ -53,15 +50,9 @@ while start_date <= end_date:
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
     if (generalconfig["symbol"] == defs.BN):
-      (trade, positions) = strategies.MultiDayStrategy(masterdfBN, positions, generalconfig, positionconfig)
+      (trade, positions) = strategies.OverNightDirectional(masterdfBN, positions, generalconfig, positionconfig)
     elif (generalconfig["symbol"] == defs.N):
-      (trade, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig)
-    elif (generalconfig["symbol"] == defs.BOTH):
-      positionconfig = strategies.getStatArbDef()
-      (trade1, positions) = strategies.MultiDayStrategy(masterdfBN, positions, generalconfig, positionconfig[0])
-      (trade2, positions) = strategies.MultiDayStrategy(masterdfN, positions, generalconfig, positionconfig[1])
-      trade.append(trade1)
-      trade.append(trade2)
+      (trade, positions) = strategies.OverNightDirectional(masterdfN, positions, generalconfig, positionconfig)
     if (len(trade) > 0):
         trades = trades.append(trade)
   else:

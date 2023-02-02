@@ -3,6 +3,60 @@ import definitions as defs
 import directional as direc
 import time
 
+def IntradayTimeReEntry(masterdf, generalconfig, positionconfig):
+  spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
+  placed = False
+  positions = []
+  trades = []
+  MinCounter = 0
+
+  OHLCEnter = 'open'
+  exitSLOHLC = 'close'
+  exitTGOHLC = 'close'
+  exitSQOHLC = 'close'
+  exitSQEODOHLC = 'open'
+
+  for s in range(len(spotdata)):
+    MinCounter += 1
+    currentcandle = spotdata.iloc[s]
+    # Check Enter time Condition
+    if currentcandle.name.time() == generalconfig["EnterTime"] and not placed:
+      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                           currentcandle, OHLCEnter)
+      placed = True
+    if placed:
+      # Check time based re-entry. If true, re-enter every "ReEnterEvery" number of minutes.
+      if (generalconfig["Timerenter"] == defs.YES):
+        if (MinCounter % generalconfig["ReEnterEvery"] == 0):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, OHLCEnter)
+      # Check Stop Loss Condition
+      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+
+      # We enter this loop if there is any position where stop-loss is triggered.
+      if (len(postoExitSL) > 0):
+        atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+        if (generalconfig["SLToCost"] == defs.YES):
+          atom.StopLossToCost(positions)
+        if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
+
+      # Check Target Profit Condition
+      (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+      # We enter this loop if there is any position where target profit condition is satisfied.
+      if (len(postoExitTarget) > 0):
+        ReEnterNextTG = True
+        posConfigtoExitTGNext = posConfigtoExitTG
+        atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
+        if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
+          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
+
+      # Square off Remaining Legs EOD
+      if (currentcandle.name.time() == generalconfig["ExitTime"]):
+        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+        trades = atom.GetFinalTrades(positions)
+  return trades
+
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
   placed = False
@@ -32,11 +86,6 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
       CallActive = True
       PutActive = True
     if placed:
-      # Check time based re-entry. If true, re-enter every "ReEnterEvery" number of minutes.
-      if (generalconfig["Timerenter"] == defs.YES):
-        if (MinCounter % generalconfig["ReEnterEvery"] == 0):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
       # Check Stop Loss Condition
       (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
       # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
@@ -99,14 +148,47 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
         trades = atom.GetFinalTrades(positions)
   return trades
 
+def OverNightDirectional(masterdf, positions, generalconfig, positionconfig):
+  spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
+  trades = []
+  OHLCEnter = 'open'
+  exitSQEODOHLC = 'open'
+  direc.UpdatePosition(masterdf, positions)
+  for s in range(len(spotdata)):
+    currentcandle = spotdata.iloc[s]
+    if (currentcandle.name.time() == generalconfig["StartCheckTime"]):
+      startVal = currentcandle["open"]
+    if (currentcandle.name.time() == generalconfig["EndCheckTime"]):
+      endVal = currentcandle["open"]
+    if currentcandle.name.time() == generalconfig["EnterTime"] and currentcandle.name.weekday() in generalconfig['EnterDay']:
+      if (startVal < endVal):
+        if (generalconfig["SType"] == "Trend"):
+          outlook = defs.BULL
+        else:
+          outlook = defs.BEAR
+      else:
+        if (generalconfig["SType"] == "Trend"):
+          outlook = defs.BEAR
+        else:
+          outlook = defs.BULL
+      if (outlook == defs.BULL):
+        (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                            currentcandle, OHLCEnter, defs.BULL)
+      else:
+        (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                            currentcandle, OHLCEnter, defs.BEAR)
+
+    # Square off Legs at ExitTime
+    if (currentcandle.name.time() == generalconfig['ExitTime']) and (currentcandle.name.weekday() in generalconfig["ExitDay"]):
+      direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+      trades = atom.GetFinalTrades(positions)
+      positions = []
+  return (trades, positions)
+
 def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
   trades = []
   MinCounter = 0
-  ReEnterCounterSL = 0
-  ReEnterCounterTG = 0
-  ReEnterNextSL = False
-  ReEnterNextTG = False
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
@@ -132,34 +214,12 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
       # Check Stop Loss Condition
       (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
 
-      # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
-      if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterCounterSL <= generalconfig["MaxReEnterCounterSL"]) and (ReEnterNextSL):
-        ReEnterNextSL = False
-        ReEnterCounterSL += 1
-        if (generalconfig["SquareOffSL"] == defs.ONELEG):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitSLNext, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
-        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
       # We enter this loop if there is any position where stop-loss is triggered.
       if (len(postoExitSL) > 0):
-        #print("SL Hit, Entering the exit and reentry loop")
-        ReEnterNextSL = True
-        posConfigtoExitSLNext = posConfigtoExitSL
         atom.ExitPosition(postoExitSL, currentcandle, defs.SLPos, exitSLOHLC)
+
       # Check Target Profit Condition
       (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
-
-      # We enter the loop below if re-entry is true and target profit condition was triggered the previous minute.
-      if (generalconfig["ReEntryTG"] == defs.YES) and (ReEnterCounterTG <= generalconfig["MaxReEnterCounterTG"]) and (ReEnterNextTG):
-        ReEnterCounterTG += 1
-        if (generalconfig["SquareOffSL"] == defs.ONELEG):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitTGNext, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
-        elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
 
       # We enter this loop if there is any position where target profit condition is satisfied.
       if (len(postoExitTarget) > 0):

@@ -59,7 +59,7 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
   return (data, trades)
 
 def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path):
-  (generalconfig, positionconfig) = GetConfigs.GetINDStraddlesConfig(config)
+  (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
   delta = datetime.timedelta(days=1)
   trade = pd.DataFrame()
   trades = pd.DataFrame()
