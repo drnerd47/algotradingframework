@@ -87,7 +87,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
                   "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
                   "Active": True, "Strike": cst + posc["Delta"],
                   "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
-                  "FutEnterPrice":futprice }
+                  "FutEnterPrice":futprice, "TrailMul": 1}
             positions.append(position)
         else:
             positionsNotPlaced.append(posc)
@@ -95,8 +95,16 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
 
 def StopLossToCost(positions):
     for pos in positions:
-        if (pos["Active"]) and pos["PositionConfig"]["SL"] == defs.YES:
+        if (pos["Active"]) and pos["PositionConfig"]["SL"] == defs.YES and (pos["SLCond"] - pos["EnterPrice"])*pos["PositionConfig"]["Action"] < 0:
             pos["SLCond"] = pos["EnterPrice"]
+
+def TrailStopLoss(positions, currentcandle):
+    for pos in positions:
+        optionprice = pos["OpData"].loc[currentcandle.name]['low'] # assuming it is sell side for simplicity
+        trailval = pos["EnterPrice"] + pos["TrailMul"]*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["SLPc"] / 100
+        if (pos["Active"]) and (pos["PositionConfig"]["SL"] == defs.YES) and (optionprice < trailval):
+            pos["SLCond"] = pos["EnterPrice"] + (pos["TrailMul"] - 1)*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["SLPc"] / 100
+            pos["TrailMul"] = pos["TrailMul"] + 1
 
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []

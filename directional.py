@@ -245,7 +245,7 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
                     "EnterSpotPrice": enterspotprice,
                     "Active": True, "Strike": cst + posc["Delta"],
                     "symbol": generalconfig['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
-                    "FutEnterPrice":futprice }
+                    "FutEnterPrice":futprice, "TrailMul": 1}
                 if (posc["SL"] == defs.YES):
                     position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
                 if (posc["Target"] == defs.YES):

@@ -31,14 +31,14 @@ print("Test Directional Config")
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-#approach = "BB2"
-#config = defconfigs.bb2_Ns
+approach = "BB2"
+config = defconfigs.bb2_BNs
 #approach = "RSI-Dual"
-#config = defconfigs.rsidual_BNs
+#config = defconfigs.rsidual_Ns
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
-approach = "EMA"
-config = defconfigs.ema_Ns
+#approach = "EMA"
+#config = defconfigs.ema_Ns
 #approach = "ST"
 #config = defconfigs.st_Nb
 #approach = "RSI2"

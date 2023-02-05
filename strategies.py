@@ -86,6 +86,9 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
       CallActive = True
       PutActive = True
     if placed:
+      # Trail Stop Loss Condition
+      if (generalconfig["TrailSL"] == defs.YES):
+        atom.TrailStopLoss(positions, currentcandle)
       # Check Stop Loss Condition
       (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
       # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
@@ -269,7 +272,9 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       placedBear = True
     
     if placedBull or placedBear:
-    # Check Stop Loss Condition
+      if (generalconfig["TrailSL"] == defs.YES):
+        atom.TrailStopLoss(positions, currentcandle)
+      # Check Stop Loss Condition
       if (generalconfig["StopLoss"]) and (currentcandle.name.time() <= generalconfig["ExitTime"]):
         if (generalconfig["StopLossCond"] == "TIBased") or (generalconfig["StopLossCond"] == "TIPremiumBased"):
           postoExitSL = direc.CheckStopLossTI(positions, currentcandle, nextcandle, TIconfig)

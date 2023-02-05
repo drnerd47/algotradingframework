@@ -5,8 +5,8 @@ import generalconfigs as genconfigs
 import positionconfigs as posconfigs
 
 def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
-                    SL, Target, SLPc, TargetPc):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery)
+                    SL, Target, SLPc, TargetPc, TrailSL):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL)
     positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
@@ -24,14 +24,15 @@ def GetINDStraddlesConfig(config):
     TargetPc = config['TargetPc']
     SLtoCost = config['SLtoCost']
     REEvery = config['REEvery']
+    TrailSL = config["TrailSL"]
     (generalconfig, positionconfig) = GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                       SLtoCost, REEvery, SL, Target, SLPc, TargetPc)
+                                                       SLtoCost, REEvery, SL, Target, SLPc, TargetPc, TrailSL)
                                                     
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
-                    SL, Target, SLPc, TargetPc, Delta):
-    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery)
+                    SL, Target, SLPc, TargetPc, Delta, TrailSL):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL)
     positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
@@ -50,11 +51,12 @@ def GetINDStranglesConfig(config):
     SLtoCost = config['SLtoCost']
     REEvery = config['REEvery']
     Delta = config["Delta"]
+    TrailSL = config["TrailSL"]
     (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                    SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta)
+                                                    SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta, TrailSL)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous):
+def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -78,7 +80,7 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": SLTGContinuous}
+                     "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.lt, "BearOperator": operator.gt},
@@ -104,9 +106,10 @@ def GetRSI2Config(config):
     reenter = config["reenter"]
     Delta = config["Delta"]
     SLTGContinuous = config["SLTGContinuous"]
-    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous)
+    TrailSL = config["TrailSL"]
+    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL)
 ##############################################################################################################################
-def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous):
+def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -130,7 +133,7 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                     "SLTGContinuous": SLTGContinuous}
+                     "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI14", "ThreshBull": TBull1, "ThreshBear": TBear1, "Window": window1, "SL": defs.NO,
          "Target": defs.NO, "BullOperator": operator.gt, "BearOperator": operator.lt},
@@ -156,9 +159,10 @@ def GetRSIDualConfig(config):
     SL = config['SL']
     Target = config['Target']
     SLTGContinuous = config["SLTGContinuous"]
-    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous)
+    TrailSL = config["TrailSL"]
+    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL)
 ##############################################################################################################################
-def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev):
+def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -183,7 +187,7 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                    "SLTGContinuous": defs.NO}
+                    "SLTGContinuous": defs.NO, "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "BB", "columnname" : "bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
@@ -205,12 +209,12 @@ def GetBB1Config(config):
     reenter = config['reenter']
     Delta = config["Delta"]
     stddev = config["stddev"]
-
+    TrailSL = config["TrailSL"]
     (TIconfig, generalconfig, positionconfig) = GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
-                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev)
+                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous):
+def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -235,7 +239,7 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
-                    "SLTGContinuous": SLTGContinuous}
+                    "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "BB", "columnname":"bbsignal", "ThreshBull": TBull, "ThreshBear": TBear, "period": period,"stddev": stddev, "SL": defs.NO, "Target": defs.NO,
                 "SLBull": 0, "SLBear":0, "TargetBull": 0, "TargetBear": 0,
@@ -259,11 +263,12 @@ def GetBB2Config(config):
     Delta = config["Delta"]
     stddev = config["stddev"]
     SLTGContinuous = config["SLTGContinuous"]
+    TrailSL = config["TrailSL"]
     (TIconfig, generalconfig, positionconfig) = GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
-                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous)
+                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous):
+def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -288,7 +293,7 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
     generalconfig = { "symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter,
-                      "SLTGContinuous": SLTGContinuous}
+                      "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "RSI", "columnname": "RSI", "ThreshBull": TBull, "ThreshBear": TBear, "Window": window, "SL": defs.NO, "Target": defs.NO,
             "SLBull": 0, "SLBear": 0, "TargetBull": 0, "TargetBear": 0,
@@ -315,11 +320,12 @@ def GetRSIADXconfig(config):
     reenter = config['reenter']
     Delta = config["Delta"]
     SLTGContinuous = config["SLTGContinuous"]
+    TrailSL = config["TrailSL"]
     (TIconfig, generalconfig, positionconfig) = GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear,
-                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous)
+                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter):
+def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -342,7 +348,8 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
         lotsize = defs.NLOTSIZE
     generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
-                        "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.YES}
+                        "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.YES,
+                     "TrailSL": TrailSL}
 
     ticonfig = [{"TI": "MA", "columnname":"EMA", "ThreshBull": TBull, "ThreshBear": TBear, "period": period, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt, "SLBull":0 , "SLBear": 0,
@@ -364,9 +371,10 @@ def GetEMAconfig(config):
     rolling = config['rolling']
     reenter = config['reenter']
     Delta = config["Delta"]
-    return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter)
+    TrailSL = config["TrailSL"]
+    return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL)
 ##############################################################################################################################
-def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous):
+def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -393,7 +401,7 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
 
     generalconfig = {"name":"BNST","symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
-                    "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": SLTGContinuous}
+                    "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}
     return ( ticonfig, generalconfig, positionconfig)
 
 def GetSTconfig(config):
@@ -410,4 +418,5 @@ def GetSTconfig(config):
     Target = config["Target"]
     TargetPc = config["TargetPc"]
     SLTGContinuous = config["SLTGContinuous"]
-    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous)
+    TrailSL = config["TrailSL"]
+    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL)
