@@ -19,6 +19,7 @@ def LoadDF(currpath):
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         except :
             masterdf['datetime'] = masterdf['date'] + masterdf['time']
+            masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])
     return masterdf
 
