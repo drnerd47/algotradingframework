@@ -18,7 +18,7 @@ def LoadDF(currpath):
             masterdf = masterdf.drop('datetime.1', axis=1)
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         except :
-            masterdf['datetime'] = masterdf['date'] + masterdf['time']
+            masterdf['datetime'] = masterdf['date'] + ' ' + masterdf['time']
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
         masterdf = masterdf.set_index(masterdf['datetime'])
     return masterdf
