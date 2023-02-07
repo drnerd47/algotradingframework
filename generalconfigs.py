@@ -1,13 +1,13 @@
 import definitions as defs
 import datetime
 
-def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL):
+def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL, EnterTime, ExitTime):
     if (symbol == defs.BN):
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
         lotsize = defs.NLOTSIZE
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
-                       "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15), "symbol": symbol,
+                       "EnterTime": EnterTime, "ExitTime": ExitTime, "symbol": symbol,
                        "ReEntrySL": ReEntrySL, "ReEntryTG": ReEntryTG, "MaxReEnterCounterSL": MaxReEnterCounterSL,
                         "MaxReEnterCounterTG": MaxReEnterCounterTG, "SLToCost": SLtoCost, "REEvery": REEvery, "TrailSL": TrailSL,
                        "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}

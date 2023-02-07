@@ -32,7 +32,7 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 approach = "BB2"
-config = defconfigs.bb2_BNs
+config = defconfigs.bb2_Ns
 #approach = "RSI-Dual"
 #config = defconfigs.rsidual_Ns
 #approach = "RSI-ADX"
