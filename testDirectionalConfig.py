@@ -8,9 +8,9 @@ warnings.filterwarnings("ignore")
 import utils
 import definitions as defs
 import OptimizedConfigs as opconfigs
-year = 2022
+year = 2023
 startmonth = 1
-endmonth = 12
+endmonth = 1
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
 
@@ -31,18 +31,18 @@ print("Test Directional Config")
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
-approach = "BB2"
-config = defconfigs.bb2_Ns
+#approach = "BB2"
+#config = defconfigs.bb2_Nb
 #approach = "RSI-Dual"
-#config = defconfigs.rsidual_Ns
+#config = defconfigs.rsidual_Nb
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
-#approach = "EMA"
-#config = defconfigs.ema_Ns
+approach = "EMA"
+config = defconfigs.ema_Nb
 #approach = "ST"
-#config = defconfigs.st_Nb
+#config = defconfigs.st_BNs
 #approach = "RSI2"
-#config = defconfigs.rsi2_BNb
+#config = defconfigs.rsi2_BNs
 #config = opconfigs.rsi2Nb1
 
 print(approach)
@@ -61,7 +61,7 @@ trades.to_csv(Result_path + approach + "_trades.csv")
 
 # print("\n")
 Daily_Chart = rep.GetDailyChartTI(trades)
-# print(Daily_Chart)
+print(Daily_Chart)
 Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 # print("\n")

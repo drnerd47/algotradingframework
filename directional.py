@@ -118,8 +118,12 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
         
         if csv_file.exists():
             df = pd.read_csv(csv_currpath)
-            df = df.drop('datetime.1', axis=1)
-            df["datetime"] = pd.to_datetime(df["datetime"])
+            try:
+                df = df.drop('datetime.1', axis=1)
+                df["datetime"] = pd.to_datetime(df["datetime"])
+            except:
+                df['datetime'] = df['date'] + ' ' + df['time']
+                df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol           
@@ -132,8 +136,12 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
 
         elif pkl_file.exists():
             df = pd.read_pickle(pkl_currpath)
-            df = df.drop('datetime.1', axis=1)
-            df["datetime"] = pd.to_datetime(df["datetime"])
+            try:
+                df = df.drop('datetime.1', axis=1)
+                df["datetime"] = pd.to_datetime(df["datetime"])
+            except:
+                df['datetime'] = df['date'] + ' ' + df['time']
+                df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol           
@@ -166,11 +174,15 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
         pkl_file = Path(pkl_currpath)
         if csv_file.exists():
             df = pd.read_csv(csv_currpath)
-            df = df.drop('datetime.1', axis=1)
-            df["datetime"] = pd.to_datetime(df["datetime"])
+            try:
+                df = df.drop('datetime.1', axis=1)
+                df["datetime"] = pd.to_datetime(df["datetime"])
+            except:
+                df['datetime'] = df['date'] + ' ' + df['time']
+                df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
-            mask2 = df['symbol'] == symbol           
+            mask2 = df['symbol'] == symbol
             spotdata = df[mask1 & mask2]
             spotdata.drop_duplicates(subset=['datetime'], inplace=True)
             resampled = Resample(spotdata, freq)
@@ -178,14 +190,17 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
             resampled.dropna(inplace=True)
             resampled = getTI(resampled, TIconfig)
             df_list.append(resampled)
-
         elif pkl_file.exists():
             df = pd.read_pickle(pkl_currpath)
-            df = df.drop('datetime.1', axis=1)
-            df["datetime"] = pd.to_datetime(df["datetime"])
+            try:
+                df = df.drop('datetime.1', axis=1)
+                df["datetime"] = pd.to_datetime(df["datetime"])
+            except:
+                df['datetime'] = df['date'] + ' ' + df['time']
+                df["datetime"] = pd.to_datetime(df["datetime"])
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
-            mask2 = df['symbol'] == symbol           
+            mask2 = df['symbol'] == symbol
             spotdata = df[mask1 & mask2]
             spotdata.drop_duplicates(subset=['datetime'], inplace=True)
             resampled = Resample(spotdata, freq)
@@ -193,7 +208,6 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
             resampled.dropna(inplace=True)
             resampled = getTI(resampled, TIconfig)
             df_list.append(resampled)
-     
         # start_date += delta
     finaldf = pd.concat(df_list)
     return finaldf
