@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 user = "RI"
 
-year = 2022
+year = 2021
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -28,21 +28,23 @@ if user == "SD":
   Result_path = "D:/Work/Sykes and Ray/NIFTYOptionsData/OptionsData/Results/"
 elif user == "RI":
   Root = "../"
-  Result_path = "Results/IND/" + str(year) + "/"
+  Result_path = "Results/INDLatest/" + str(year) + "/"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 # Default Config
 # config = opcon.ind_straddle_BN_2
-configs = [defcon.ind_straddle_BN_OL1, defcon.ind_straddle_N_OL1, defcon.ind_straddle_BN_AL, defcon.ind_straddle_N_AL,
+configs = [defcon.ind_straddle_BN_OLS, defcon.ind_straddle_N_OLS, defcon.ind_straddle_BN_OL, defcon.ind_straddle_N_OL,
+           defcon.ind_straddle_BN_AL, defcon.ind_straddle_N_AL,
            defcon.ind_straddle_BN_OL_RE, defcon.ind_straddle_N_OL_RE, defcon.ind_straddle_BN_ALS, defcon.ind_straddle_N_ALS]
 # Optimized Config
-approachVec = ["INDOLBN", "INDOLN", "INDALBN", "INDALN", "INDOLREBN", "INDOLREN", "INDALSBN", "INDALSN"]
-numStrategies = 8
+approachVec = ["INDOLSBN", "INDOLSN", "INDOLBN", "INDOLN", "INDALBN", "INDALN", "INDOLREBN", "INDOLREN", "INDALSBN", "INDALSN"]
+numStrategies = 10
 for n in range(numStrategies):
     approach = approachVec[n]
     config = configs[n]
+    print(approach)
     trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
     print("\n")
     print(trades)

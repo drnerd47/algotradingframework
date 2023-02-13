@@ -45,10 +45,11 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #config = defconfigs.rsi2_BNb
 #config = opconfigs.rsi2Nb1
 
-approachVec = ["BB2","BB2", "RSI-Dual", "RSI-Dual", "RSI-ADX", "RSI-ADX", "EMA","EMA", "ST", "ST", "RSI2", "RSI2"]
-NameVec = ["BB2BN","BB2N", "RSI-DualBN", "RSI-DualN", "RSI-ADXBN", "RSI-ADXN", "EMABN","EMAN", "STBN", "STN", "RSI2BN", "RSI2N"]
-configs = [defconfigs.bb2_BNs, defconfigs.bb2_Ns, defconfigs.rsidual_BNs, defconfigs.rsidual_Ns, defconfigs.rsiadx_BNs, defconfigs.rsiadx_Ns,
-           defconfigs.ema_BNs, defconfigs.ema_Ns, defconfigs.st_BNs, defconfigs.st_Ns, defconfigs.rsi2_BNs, defconfigs.rsi2_Ns]
+approachVec = ["BB2","BB2", "RSI-Dual", "RSI-Dual", "EMA","EMA", "ST", "ST", "RSI2", "RSI2", "RSI-ADX", "RSI-ADX", ]
+NameVec = ["BB2BN","BB2N", "RSI-DualBN", "RSI-DualN", "EMABN","EMAN", "STBN", "STN", "RSI2BN", "RSI2N", "RSI-ADXBN", "RSI-ADXN", ]
+configs = [defconfigs.bb2_BNs, defconfigs.bb2_Ns, defconfigs.rsidual_BNs, defconfigs.rsidual_Ns,
+           defconfigs.ema_BNs, defconfigs.ema_Ns, defconfigs.st_BNs, defconfigs.st_Ns, defconfigs.rsi2_BNs, defconfigs.rsi2_Ns,
+           defconfigs.rsiadx_BNs, defconfigs.rsiadx_Ns]
 numStrategies = 12
 #print(approach)
 #print(config)

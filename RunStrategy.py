@@ -59,12 +59,17 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
   return (data, trades)
 
 def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path):
-  (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
   delta = datetime.timedelta(days=1)
   trade = pd.DataFrame()
   trades = pd.DataFrame()
   tic = time.time()
+  origDelta = config["Delta"]
   while start_date <= end_date:
+    if start_date.weekday() == defs.THU:
+      config["Delta"] = config["DeltaThu"]
+    else:
+      config["Delta"] = origDelta
+    (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
     date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
     BNPath = Banknifty_Path + date_string
     NPath = Nifty_Path + date_string

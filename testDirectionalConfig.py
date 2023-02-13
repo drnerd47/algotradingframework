@@ -8,9 +8,9 @@ warnings.filterwarnings("ignore")
 import utils
 import definitions as defs
 import OptimizedConfigs as opconfigs
-year = 2023
+year = 2022
 startmonth = 1
-endmonth = 1
+endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
 
@@ -38,7 +38,7 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
 approach = "EMA"
-config = defconfigs.ema_Nb
+config = defconfigs.ema_BNs
 #approach = "ST"
 #config = defconfigs.st_BNs
 #approach = "RSI2"

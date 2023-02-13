@@ -34,10 +34,10 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 # Default Config
-config = defcon.ind_straddle_N_AL
+config = defcon.ind_straddle_BN_OL_RE
 #configs = [defcon.ind_straddle_BN_OL1, defcon.ind_straddle_N_OL1, defcon.ind_straddle_BN_AL, defcon.ind_straddle_N_AL,
 #           defcon.ind_straddle_BN_OL_RE, defcon.ind_straddle_N_OL_RE, defcon.ind_straddle_BN_ALS, defcon.ind_straddle_N_ALS]
-approach = "INDALN"
+approach = "INDALBN"
 #approachVec = ["INDOLBN", "INDOLN", "INDALBN", "INDALN", "INDOLREBN", "INDOLREN", "INDALSBN", "INDALSN"]
 trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
 print("\n")
