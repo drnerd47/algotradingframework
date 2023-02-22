@@ -6,6 +6,7 @@ import atomic as atom
 import definitions as defs
 import supertrend as st
 import numpy as np
+import pandas_ta as pta
 #from numba import jit_module
 
 # This function resamples data to required frequency from 1 min data
@@ -29,7 +30,8 @@ def getADX(spotdata, columnname, period=14):
     try:
         tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
     except:
-        tempdf[columnname] = 0
+        colname = 'ADX_' + str(period)
+        tempdf[columnname] = pta.adx(high=tempdf['high'], low=tempdf['low'], close=tempdf['close'], length=period)[colname]
     return tempdf
 
 def getMA(spotdata, columnname, period=14, type='simple'):
