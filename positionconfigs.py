@@ -122,9 +122,9 @@ positionconfigsingleselldirecHedged = [{"Type":defs.CALL,"Action":defs.SELL,"Del
                         "SL": defs.NO, "Target": defs.NO, "Stance": defs.BULL, "SLPc": 40, "Id": 4, "HedgeId": 0}]
 
 positionconfigsingleselldirecSL = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 20, "TargetPc": 70},
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 20, "TargetPc": 70},
                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 20, "TargetPc": 70}]
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 20, "TargetPc": 70}]
 
 positionconfigsingleselldirecSL1 = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
                        "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 5, "TargetPc": 90},
@@ -137,6 +137,6 @@ positionconfigsinglebuydirec = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "
                         "SL": defs.NO, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 40}]
 
 positionconfigsinglebuydirecSL = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BULL, "SLPc": 20, "TargetPc": 70},
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 20, "TargetPc": 70},
                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "NumLots":1,
-                       "SL": defs.YES, "Target":defs.YES, "Stance": defs.BEAR, "SLPc": 20, "TargetPc": 70}]
+                       "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 20, "TargetPc": 70}]

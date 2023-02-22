@@ -104,11 +104,12 @@ def StopLossToCost(positions):
 
 def TrailStopLoss(positions, currentcandle):
     for pos in positions:
-        optionprice = pos["OpData"].loc[currentcandle.name]['low'] # assuming it is sell side for simplicity
-        trailval = pos["EnterPrice"] + pos["TrailMul"]*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["SLPc"] / 100
-        if (pos["Active"]) and (pos["PositionConfig"]["SL"] == defs.YES) and (optionprice < trailval):
-            pos["SLCond"] = pos["EnterPrice"] + (pos["TrailMul"] - 1)*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["SLPc"] / 100
-            pos["TrailMul"] = pos["TrailMul"] + 1
+        if currentcandle.name in pos["OpData"].index:
+            optionprice = pos["OpData"].loc[currentcandle.name]['low'] # assuming it is sell side for simplicity
+            trailval = pos["EnterPrice"] + pos["TrailMul"]*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["TrailSLPc"] / 100
+            if (pos["Active"]) and (pos["PositionConfig"]["SL"] == defs.YES) and (optionprice < trailval):
+                pos["SLCond"] = pos["EnterPrice"] + (pos["TrailMul"] - 1)*pos["PositionConfig"]["Action"] * pos["EnterPrice"] * pos["PositionConfig"]["TrailSLPc"] / 100
+                pos["TrailMul"] = pos["TrailMul"] + 1
 
 def CheckStopLoss(positions, currentcandle):
     positionstoExit = []

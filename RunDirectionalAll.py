@@ -41,8 +41,8 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 #config = defconfigs.ema_Ns
 #approach = "ST"
 #config = defconfigs.st_Nb
-#approach = "RSI2"
-#config = defconfigs.rsi2_BNb
+approach = "RSI2"
+config = defconfigs.rsi2_BNs
 #config = opconfigs.rsi2Nb1
 
 approachVec = ["BB2","BB2", "RSI-Dual", "RSI-Dual", "EMA","EMA", "ST", "ST", "RSI2", "RSI2", "RSI-ADX", "RSI-ADX", ]

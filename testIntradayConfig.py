@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 
 user = "RI"
 
-year = 2022
+year = 2023
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -34,10 +34,10 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 # Default Config
-config = defcon.ind_straddle_BN_OL_RE
+config = defcon.ind_straddle_N_OLS
 #configs = [defcon.ind_straddle_BN_OL1, defcon.ind_straddle_N_OL1, defcon.ind_straddle_BN_AL, defcon.ind_straddle_N_AL,
 #           defcon.ind_straddle_BN_OL_RE, defcon.ind_straddle_N_OL_RE, defcon.ind_straddle_BN_ALS, defcon.ind_straddle_N_ALS]
-approach = "INDALBN"
+approach = "INDOLSN"
 #approachVec = ["INDOLBN", "INDOLN", "INDALBN", "INDALN", "INDOLREBN", "INDOLREN", "INDALSBN", "INDALSN"]
 trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
 print("\n")

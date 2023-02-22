@@ -136,7 +136,7 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                      "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL}

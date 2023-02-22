@@ -16,7 +16,7 @@ import utils
 
 warnings.filterwarnings("ignore")
 
-year = 2022
+year = 2021
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
@@ -41,13 +41,19 @@ Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 approach = "ORB"
 
-generalconfig = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
-                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
-                    "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE,
-                    "Premium": 50, "StartStrike": 30000, "EndStrikeStrike":40000, "BreakoutFactor":35, "Until":datetime.time(11,00)}
+#generalconfigBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
+#                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,25), "symbol":defs.BN,
+#                    "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE,
+#                    "Premium": 50, "StartStrike": 30000, "EndStrikeStrike":48000, "BreakoutFactor":10, "Until":datetime.time(11,00)}
 
-
-positionconfig = posconfig.positionconfigsinglebuydirecSL
+generalconfigN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
+                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,25), "symbol":defs.N,
+                    "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE,
+                    "Premium": 80, "StartStrike": 17000, "EndStrikeStrike":19000, "BreakoutFactor":35, "Until":datetime.time(11,0),
+                  "OpType": defs.BUY, "Type": defs.TREND}
+generalconfig = generalconfigN
+positionconfig = posconfig.positionconfigsinglebuydirec
+#positionconfig = posconfig.positionconfigsingleselldirecSL
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()
@@ -95,14 +101,14 @@ report.to_csv(Result_path + approach + "Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDownTI(Daily_Chart)
-# print(weeklyreport)
+#print(weeklyreport)
 weeklyreport.to_csv(Result_path + approach + "WeeklyReport.csv")
 
 print("\n")
 monthlyreport = rep.MonthlyBreakDownTI(Daily_Chart)
-# print(monthlyreport)
+print(monthlyreport)
 
 print("\n")
 dayofweek = rep.DayOfWeekTI(Daily_Chart)
-# print(dayofweek)
+print(dayofweek)
 

@@ -391,6 +391,8 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
   exitSQEODOHLC = 'open'
   highestCEPrice = 0
   highestPEPrice = 0
+  lowestCEPrice = 1000000
+  lowestPEPrice = 1000000
   for s in range(len(spotdata)):
     MinCounter += 1
     currentcandle = spotdata.iloc[s]
@@ -406,20 +408,45 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
       initialized = True
     # Observe the highest premium in the second part
     if initialized and (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name.time() <= generalconfig["Until"]):
-      if (currentcandle.name in opdfCE.index) and (highestCEPrice < opdfCE.loc[currentcandle.name][OHLCUntil]):
-        highestCEPrice = opdfCE.loc[currentcandle.name][OHLCUntil]
-      if (currentcandle.name in opdfPE.index) and (highestPEPrice < opdfPE.loc[currentcandle.name][OHLCUntil]):
-        highestPEPrice = opdfPE.loc[currentcandle.name][OHLCUntil]
+      if (generalconfig["Type"] == defs.BUY):
+        if (currentcandle.name in opdfCE.index) and (highestCEPrice < opdfCE.loc[currentcandle.name][OHLCUntil]):
+          highestCEPrice = opdfCE.loc[currentcandle.name][OHLCUntil]
+        if (currentcandle.name in opdfPE.index) and (highestPEPrice < opdfPE.loc[currentcandle.name][OHLCUntil]):
+          highestPEPrice = opdfPE.loc[currentcandle.name][OHLCUntil]
+      elif (generalconfig["Type"] == defs.SELL):
+        if (currentcandle.name in opdfCE.index) and (lowestCEPrice > opdfCE.loc[currentcandle.name][OHLCUntil]):
+          lowestCEPrice = opdfCE.loc[currentcandle.name][OHLCUntil]
+        if (currentcandle.name in opdfPE.index) and (lowestPEPrice > opdfPE.loc[currentcandle.name][OHLCUntil]):
+          lowestPEPrice = opdfPE.loc[currentcandle.name][OHLCUntil]
     # Look for break out signal
-    breakoutCEPrice = highestCEPrice*(1 + generalconfig["BreakoutFactor"]/100)
-    breakoutPEPrice = highestPEPrice*(1 + generalconfig["BreakoutFactor"]/100)
+    if (currentcandle.name.time() == generalconfig["Until"]):
+        breakoutCEPriceHigh = highestCEPrice*(1 + generalconfig["BreakoutFactor"]/100)
+        breakoutPEPriceHigh = highestPEPrice*(1 + generalconfig["BreakoutFactor"]/100)
+        breakoutCEPriceLow = lowestCEPrice * (1 - generalconfig["BreakoutFactor"] / 100)
+        breakoutPEPriceLow = lowestPEPrice * (1 - generalconfig["BreakoutFactor"] / 100)
     if initialized and currentcandle.name.time() >= generalconfig["Until"]:
-      if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] >= breakoutCEPrice and not placedBull:
-        (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikeCE)
-        placedBull = True
-      if (currentcandle.name in opdfPE.index) and opdfPE.loc[currentcandle.name][OHLCBreakout] >= breakoutPEPrice and not placedBear:
-        (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikePE)
-        placedBear = True
+      if (generalconfig["OpType"] == defs.BUY):
+        if (generalconfig["Type"] == defs.TREND):
+          if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] >= breakoutCEPriceHigh and not placedBull:
+            (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikeCE)
+            placedBull = True
+          if (currentcandle.name in opdfPE.index) and opdfPE.loc[currentcandle.name][OHLCBreakout] >= breakoutPEPriceHigh and not placedBear:
+            (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikePE)
+            placedBear = True
+        elif (generalconfig["Type"] == defs.MR):
+          if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] <= breakoutCEPriceLow and not placedBear:
+            (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikeCE)
+            placedBear = True
+          if (currentcandle.name in opdfPE.index) and opdfPE.loc[currentcandle.name][OHLCBreakout] <= breakoutPEPriceLow and not placedBull:
+            (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikePE)
+            placedBull = True
+      elif (generalconfig["OpType"] == defs.SELL):
+        if (currentcandle.name in opdfCE.index) and opdfCE.loc[currentcandle.name][OHLCBreakout] <= breakoutCEPrice and not placedBear:
+          (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikeCE)
+          placedBear = True
+        if (currentcandle.name in opdfPE.index) and opdfPE.loc[currentcandle.name][OHLCBreakout] <= breakoutPEPrice and not placedBull:
+          (positions, positionsNotPlaced) = direc.EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikePE)
+          placedBull = True
     if placedBull or placedBear:
       (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
       # We enter this loop if there is any position where stop-loss is triggered.
