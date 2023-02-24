@@ -82,16 +82,16 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
             futprice = futdf.loc[currentcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
             enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
             position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
-                  "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
-                  "FutData": futdf, 
+                "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
+                "FutData": futdf,
                 "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
-                  "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
-                   "date": currentcandle.name.date(), "EnterSpotPrice": currentcandle[OHLC],
-                  "SLCond": enterprice - posc["Action"] * enterprice * posc["SLPc"] / 100,
-                  "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
-                  "Active": True, "Strike": cst + posc["Delta"],
-                  "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
-                  "FutEnterPrice":futprice, "TrailMul": 1}
+                "Entertime": currentcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
+                "date": currentcandle.name.date(), "EnterSpotPrice": currentcandle[OHLC],
+                "SLCond": enterprice*(1 - posc["Action"] * posc["SLPc"] / 100),
+                "TargetCond": enterprice + posc["Action"] * enterprice * posc["TargetPc"] / 100,
+                "Active": True, "Strike": cst + posc["Delta"],
+                "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "Slippage": generalconfig['Slippage'],
+                "FutEnterPrice":futprice, "TrailMul": 1}
             positions.append(position)
         else:
             positionsNotPlaced.append(posc)
