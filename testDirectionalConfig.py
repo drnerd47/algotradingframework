@@ -14,7 +14,7 @@ endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
 end_date = datetime.date(year, endmonth, 31)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -22,9 +22,6 @@ if user == "SD":
 elif user == "RI":
   Root = "../"
   Result_path = "Results/"
-elif user == "MS":
-  Root = "Moulik's File path"
-  Result_path = " Moulik's result path"
 
 print("Test Directional Config")
 
