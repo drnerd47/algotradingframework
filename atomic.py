@@ -84,7 +84,10 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
         # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
         if currentcandle.name in opdf.index:
             price = opdf.loc[currentcandle.name][OHLC]
-            futprice = futdf.loc[currentcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+            try:
+                futprice = futdf.loc[currentcandle.name][OHLC]* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+            except:
+                futprice = 0
             enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
             position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
                 "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
