@@ -224,7 +224,7 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
                     df["datetime"] = pd.to_datetime(df["datetime"])
             except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
                 df["datetime"] = pd.to_datetime(df["datetime"])
-                
+
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol
@@ -277,7 +277,10 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
                 price = opdf.loc[nextcandle.name][OHLC]
-                futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                try:
+                    futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                except:
+                    futprice = 0
                 enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
@@ -310,7 +313,10 @@ def EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, next
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
             if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
                 price = opdf.loc[nextcandle.name][OHLC]
-                futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                try:
+                    futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                except:
+                    futprice = 0
                 enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
                 position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": strike,
