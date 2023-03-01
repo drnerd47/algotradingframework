@@ -8,7 +8,7 @@ import GetConfigs
 import datetime
 import time
 
-def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path):
+def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path, Finnifty_Path):
   if (approach == "RSI-Dual"):
     (TIconfig, generalconfig, positionconfig) = GetConfigs.GetRSIDualConfig(config)
   elif (approach == "ST"):
@@ -24,7 +24,7 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
   elif (approach == "EMA"):
     (TIconfig, generalconfig, positionconfig) = GetConfigs.GetEMAconfig(config)
   tic = time.time()
-  data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig)
+  data = direc.getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, Finnifty_Path, generalconfig, TIconfig)
   delta = datetime.timedelta(days=1)
   trade = pd.DataFrame()
   trades = pd.DataFrame()
