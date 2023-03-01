@@ -436,11 +436,14 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']
             futenterprice = pos['FutEnterPrice']
-            if currentcandle.name in pos["OpData"].index:
-                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
-            else:
-                idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
-                futexitprice = pos["FutData"].loc[idx][OHLC]
+            try:
+                if currentcandle.name in pos["OpData"].index:
+                    futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+                else:
+                    idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
+                    futexitprice = pos["FutData"].loc[idx][OHLC]
+            except:
+                futexitprice = 0
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
                             'EnterTime': pos['Entertime'], 'ExitTime': currentcandle.name.time(),
@@ -490,11 +493,14 @@ def ExitPositionPremium(positionstoExit, currentcandle, ExitReason, OHLC):
             enterprice = pos['EnterPrice']
             futenterprice = pos['FutEnterPrice']
             spotenterprice = pos['EnterSpotPrice']
-            if currentcandle.name in pos["OpData"].index :
-                futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
-            else:
-                idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
-                futexitprice = pos["FutData"].loc[idx][OHLC]
+            try:
+                if currentcandle.name in pos["OpData"].index :
+                    futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
+                else:
+                    idx = pos["FutData"].index[pos["FutData"].index.get_loc(currentcandle.name, method='nearest')]
+                    futexitprice = pos["FutData"].loc[idx][OHLC]
+            except:
+                futexitprice = 0
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             futexitprice = futexitprice #*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             spotexitprice = currentcandle[OHLC] #*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
