@@ -62,7 +62,8 @@ def GetINDStranglesConfig(config):
                                                     SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount):
+def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, 
+                     action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -83,7 +84,7 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                      "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -114,9 +115,11 @@ def GetRSI2Config(config):
     SLTGContinuous = config["SLTGContinuous"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
-    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount)
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
+    return GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
 ##############################################################################################################################
-def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount):
+def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -137,7 +140,7 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                      "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -168,9 +171,11 @@ def GetRSIDualConfig(config):
     SLTGContinuous = config["SLTGContinuous"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
-    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount)
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
+    return GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
 ##############################################################################################################################
-def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL, MaxReEnterCount):
+def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -192,7 +197,7 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
 
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                     "SLTGContinuous": defs.NO, "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -219,11 +224,13 @@ def GetBB1Config(config):
     stddev = config["stddev"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
     (TIconfig, generalconfig, positionconfig) = GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
-                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL, MaxReEnterCount)
+                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL, MaxReEnterCount):
+def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -245,7 +252,7 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
 
-    generalconfig = {"symbol": symbol, "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15),
+    generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
                     "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -274,11 +281,13 @@ def GetBB2Config(config):
     SLTGContinuous = config["SLTGContinuous"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
     (TIconfig, generalconfig, positionconfig) = GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target,
-                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL, MaxReEnterCount)
+                                                    TargetPc, Delta, symbol, action, rolling, reenter, stddev, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL, MaxReEnterCount):
+def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -300,7 +309,7 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
 
-    generalconfig = { "symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample,
+    generalconfig = { "symbol":symbol,"EnterTime": EnterTime, "ExitTime": ExitTime, "Resample": Resample,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter,
                       "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -332,11 +341,13 @@ def GetRSIADXconfig(config):
     SLTGContinuous = config["SLTGContinuous"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
     (TIconfig, generalconfig, positionconfig) = GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear,
-                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL, MaxReEnterCount)
+                                                SL, SLPc, Target, TargetPc, ADXTBull, ADXTBear, rolling, reenter, window, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
     return (TIconfig, generalconfig, positionconfig)
 ##############################################################################################################################
-def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL, MaxReEnterCount):
+def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -357,7 +368,7 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-    generalconfig = {"symbol":symbol, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": Resample, 
+    generalconfig = {"symbol":symbol, "EnterTime": EnterTime ,"ExitTime": ExitTime, "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.YES,
                      "TrailSL": TrailSL, 'MaxReEnterCounter':MaxReEnterCount}
@@ -384,9 +395,11 @@ def GetEMAconfig(config):
     Delta = config["Delta"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
-    return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL, MaxReEnterCount)
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
+    return GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Target, TargetPc, Resample, rolling, reenter, TrailSL, MaxReEnterCount, EnterTime, ExitTime)
 ##############################################################################################################################
-def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL, MaxReEnterCount):
+def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime):
     if action == defs.BUY:
         callstance = defs.BULL
         putstance = defs.BEAR
@@ -411,7 +424,7 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
     ticonfig = [{"TI": "ST", "columnname":"ST", "ThreshBull": 0, "ThreshBear": 0, "period": period,"multiplier":multiplier, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt}]
 
-    generalconfig = {"name":"BNST","symbol":symbol,"EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": Resample, 
+    generalconfig = {"name":"BNST","symbol":symbol,"EnterTime": EnterTime, "ExitTime": ExitTime, "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased", 
                     "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": SLTGContinuous, "TrailSL": TrailSL,
                     'MaxReEnterCounter':MaxReEnterCount}
@@ -433,4 +446,6 @@ def GetSTconfig(config):
     SLTGContinuous = config["SLTGContinuous"]
     TrailSL = config["TrailSL"]
     MaxReEnterCount = config['MaxReEnterCounter']
-    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL, MaxReEnterCount)
+    EnterTime = config['EnterTime']
+    ExitTime = config['ExitTime']
+    return GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling, reenter, SL, SLPc, Target, TargetPc, SLTGContinuous, TrailSL, MaxReEnterCount, EnterTime, ExitTime)

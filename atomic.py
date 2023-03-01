@@ -14,7 +14,6 @@ def LoadDF(currpath):
             masterdf = pd.read_csv(currpath)
         elif extension == ".pkl":
             masterdf = pd.read_pickle(currpath)
-
         try:
             try:
                 masterdf = masterdf.drop('datetime.1', axis=1)
@@ -22,7 +21,8 @@ def LoadDF(currpath):
             except :
                 masterdf['datetime'] = masterdf['date'] + ' ' + masterdf['time']
                 masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
-        except:
+                
+        except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
             
         masterdf = masterdf.set_index(masterdf['datetime'])
