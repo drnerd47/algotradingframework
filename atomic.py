@@ -50,6 +50,8 @@ def GetExpiry(masterdf, symbol):
         return masterdf.iloc[0]['symbol'][9:16]
     elif (symbol == defs.N):
         return masterdf.iloc[0]['symbol'][5:12]
+    elif symbol == defs.FN:
+        return masterdf.iloc[0]['symbol'][8:15]
     else:
         print("Unknown Symbol")
         return 0
@@ -79,6 +81,9 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, currentcan
         elif generalconfig['symbol'] == defs.BN :
             cst = currentcandle[OHLC]
             cst = int(round(cst / 100, 0) * 100)
+        elif generalconfig['symbol'] == defs.FN :
+            cst = currentcandle[OHLC]
+            cst = int(round(cst / 50, 0)*50)
         opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
         futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
         # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])

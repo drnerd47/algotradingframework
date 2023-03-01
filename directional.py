@@ -88,20 +88,26 @@ def getTI(spotdata, TIconfig):
     data['ExitSignal'] = np.nan
     return data
 
-def getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, generalconfig, TIconfig):
+def getTIIndicatorData(start_date, end_date, Nifty_Path, Banknifty_Path, Finnifty_Path, generalconfig, TIconfig):
     if (generalconfig["Rolling"] == defs.YES):
         if (generalconfig["symbol"] == defs.N):
             data = getRollingTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N,
                                             generalconfig["Resample"], TIconfig)
-        else:
+        elif (generalconfig["symbol"] == defs.BN) :
             data = getRollingTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN,
+                                            generalconfig["Resample"], TIconfig)
+        elif (generalconfig["symbol"] == defs.FN) :
+            data = getRollingTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Finnifty_Path, defs.FN,
                                             generalconfig["Resample"], TIconfig)
     else:
         if (generalconfig["symbol"] == defs.N):
             data = getIntradayTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Nifty_Path, defs.N,
                                             generalconfig["Resample"], TIconfig)
-        else:
+        elif (generalconfig["symbol"] == defs.BN) :
             data = getIntradayTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Banknifty_Path, defs.BN,
+                                            generalconfig["Resample"], TIconfig)
+        elif (generalconfig["symbol"] == defs.FN) :
+            data = getIntradayTIIndicatorData(start_date, end_date, generalconfig["EnterTime"], Finnifty_Path, defs.FN,
                                             generalconfig["Resample"], TIconfig)
     return data
 
@@ -124,11 +130,15 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
         if csv_file.exists():
             df = pd.read_csv(csv_currpath)
             try:
-                df = df.drop('datetime.1', axis=1)
+                try:
+                    df = df.drop('datetime.1', axis=1)
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+                except:
+                    df['datetime'] = df['date'] + ' ' + df['time']
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+            except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
                 df["datetime"] = pd.to_datetime(df["datetime"])
-            except:
-                df['datetime'] = df['date'] + ' ' + df['time']
-                df["datetime"] = pd.to_datetime(df["datetime"])
+
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol           
@@ -142,11 +152,15 @@ def getRollingTIIndicatorData(start_date, end_date, entertime, path, symbol, fre
         elif pkl_file.exists():
             df = pd.read_pickle(pkl_currpath)
             try:
-                df = df.drop('datetime.1', axis=1)
+                try:
+                    df = df.drop('datetime.1', axis=1)
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+                except:
+                    df['datetime'] = df['date'] + ' ' + df['time']
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+            except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
                 df["datetime"] = pd.to_datetime(df["datetime"])
-            except:
-                df['datetime'] = df['date'] + ' ' + df['time']
-                df["datetime"] = pd.to_datetime(df["datetime"])
+
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol           
@@ -180,11 +194,15 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
         if csv_file.exists():
             df = pd.read_csv(csv_currpath)
             try:
-                df = df.drop('datetime.1', axis=1)
+                try:
+                    df = df.drop('datetime.1', axis=1)
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+                except:
+                    df['datetime'] = df['date'] + ' ' + df['time']
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+            except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
                 df["datetime"] = pd.to_datetime(df["datetime"])
-            except:
-                df['datetime'] = df['date'] + ' ' + df['time']
-                df["datetime"] = pd.to_datetime(df["datetime"])
+
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol
@@ -198,11 +216,15 @@ def getIntradayTIIndicatorData(start_date, end_date, entertime, path, symbol, fr
         elif pkl_file.exists():
             df = pd.read_pickle(pkl_currpath)
             try:
-                df = df.drop('datetime.1', axis=1)
+                try:
+                    df = df.drop('datetime.1', axis=1)
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+                except:
+                    df['datetime'] = df['date'] + ' ' + df['time']
+                    df["datetime"] = pd.to_datetime(df["datetime"])
+            except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
                 df["datetime"] = pd.to_datetime(df["datetime"])
-            except:
-                df['datetime'] = df['date'] + ' ' + df['time']
-                df["datetime"] = pd.to_datetime(df["datetime"])
+                
             df = df.set_index(df['datetime'])
             mask1 = df.index.time >= entertime
             mask2 = df['symbol'] == symbol
@@ -246,6 +268,9 @@ def EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle
             elif generalconfig['symbol'] == defs.BN :
                 cst = nextcandle[OHLC]
                 cst = int(round(cst / 100, 0) * 100)
+            elif generalconfig['symbol'] == defs.FN :
+                cst = nextcandle[OHLC]
+                cst = int(round(cst / 50, 0)*50)
             opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
             futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
             #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
@@ -483,6 +508,8 @@ def FindStrike(masterdf, premium, time, startstrike, endstrike, optype, OHLC, sy
         inc = 50
     elif symbol == defs.BN :
         inc = 100
+    elif symbol == defs.FN :
+        inc = 50
     minval = 1000
     #print(optype)
     for s in range(startstrike, endstrike, inc):

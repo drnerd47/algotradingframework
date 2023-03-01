@@ -35,6 +35,7 @@ EXPIRYDAY = 4
 N = 'NIFTY'
 BN = 'BANKNIFTY'
 BOTH = "BOTH"
+FN = 'FINNIFTY'
 
 SLFar = 0
 SL = 1

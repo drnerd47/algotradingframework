@@ -30,9 +30,6 @@ if user == "SD":
 elif user == "RI":
   Root = "../"
   Result_path = "Results/"
-elif user == "MS":
-  Root = "Moulik's File path"
-  Result_path = " Moulik's result path"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
