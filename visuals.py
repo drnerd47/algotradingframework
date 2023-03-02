@@ -505,4 +505,6 @@ def plotINDTrade(trade, datapath):
     fig.update_xaxes(rangebreaks=[ dict(bounds=["sat", "mon"]) , dict(bounds=[16, 9], pattern="hour")])
     fig.show();
 
-
+# Plot all the trades for a particular strategy on a day with entry and exit points 
+def plotDayTrades():
+    pass

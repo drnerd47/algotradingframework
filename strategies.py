@@ -251,7 +251,7 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
   exitSQEODOHLC = 'close'
-  for s in range(len(spotdata)): 
+  for s in range(len(spotdata)): # 
     currentcandle = spotdata.iloc[s]
     if (currentcandle.name in spotdatafull.index):
       sfull = spotdatafull.index.get_loc(currentcandle.name)
@@ -263,12 +263,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       nextcandle = currentcandle
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
     # Check Enter Condition
-    if bullentry and not placedBull and (ReEnterCounter < generalconfig["MaxReEnterCounter"]):
+    if bullentry and not placedBull and (ReEnterCounter < generalconfig["MaxBullReEnterCounter"]):
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BULL)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBULLPOSITION
       placedBull = True
       ReEnterCounter += 1
-    if bearentry and not placedBear and (ReEnterCounter < generalconfig["MaxReEnterCounter"]):
+    if bearentry and not placedBear and (ReEnterCounter < generalconfig["MaxBearReEnterCounter"]):
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BEAR)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBEARPOSITION
       placedBear = True
