@@ -31,6 +31,11 @@ ind_straddle_N_OLS = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "sy
                 "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":200, "DeltaThu":0, "OnlyThu": False,
                          "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15)}
 
+# INTRADAY STRADDLE OL NIFTY
+ind_straddle_FN_OLS = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.FN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, "TrailSL": defs.NO,
+                "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":50, "Delta":200, "DeltaTue":0, "OnlyTue": False,
+                         "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15)}
+
 # INTRADAY STRADDLE AL BANKNIFTY
 ind_straddle_BN_AL = {"SquareOffSL":defs.ALLLEGS, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.YES, "ReEntryTG": defs.NO, "REEvery":1, "TrailSL": defs.NO,
                 "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 6, "SLtoCost":defs.NO, "SL":defs.YES, "Target":defs.NO, "SLPc":45, "TargetPc":50, "Delta":1000, "DeltaThu":0, "OnlyThu": False,
@@ -92,6 +97,12 @@ rsi2_BNs = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 
 # RSI-2 NIFTY SELL SIDE
 rsi2_Ns = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.N, 'action': defs.SELL,
+            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0, "TrailSL": defs.NO, 'MaxBullReEnterCounter':4, 'MaxBearReEnterCounter':4,
+            "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15)}
+
+# RSI-2 FINNIFTY SELL SIDE
+rsi2_FNs = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
+            "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.FN, 'action': defs.SELL,
             'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0, "TrailSL": defs.NO, 'MaxBullReEnterCounter':4, 'MaxBearReEnterCounter':4,
             "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15)}
 

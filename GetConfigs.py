@@ -84,6 +84,8 @@ def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
@@ -140,6 +142,8 @@ def GetRSIDualConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TB
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                            "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                            "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
@@ -196,7 +200,8 @@ def GetBB1ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
@@ -251,7 +256,8 @@ def GetBB2ConfigsPB(period, Resample, TBull, TBear, SL, SLPc, Target, TargetPc, 
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
-
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"symbol": symbol, "EnterTime": EnterTime, "ExitTime": ExitTime,
                     "Resample": Resample, "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased",
                     "TargetCond": "PremiumBased", "Slippage": defs.SLIPPAGE, "LotSize": lotsize, "Rolling": rolling, "Reenter": reenter,
@@ -308,6 +314,8 @@ def GetRSIADXconfigsPB(action, symbol, Delta, Resample, TBull, TBear, SL, SLPc, 
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
 
     generalconfig = { "symbol":symbol,"EnterTime": EnterTime, "ExitTime": ExitTime, "Resample": Resample,
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
@@ -368,6 +376,8 @@ def GetEMAconfigsPB(symbol, action, Delta, TBull, TBear, period, SL, SLPc, Targe
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"symbol":symbol, "EnterTime": EnterTime ,"ExitTime": ExitTime, "Resample": Resample, 
                     "StopLoss": SLBool, "Target": TBool, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":lotsize, "Rolling": rolling, "Reenter": reenter, "SLTGContinuous": defs.YES,
@@ -420,6 +430,8 @@ def GetSTconfigsPB(action, Delta, symbol, period, multiplier, Resample, rolling,
         lotsize = defs.BNLOTSIZE
     elif symbol == defs.N :
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN :
+        lotsize = defs.FNLOTSIZE
 
     ticonfig = [{"TI": "ST", "columnname":"ST", "ThreshBull": 0, "ThreshBear": 0, "period": period,"multiplier":multiplier, "SL": defs.NO, "Target": defs.NO,
                 "BullOperator": operator.gt, "BearOperator": operator.lt}]

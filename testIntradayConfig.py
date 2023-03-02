@@ -15,13 +15,13 @@ import OptimizedConfigs as opcon
 
 warnings.filterwarnings("ignore")
 
-user = "RI"
+user = "SD"
 
 year = 2023
-startmonth = 1
-endmonth = 12
-start_date = datetime.date(year, startmonth, 1)
-end_date = datetime.date(year, endmonth, 31)
+startmonth = 2
+endmonth = 2
+start_date = datetime.date(year, startmonth, 28)
+end_date = datetime.date(year, endmonth, 28)
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -30,16 +30,17 @@ elif user == "RI":
   Root = "../"
   Result_path = "Results/IND/Test/"
 
-Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+Banknifty_Path = Root + "NIFTYOptionsData/Resampled Data/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/Resampled Data/Nifty/"
+Finnifty_Path = Root + "NIFTYOptionsData/Resampled Data/Finnifty/"
 
 # Default Config
-config = defcon.ind_straddle_N_OLS
+config = defcon.ind_straddle_FN_OLS
 #configs = [defcon.ind_straddle_BN_OL1, defcon.ind_straddle_N_OL1, defcon.ind_straddle_BN_AL, defcon.ind_straddle_N_AL,
 #           defcon.ind_straddle_BN_OL_RE, defcon.ind_straddle_N_OL_RE, defcon.ind_straddle_BN_ALS, defcon.ind_straddle_N_ALS]
-approach = "INDOLSN"
+approach = "INDOLSFN"
 #approachVec = ["INDOLBN", "INDOLN", "INDALBN", "INDALN", "INDOLREBN", "INDOLREN", "INDALSBN", "INDALSN"]
-trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
+trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path, Finnifty_Path)
 print("\n")
 print(trades)
 trades.to_csv(Result_path + approach + "trades.csv")

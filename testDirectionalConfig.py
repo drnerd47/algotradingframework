@@ -8,11 +8,11 @@ warnings.filterwarnings("ignore")
 import utils
 import definitions as defs
 import OptimizedConfigs as opconfigs
-year = 2022
-startmonth = 1
-endmonth = 12
-start_date = datetime.date(year, startmonth, 1)
-end_date = datetime.date(year, endmonth, 31)
+year = 2023
+startmonth = 2
+endmonth = 2
+start_date = datetime.date(year, startmonth, 28)
+end_date = datetime.date(year, endmonth, 28)
 
 user = "SD"
 
@@ -25,9 +25,9 @@ elif user == "RI":
 
 print("Test Directional Config")
 
-Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
-Finnifty_Path = Root + "NIFTYOptionsData/OptionsData/Finnifty/"
+Banknifty_Path = Root + "NIFTYOptionsData/Resampled Data/Banknifty/"
+Nifty_Path = Root + "NIFTYOptionsData/Resampled Data/Nifty/"
+Finnifty_Path = Root + "NIFTYOptionsData/Resampled Data/Finnifty/"
 
 #approach = "BB2"
 #config = defconfigs.bb2_Nb
@@ -35,12 +35,12 @@ Finnifty_Path = Root + "NIFTYOptionsData/OptionsData/Finnifty/"
 #config = defconfigs.rsidual_BNs
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
-approach = "EMA"
-config = defconfigs.ema_Ns
+# approach = "EMA"
+# config = defconfigs.ema_Ns
 #approach = "ST"
 #config = defconfigs.st_BNs
-#approach = "RSI2"
-#config = defconfigs.rsi2_BNs
+approach = "RSI2"
+config = defconfigs.rsi2_FNs
 #config = opconfigs.rsi2Nb1
 
 print(approach)
@@ -60,6 +60,12 @@ trades.to_csv(Result_path + approach + "_trades.csv")
 # print("\n")
 Daily_Chart = rep.GetDailyChartTI(trades)
 print(Daily_Chart)
+print('\n')
+print(Daily_Chart.describe())
+print('\n')
+print('Max Profit was on %s -> %s'% (Daily_Chart[Daily_Chart['Daily pnl'] == Daily_Chart['Daily pnl'].max()].index, Daily_Chart['Daily pnl'].max()))
+print('\n')
+print('Max Loss on %s -> %s'% (Daily_Chart[Daily_Chart['Daily pnl'] == Daily_Chart['Daily pnl'].min()].index, Daily_Chart['Daily pnl'].min()))
 Daily_Chart.to_csv(Result_path + approach + "DailyChart.csv")
 
 # print("\n")

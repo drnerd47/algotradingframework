@@ -12,6 +12,8 @@ def BuyMarginCalculator(trades, symbol):
     margin = trades.EnterPrice * defs.BNLOTSIZE
   elif symbol == defs.N :
     margin = trades.EnterPrice * defs.NLOTSIZE
+  elif symbol == defs.FN :
+    margin = trades.EnterPrice * defs.FNLOTSIZE
   return margin.max()
 
 def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
@@ -22,11 +24,17 @@ def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
     elif (symbol == defs.N):
       singlecost = 125000
       doublecost = 110000
+    elif (symbol == defs.FN):
+      singlecost = 125000
+      doublecost = 110000
   elif (positiontype == "Hedged"):
     if (symbol == defs.BN):
       singlecost = 45000
       doublecost = 70000
     elif (symbol == defs.N):
+      singlecost = 30000
+      doublecost = 60000
+    elif (symbol == defs.FN):
       singlecost = 30000
       doublecost = 60000
   return min(numcalllegs, numputlegs)*doublecost + (max(numcalllegs, numputlegs) - min(numcalllegs, numputlegs))*singlecost
