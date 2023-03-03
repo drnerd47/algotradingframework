@@ -27,11 +27,11 @@ def getRSI(spotdata, columnname, period=14):
 
 def getADX(spotdata, columnname, period=14):
     tempdf = spotdata
-    try:
-        tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
-    except:
-        colname = 'ADX_' + str(period)
-        tempdf[columnname] = pta.adx(high=tempdf['high'], low=tempdf['low'], close=tempdf['close'], length=period)[colname]
+    # try:
+    #     tempdf[columnname] = ta.trend.ADXIndicator(tempdf['high'], tempdf['low'], tempdf['close'], window=period).adx()
+    # except:
+    colname = 'ADX_' + str(period)
+    tempdf[columnname] = pta.adx(high=tempdf['high'], low=tempdf['low'], close=tempdf['close'], length=period)[colname]
     return tempdf
 
 def getMA(spotdata, columnname, period=14, type='simple'):
