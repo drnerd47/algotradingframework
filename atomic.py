@@ -26,6 +26,7 @@ def LoadDF(currpath):
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
             
         masterdf = masterdf.set_index(masterdf['datetime'])
+        masterdf.dropna(inplace=True)
     return masterdf
 
 def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
