@@ -246,7 +246,8 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   exitDone = False # if exit (EOD) is done, we do not go to the exit condition again.
   positions = []
   trades = []
-  ReEnterCounter = 0
+  BullReEnterCounter = 0
+  BearReEnterCounter = 0
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
@@ -263,12 +264,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       nextcandle = currentcandle
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
     # Check Enter Condition
-    if bullentry and not placedBull and (ReEnterCounter < generalconfig["MaxBullReEnterCounter"]):
+    if bullentry and not placedBull and (BullReEnterCounter < generalconfig["MaxBullReEnterCounter"]):
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BULL)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBULLPOSITION
       placedBull = True
       ReEnterCounter += 1
-    if bearentry and not placedBear and (ReEnterCounter < generalconfig["MaxBearReEnterCounter"]):
+    if bearentry and not placedBear and (BearReEnterCounter < generalconfig["MaxBearReEnterCounter"]):
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BEAR)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBEARPOSITION
       placedBear = True

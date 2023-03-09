@@ -282,7 +282,7 @@ def plotTrade(trade, signaldata, datapath):
         pass
 
     spotdata = data[data.symbol == symbol]
-    opdata = data[data.symbol == OpSymbol]   
+    opdata = data[data.symbol == OpSymbol]
     
     try:
         signaldata['datetime'] = pd.to_datetime(signaldata['datetime'], infer_datetime_format=True)
@@ -296,7 +296,7 @@ def plotTrade(trade, signaldata, datapath):
     bullentry = df[df.EntrySignal == 2]
     stoploss = df[df.ExitSignal == -1]
     target = df[df.ExitSignal == 1]
-    eodsquareoff = df[df.ExitSignal == 0] 
+    eodsquareoff = df[df.ExitSignal == 0]
 
     # Plotting indicators
     if "RSI14" and "RSI2" in df.columns:
