@@ -268,12 +268,12 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BULL)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBULLPOSITION
       placedBull = True
-      ReEnterCounter += 1
+      BullReEnterCounter += 1
     if bearentry and not placedBear and (BearReEnterCounter < generalconfig["MaxBearReEnterCounter"]):
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BEAR)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBEARPOSITION
       placedBear = True
-      ReEnterCounter += 1
+      BearReEnterCounter += 1
     
     if placedBull or placedBear:
       if (generalconfig["TrailSL"] == defs.YES):
