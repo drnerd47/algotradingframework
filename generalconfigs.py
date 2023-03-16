@@ -55,7 +55,7 @@ def GetGeneralConfigNextDay(SquareOffSL, SquareOffTG, symbol, EnterDay, ExitDay)
     generalconfig = {"SquareOffSL":SquareOffSL,"SquareOffTG":SquareOffTG, "EnterDay": EnterDay,
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": ExitDay, "symbol":symbol,
                      "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5,
-                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
+                 "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
     return generalconfig
 
 generalconfigNextDayBNMW = {"name":" NextdayBNMW", "SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.MON, defs.TUE, defs.WED, defs.FRI],
@@ -144,7 +144,6 @@ generalconfigBNRSIADX = {"name":"BNRSIADX" , "symbol":defs.BN,"EnterTime": datet
 generalconfigNRSIADX = {"name":"NRSIADX", "symbol":defs.N, "EnterTime": datetime.time(9,15), "ExitTime": datetime.time(15,15), "Resample": 3,
                         "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",
                         "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "Rolling": defs.NO, "Reenter": defs.YES, "SLTGContinuous": defs.YES}
-
 
 generalconfigBNRSI2 = {"name":"NBNRSI2","symbol":defs.BN, "EnterTime": datetime.time(9,15) ,"ExitTime": datetime.time(15,15), "Resample": 10,
                     "StopLoss": True, "Target": False, "StopLossCond": "PremiumBased", "TargetCond": "PremiumBased",

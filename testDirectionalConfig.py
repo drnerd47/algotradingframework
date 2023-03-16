@@ -31,16 +31,16 @@ Finnifty_Path = Root + "NIFTYOptionsData/Resampled Data/Finnifty/"
 
 #approach = "BB2"
 #config = defconfigs.bb2_Nb
-#approach = "RSI-Dual"
-#config = defconfigs.rsidual_BNs
+approach = "RSI-Dual"
+config = defconfigs.rsidual_BNs
 #approach = "RSI-ADX"
 #config = defconfigs.rsiadx_BNs
 # approach = "EMA"
-# config = defconfigs.ema_Ns
+# config = defconfigs.ema_FNs
 #approach = "ST"
 #config = defconfigs.st_BNs
-approach = "RSI2"
-config = defconfigs.rsi2_FNs
+# approach = "RSI2"
+# config = defconfigs.rsi2_BNs
 #config = opconfigs.rsi2Nb1
 
 print(approach)

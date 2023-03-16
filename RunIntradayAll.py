@@ -32,6 +32,7 @@ elif user == "RI":
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+Finnifty_Path = ''
 
 # Default Config
 # config = opcon.ind_straddle_BN_2
@@ -45,7 +46,7 @@ for n in range(numStrategies):
     approach = approachVec[n]
     config = configs[n]
     print(approach)
-    trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path)
+    trades = RunStrategy.RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path, Finnifty_Path)
     print("\n")
     print(trades)
     trades.to_csv(Result_path + approach + "trades.csv")

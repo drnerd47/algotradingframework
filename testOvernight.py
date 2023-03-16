@@ -20,7 +20,7 @@ elif user == "RI":
   Root = "../"
   Result_path = "Results/"
 
-
+approach = "ODN"
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
@@ -62,22 +62,22 @@ trades = trades.drop(["index"],axis = 1)
 
 print("\n")
 print(trades)
-trades.to_csv(Result_path + "trades.csv")
+trades.to_csv(Result_path + approach + "_trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv(Result_path + "DailyChart.csv")
+Daily_Chart.to_csv(Result_path + approach + "_DailyChart.csv")
 
 print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv(Result_path + "Report.csv")
+report.to_csv(Result_path + approach + "_Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
-weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
+weeklyreport.to_csv(Result_path + approach + "_WeeklyReport.csv")
 
 
 print("\n")

@@ -20,20 +20,46 @@ elif user == "RI":
   Root = "../"
   Result_path = "Results/"
 
+PUTSPREADND = 1
+ICND = 2
+ICPos = 3
+
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 9, 30)
+end_date = datetime.date(2022, 12, 31)
 delta = datetime.timedelta(days=1)
 
-generalconfig = genconfigs.generalconfigNextDayNMW
-#generalconfig = genconfigs.generalconfigExpiryBN
-# positionconfigSS = posconfigs.getStraddles(defs.SELL, defs.NO, defs.NO, 25, 50)
-positionconfigIB = posconfigs.getIronButterfly(2000, defs.NO, defs.NO, defs.NO, 35, 35, 50)
-positionconfigIC = posconfigs.getIronCondor(500, 3000, defs.NO, defs.YES, defs.NO, 35, 100, 50)
-positionconfigSS = posconfigs.getStrangles(500, defs.SELL, defs.YES, defs.NO, 25, 50, 50)
-positionconfig = positionconfigIC
+StratType = ICPos
+Symbol = defs.N
+approach = "PosFN"
+if (StratType == PUTSPREADND):
+  # Next Day Put Spread
+  if (Symbol == defs.N):
+    generalconfig = genconfigs.generalconfigNextDayNMW
+    positionconfig = posconfigs.positionconfigPutSpreadN
+  else:
+    generalconfig = genconfigs.generalconfigNextDayBNMW
+    positionconfig = posconfigs.positionconfigPutSpreadBN
+elif (StratType == ICND):
+  # Next Day Iron Condor
+  if (Symbol == defs.N):
+    generalconfig = genconfigs.generalconfigNextDayNMW
+    positionconfig = posconfigs.getIronCondor(200, 1000, defs.NO, defs.NO, defs.NO, 35, 200, 50)
+  else:
+    generalconfig = genconfigs.generalconfigNextDayBNMW
+    positionconfig = posconfigs.getIronCondor(500, 2000, defs.NO, defs.NO, defs.NO, 35, 120, 50)
+elif (StratType == ICPos):
+  # Positional Iron Condor
+  if (Symbol == defs.N):
+    generalconfig = genconfigs.GetGeneralConfigExpiry(defs.ONELEG, defs.ONELEG, defs.N, [defs.MON], [defs.THU])
+    positionconfig = posconfigs.getIronCondor(200, 1000, defs.NO, defs.YES, defs.NO, 35, 80, 50)
+  else:
+    generalconfig = genconfigs.GetGeneralConfigExpiry(defs.ONELEG, defs.ONELEG, defs.BN, [defs.MON], [defs.THU])
+    positionconfig = posconfigs.getIronCondor(500, 2000, defs.NO, defs.YES, defs.NO, 35, 150, 50)
+
+
 trade = pd.DataFrame()
 trades = pd.DataFrame()
 positions = []
@@ -70,22 +96,22 @@ trades = trades.drop(["index"],axis = 1)
 
 print("\n")
 print(trades)
-trades.to_csv(Result_path + "trades.csv")
+trades.to_csv(Result_path + approach + "_trades.csv")
 
 print("\n")
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv(Result_path + "DailyChart.csv")
+Daily_Chart.to_csv(Result_path + approach + "_DailyChart.csv")
 
 print("\n")
 report = rep.Report(trades, Daily_Chart)
 print(report)
-report.to_csv(Result_path + "Report.csv")
+report.to_csv(Result_path + approach + "_Report.csv")
 
 print("\n")
 weeklyreport = rep.WeeklyBreakDown(Daily_Chart)
 print(weeklyreport)
-weeklyreport.to_csv(Result_path + "WeeklyReport.csv")
+weeklyreport.to_csv(Result_path + approach + "_WeeklyReport.csv")
 
 
 print("\n")

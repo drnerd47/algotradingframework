@@ -30,6 +30,7 @@ print("Test Directional Config")
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+Finnifty_Path = ''
 
 #approach = "BB2"
 #config = defconfigs.bb2_Ns
@@ -58,7 +59,7 @@ for n in range(numStrategies):
   approach = approachVec[n]
   name = NameVec[n]
   config = configs[n]
-  (data, trades) = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path)
+  (data, trades) = RunStrategy.RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Path, Nifty_Path, Finnifty_Path)
   if (config["action"] == defs.BUY):
     margin = utils.BuyMarginCalculator(trades, config["symbol"])
   else:

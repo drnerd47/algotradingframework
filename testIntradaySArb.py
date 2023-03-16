@@ -11,7 +11,7 @@ import positionconfigs as st
 import warnings
 warnings.filterwarnings("ignore")
 
-user = "MS"
+user = "RI"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -24,16 +24,34 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 
 start_date = datetime.date(2022, 1, 1)
-end_date = datetime.date(2022, 8, 31)
+end_date = datetime.date(2022, 12, 31)
 delta = datetime.timedelta(days=1)
 
 
 trade = pd.DataFrame()
 trades = []
-generalconfigBN = genconfigs.generalconfigIntradayBN
-generalconfigN = genconfigs.generalconfigIntradayN
-positionconfig = st.positionconfitStatArbStraddle
+generalconfigBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
+                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.BN,
+                     "ReEntrySL": 5, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5, "SLToCost": defs.YES, "REEvery": 1,
+                    "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE, "TrailSL": defs.NO}
+generalconfigN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
+                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,15), "symbol":defs.N,
+                     "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5, "MaxReEnterCounterTG": 5, "SLToCost": defs.YES, "REEvery": 1,
+                    "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE, "TrailSL": defs.NO}
 
+positionconfigShortStraddle = [{"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "SLPc":15, "SLPcFar":100, "TargetPc":50, "NumLots":1,
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
+                      {"Type":defs.PUT,"Action":defs.SELL,"Delta":0,"SLPc":15, "SLPcFar":100, "TargetPc":50,"NumLots":1,
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
+
+# Long Straddle
+positionconfigLongStraddle = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "SLPc":25, "SLPcFar":100, "TargetPc":50, "NumLots":1,
+                       "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
+                      {"Type":defs.PUT,"Action":defs.BUY,"Delta":0,"SLPc":25, "SLPcFar":100, "TargetPc":50,"NumLots":1,
+                       "SL": defs.YES,"Target":defs.NO, "Id": 2, "HedgeId": 0}]
+
+positionconfig = [positionconfigShortStraddle, positionconfigLongStraddle]
+#positionconfig = positionconfigShortStraddle
 trades = pd.DataFrame()
 
 while start_date <= end_date:
@@ -68,7 +86,7 @@ trades.to_csv("Results/trades.csv")
 
 Daily_Chart = rep.GetDailyChart(trades)
 print(Daily_Chart)
-Daily_Chart.to_csv("Results/trades.csv")
+Daily_Chart.to_csv("Results/DailyChart.csv")
 
 report = rep.Report(trades, Daily_Chart)
 print(report)

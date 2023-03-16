@@ -31,13 +31,12 @@ start_date = datetime.date(year, 1, 1)
 end_date = datetime.date(year, 12, 31)
 delta = datetime.timedelta(days=1)
 
-#generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.BN, defs.NO, defs.NO, 1, 6, defs.NO, 5)
-generalconfig = genconfigs.GetGeneralConfigIntradayTime(defs.ONELEG, defs.ONELEG, defs.BN, 60, defs.NO, 1, defs.NO)
+generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.N, defs.NO, defs.NO, 1, 1, defs.NO, 1, defs.NO, datetime.time(9, 16), datetime.time(15, 20))
 #generalconfig = genconfigs.generalconfigIntradayREBN
 #positionconfig = posconfings.getIronButterfly(1500, 0, 1, 0, 30, 35, 70)
-#ositionconfig = posconfings.getIronCondor(400, 500, 0, 0, 1, 20, 35, 30)
-positionconfig = posconfings.getStraddles(defs.SELL, defs.YES, defs.NO, 25, 40)
-#positionconfig = posconfings.positionconfigShortStraddle
+positionconfigOther = posconfings.getIronCondor(500, 1500, 0, 0, 0, 20, 35, 30)
+positionconfigThu = posconfings.getIronCondor(500, 1500, 0, 0, 0, 20, 35, 30)
+#positionconfig = posconfings.getStrangles(defs.SELL, 500, defs.NO, defs.NO, 50, 50)
 
 trade = pd.DataFrame()
 trades = pd.DataFrame()

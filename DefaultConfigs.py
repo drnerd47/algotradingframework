@@ -91,7 +91,7 @@ rsi2_Nb = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 9
 # RSI-2 BANKNIFTY SELL SIDE
 rsi2_BNs = {"TBull1": 40, "TBear1": 60, "window1": 14,  "TBull2": 10, "TBear2": 90, "window2":2,
             "SL": defs.YES, "Target": defs.NO, "SLPc": 20, "TargetPc": 70, 'symbol': defs.BN, 'action': defs.SELL,
-            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0, "TrailSL": defs.NO, 'MaxBullReEnterCounter':4, 'MaxBearReEnterCounter':4,
+            'rolling': defs.YES, 'Resample': 10, 'reenter': defs.YES, "SLTGContinuous": defs.YES, 'Delta': 0, "TrailSL": defs.NO, 'MaxBullReEnterCounter':5, 'MaxBearReEnterCounter':5,
             "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15)}
 
 # RSI-2 NIFTY SELL SIDE
@@ -191,6 +191,11 @@ ema_BNs = {"TBull": 35, "TBear": -65, "period": 14, "SL": defs.YES, "Delta": 0, 
 # EMA NIFTY SELL SIDE
 ema_Ns = {"TBull": 20, "TBear": -20, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
             'action': defs.SELL, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.N, "SLTGContinuous": defs.YES, "TrailSL": defs.NO, 'MaxBullReEnterCounter':4, 'MaxBearReEnterCounter':4,
+            "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15)}
+
+# EMA NIFTY SELL SIDE
+ema_FNs = {"TBull": 20, "TBear": -20, "period": 14, "SL": defs.YES, "Delta": 0, "Target": defs.NO, 'SLPc': 20, 'TargetPc': 70, 'Resample': 3,
+            'action': defs.SELL, 'rolling': defs.NO, 'reenter': defs.YES, 'symbol': defs.FN, "SLTGContinuous": defs.YES, "TrailSL": defs.NO, 'MaxBullReEnterCounter':4, 'MaxBearReEnterCounter':4,
             "EnterTime": datetime.time(9, 15), "ExitTime": datetime.time(15, 15)}
 
 st_BNs = {"action": defs.SELL, "Delta": 0, "symbol": defs.BN, "period": 10, "multiplier": 2, "Resample": 3, "rolling": defs.NO, "reenter": defs.YES,

@@ -1,60 +1,59 @@
 import atomic as atom
 import definitions as defs
 import directional as direc
+import pandas as pd
 import time
 
-def IntradayTimeReEntry(masterdf, generalconfig, positionconfig):
+def IntradayTimeReEntry(masterdf, generalconfig, positionconfigs):
   spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
   placed = False
-  positions = []
-  trades = []
+  positionsArr = []
+  trades = pd.DataFrame()
   MinCounter = 0
-
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
   exitSQOHLC = 'close'
   exitSQEODOHLC = 'open'
-
+  counter = 0
   for s in range(len(spotdata)):
     MinCounter += 1
     currentcandle = spotdata.iloc[s]
     # Check Enter time Condition
-    if currentcandle.name.time() == generalconfig["EnterTime"] and not placed:
-      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+    if (counter < len(generalconfig["EnterTime"])) and currentcandle.name.time() == generalconfig["EnterTime"][counter]:
+      positions = []
+      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
                                                            currentcandle, OHLCEnter)
+      counter = counter + 1
       placed = True
+      MinCounter = 0
+      positionsArr.append(positions)
     if placed:
-      # Check time based re-entry. If true, re-enter every "ReEnterEvery" number of minutes.
-      if (generalconfig["Timerenter"] == defs.YES):
-        if (MinCounter % generalconfig["ReEnterEvery"] == 0):
-          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
-                                                               currentcandle, OHLCEnter)
       # Check Stop Loss Condition
-      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
-
-      # We enter this loop if there is any position where stop-loss is triggered.
-      if (len(postoExitSL) > 0):
-        atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
-        if (generalconfig["SLToCost"] == defs.YES):
-          atom.StopLossToCost(positions)
-        if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
-          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
-
+      for positions in positionsArr:
+        (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+        # We enter this loop if there is any position where stop-loss is triggered.
+        if (len(postoExitSL) > 0):
+          atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+          if (generalconfig["SLToCost"] == defs.YES):
+            atom.StopLossToCost(positions)
+          if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+            atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
       # Check Target Profit Condition
-      (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
-      # We enter this loop if there is any position where target profit condition is satisfied.
-      if (len(postoExitTarget) > 0):
-        ReEnterNextTG = True
-        posConfigtoExitTGNext = posConfigtoExitTG
-        atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
-        if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
-          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
+      for positions in positionsArr:
+        (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+        # We enter this loop if there is any position where target profit condition is satisfied.
+        if (len(postoExitTarget) > 0):
+          atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
+          if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
+            atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
 
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]):
-        atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
-        trades = atom.GetFinalTrades(positions)
+        for positions in positionsArr:
+          atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+          tradesCurr = atom.GetFinalTrades(positions)
+          trades = trades.append(tradesCurr)
   return trades
 
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
@@ -246,13 +245,13 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
   exitDone = False # if exit (EOD) is done, we do not go to the exit condition again.
   positions = []
   trades = []
-  BullReEnterCounter = 0
-  BearReEnterCounter = 0
   OHLCEnter = 'open'
   exitSLOHLC = 'close'
   exitTGOHLC = 'close'
   exitSQEODOHLC = 'close'
-  for s in range(len(spotdata)): # 
+  ReEnterCounterBull = 0
+  ReEnterCounterBear = 0
+  for s in range(len(spotdata)): 
     currentcandle = spotdata.iloc[s]
     if (currentcandle.name in spotdatafull.index):
       sfull = spotdatafull.index.get_loc(currentcandle.name)
@@ -263,18 +262,18 @@ def DirectionalStrategy(data, masterdf, generalconfig, positionconfig, TIconfig,
     else:
       nextcandle = currentcandle
     (bullentry, bearentry) = direc.CheckEntryCondition(currentcandle, TIconfig)
-    # Check Enter Condition
-    if bullentry and not placedBull and (BullReEnterCounter < generalconfig["MaxBullReEnterCounter"]):
+    # Check Enter Condition "MaxReEnterCounterBull": 5, "MaxReEnterCounterBear": 5
+    if bullentry and not placedBull and generalconfig["MaxBullReEnterCounter"] > ReEnterCounterBull:
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BULL)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBULLPOSITION
       placedBull = True
-      BullReEnterCounter += 1
-    if bearentry and not placedBear and (BearReEnterCounter < generalconfig["MaxBearReEnterCounter"]):
+      ReEnterCounterBull += 1
+    if bearentry and not placedBear and generalconfig["MaxBearReEnterCounter"] > ReEnterCounterBear:
       (positions, positionsNotPlaced) = direc.EnterPosition(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLCEnter, defs.BEAR)
       data.loc[currentcandle.name]['EntrySignal'] = defs.ENTERBEARPOSITION
       placedBear = True
-      BearReEnterCounter += 1
-    
+      ReEnterCounterBear += 1
+
     if placedBull or placedBear:
       if (generalconfig["TrailSL"] == defs.YES):
         atom.TrailStopLoss(positions, currentcandle)
