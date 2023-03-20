@@ -24,9 +24,10 @@ def LoadDF(currpath):
                 
         except: # THIS EXCEPTION OCCURS WHEN BACKTESTING ON LIVE STORED DATA
             masterdf["datetime"] = pd.to_datetime(masterdf["datetime"])
+            masterdf.dropna(inplace=True)
             
         masterdf = masterdf.set_index(masterdf['datetime'])
-        masterdf.dropna(inplace=True)
+        
     return masterdf
 
 def GetOptionPriceAtomic(masterdf, symbol, type, strikeprice, time, HLOC):
@@ -45,6 +46,17 @@ def GetOptionPrice(masterdf, opsymbol, time, HLOC):
     else:
         price = -1
     return price
+
+def CheckPNL(positions, currentcandle):
+    CurrPNL = 0
+    for pos in positions:
+        if currentcandle.name in pos['OpData'].index:
+            if pos["Active"]:
+                optionprice = pos["OpData"].loc[currentcandle.name]['close']
+                CurrPNL = CurrPNL + pos["PositionConfig"]["Action"] * pos["Qty"]*(optionprice - pos["EnterPrice"])
+            else:
+                CurrPNL = CurrPNL + pos["trades"]["pnl"]
+    return CurrPNL
 
 def GetExpiry(masterdf, symbol):
     if (symbol == defs.BN):
