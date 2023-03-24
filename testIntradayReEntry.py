@@ -82,13 +82,13 @@ while start_date <= end_date:
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
     if (generalconfig["symbol"] == defs.BN):
-      trade = strategies.IntradayTimeReEntry(masterdfBN, generalconfig, positionconfigs)
+      (trade, PNLTracker, PNLTrackerSumm) = strategies.IntradayTimeReEntry(masterdfBN, generalconfig, positionconfigs)
     elif (generalconfig["symbol"] == defs.N):
-      trade = strategies.IntradayTimeReEntry(masterdfN, generalconfig, positionconfigs)
+      (trade, PNLTracker, PNLTrackerSumm) = strategies.IntradayTimeReEntry(masterdfN, generalconfig, positionconfigs)
     if (len(trade) > 0):
       trades = trades.append(trade)
-  else:
-    print("No data for " + start_date.strftime("%Y-%m-%d"))
+    print("MinPNL = " + str(PNLTrackerSumm["MinPNL"]) + ", MaxPNL = " + str(
+      PNLTrackerSumm["MaxPNL"]) + ", FinalPNL = " + str(PNLTrackerSumm["FinalPNL"]))
   start_date += delta
 
 trades['date'] = pd.to_datetime(trades["date"])

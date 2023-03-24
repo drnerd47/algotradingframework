@@ -15,18 +15,16 @@ def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntr
                        "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
     return generalconfig
 
-def GetGeneralConfigIntradayTime(SquareOffSL, SquareOffTG, symbol, ReEnterEvery, SLtoCost, REEvery, TrailSL):
+def GetGeneralConfigIntradayTime(EnterTime, ExitTime, SquareOffSL, SquareOffTG, symbol, ReEnterEvery, SLtoCost, PNLLimit, DrawdownLimit):
     if (symbol == defs.BN):
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
         lotsize = defs.NLOTSIZE
-    elif (symbol == defs.FN):
-        lotsize = defs.FNLOTSIZE
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
-                       "EnterTime": datetime.time(9, 30), "ExitTime": datetime.time(15, 15), "symbol": symbol,
-                       "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "MaxReEnterCounterSL": 5,
-                        "MaxReEnterCounterTG": 5, "SLToCost": SLtoCost, "REEvery": REEvery, "TrailSL": TrailSL,
-                       "debug": defs.DEBUGTIME, "Timerenter": defs.YES, "ReEnterEvery": ReEnterEvery, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
+                       "EnterTime": EnterTime, "ExitTime": ExitTime, "symbol": symbol,
+                       "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "SLToCost": SLtoCost, "REEvery": 1,
+                       "debug": defs.DEBUGTIME, "Timerenter": defs.YES, "ReEnterEvery": ReEnterEvery, "Slippage": defs.SLIPPAGE, "LotSize":lotsize,
+                     "PNLLimit": PNLLimit, "DrawdownLimit": DrawdownLimit}
     return generalconfig
 
 def GetGeneralConfigExpiry(SquareOffSL, SquareOffTG, symbol, EnterDay, ExitDay):

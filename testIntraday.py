@@ -25,13 +25,13 @@ Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
 Finnifty_Path = Root + "NIFTYOptionsData/Resampled Data/Finnifty/"
 
-year = 2022
+year = 2023
 
 start_date = datetime.date(year, 1, 1)
-end_date = datetime.date(year, 12, 31)
+end_date = datetime.date(year, 2, 28)
 delta = datetime.timedelta(days=1)
 
-generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.N, defs.NO, defs.NO, 1, 1, defs.NO, 1, defs.NO, datetime.time(9, 16), datetime.time(15, 20))
+generalconfig = genconfigs.GetGeneralConfigIntraday(defs.ONELEG, defs.ONELEG, defs.N, defs.YES, defs.NO, 1, 1, defs.NO, 1, defs.NO, datetime.time(9, 16), datetime.time(15, 20))
 #generalconfig = genconfigs.generalconfigIntradayREBN
 #positionconfig = posconfings.getIronButterfly(1500, 0, 1, 0, 30, 35, 70)
 positionconfigOther = posconfings.getIronCondor(500, 1500, 0, 0, 0, 20, 35, 30)
@@ -45,26 +45,29 @@ while start_date <= end_date:
   date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
   BNPath = Banknifty_Path + date_string
   NPath = Nifty_Path + date_string
-  FNPath = Finnifty_Path + date_string
   my_fileN = Path(NPath)
   my_fileBN = Path(BNPath)
-  my_fileFN = Path(FNPath)
   print(date_string)
-  if my_fileN.exists() and my_fileBN.exists() : # and my_fileFN.exists()
+  if start_date.weekday() == defs.THU:
+    positionconfig = positionconfigThu
+  else:
+    positionconfig = positionconfigOther
+  if my_fileN.exists() and my_fileBN.exists():
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
-    # masterdfFN = atom.LoadDF(FNPath)
     if (generalconfig["symbol"] == defs.BN):
-      trade = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+      (trade, PNLTracker, PNLTrackerSumm) = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
     elif (generalconfig["symbol"] == defs.N):
-      trade = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
-    # elif (generalconfig["symbol"] == defs.FN):
-    #   trade = strategies.IntraDayStrategy(masterdfFN, generalconfig, positionconfig)
+      (trade, PNLTracker, PNLTrackerSumm) = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
     if (len(trade) > 0):
       trades = trades.append(trade)
+    print("MinPNL = " + str(PNLTrackerSumm["MinPNL"]) + ", MaxPNL = " + str(PNLTrackerSumm["MaxPNL"]) +
+          ", FinalPNL = " + str(PNLTrackerSumm["FinalPNL"]))
+
   else:
     print("No data for " + start_date.strftime("%Y-%m-%d"))
   start_date += delta
+
 
 trades['date'] = pd.to_datetime(trades["date"])
 trades = trades.reset_index()
