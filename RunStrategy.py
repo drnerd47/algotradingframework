@@ -87,9 +87,9 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
         masterdfN = atom.LoadDF(NPath)
         masterdfBN = atom.LoadDF(BNPath)
         if (generalconfig["symbol"] == defs.BN):
-          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+          trade, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
         elif (generalconfig["symbol"] == defs.N):
-          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
+          trade, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
         if (len(trade) > 0):
           trades = trades.append(trade)
           
@@ -108,7 +108,7 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
       if my_fileFN.exists() and runToday:
         masterdfFN = atom.LoadDF(FNPath)
         if (generalconfig["symbol"] == defs.FN):
-          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfFN, generalconfig, positionconfig)
+          trade, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfFN, generalconfig, positionconfig)
         if (len(trade) > 0):
           trades = trades.append(trade)
       start_date += delta
