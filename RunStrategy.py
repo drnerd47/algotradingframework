@@ -67,7 +67,7 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
   delta = datetime.timedelta(days=1)
   trade = pd.DataFrame()
   trades = pd.DataFrame()
-  PnL = pd.DataFrame()
+  
   tic = time.time()
   origDelta = config["Delta"]
   if config['symbol'] == defs.N or config['symbol'] == defs.BN:
@@ -87,12 +87,12 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
         masterdfN = atom.LoadDF(NPath)
         masterdfBN = atom.LoadDF(BNPath)
         if (generalconfig["symbol"] == defs.BN):
-          trade, PnLArray = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
+          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfBN, generalconfig, positionconfig)
         elif (generalconfig["symbol"] == defs.N):
-          trade, PnLArray = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
+          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfN, generalconfig, positionconfig)
         if (len(trade) > 0):
           trades = trades.append(trade)
-          PnL = PnL.append(PnLArray)
+          
       start_date += delta
   elif config['symbol'] == defs.FN:
     while start_date <= end_date:
@@ -108,10 +108,9 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
       if my_fileFN.exists() and runToday:
         masterdfFN = atom.LoadDF(FNPath)
         if (generalconfig["symbol"] == defs.FN):
-          trade, PnLArray = strategies.IntraDayStrategy(masterdfFN, generalconfig, positionconfig)
+          trades, PNLTracker, PNLTrackerSumm = strategies.IntraDayStrategy(masterdfFN, generalconfig, positionconfig)
         if (len(trade) > 0):
           trades = trades.append(trade)
-          PnL = PnL.append(PnLArray)
       start_date += delta
   toc = time.time()
   print("Time taken to run this Strategy ", toc-tic)
