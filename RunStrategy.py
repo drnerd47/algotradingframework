@@ -119,4 +119,4 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
   trades['date'] = pd.to_datetime(trades["date"])
   trades = trades.reset_index()
   trades = trades.drop(["index"],axis = 1)
-  return trades, PnL
+  return trades
