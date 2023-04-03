@@ -70,7 +70,7 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
   
   tic = time.time()
   origDelta = config["Delta"]
-  if config['symbol'] == defs.N or config['symbol'] == defs.BN:
+  if config['symbol'] == defs.N or config['symbol'] == defs.BN :
     while start_date <= end_date:
       if start_date.weekday() == defs.THU:
         config["Delta"] = config["DeltaThu"]

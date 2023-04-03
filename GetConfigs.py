@@ -5,10 +5,10 @@ import generalconfigs as genconfigs
 import positionconfigs as posconfigs
 
 def GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
-                    SL, Target, SLPc, TargetPc, TrailSL, EnterTime, ExitTime):
+                    SL, Target, SLPc, TargetPc, TrailSL, EnterTime, ExitTime, action, limit, pnllimit, ddlimit):
     generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL,
-                                                        EnterTime, ExitTime)
-    positionconfig = posconfigs.getStraddles(defs.SELL, SL, Target, SLPc, TargetPc)
+                                                        EnterTime, ExitTime, limit, pnllimit, ddlimit)
+    positionconfig = posconfigs.getStraddles(action, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
 def GetINDStraddlesConfig(config):
@@ -28,16 +28,20 @@ def GetINDStraddlesConfig(config):
     TrailSL = config["TrailSL"]
     EnterTime = config["EnterTime"]
     ExitTime = config["ExitTime"]
+    action = config["action"]
+    limit = config["Limits"]
+    pnllimit = config["PNLLimit"]
+    ddlimit = config["DrawdownLimit"]
     (generalconfig, positionconfig) = GetINDStraddles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                       SLtoCost, REEvery, SL, Target, SLPc, TargetPc, TrailSL, EnterTime, ExitTime)
+                                                       SLtoCost, REEvery, SL, Target, SLPc, TargetPc, TrailSL, EnterTime, ExitTime, action, limit, pnllimit, ddlimit)
                                                     
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
-                    SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime):
+                    SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime, action, limit, pnllimit, ddlimit):
     generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL,
-                                                        EnterTime, ExitTime)
-    positionconfig = posconfigs.getStrangles(defs.SELL, Delta, SL, Target, SLPc, TargetPc)
+                                                        EnterTime, ExitTime, limit, pnllimit, ddlimit)
+    positionconfig = posconfigs.getStrangles(action, Delta, SL, Target, SLPc, TargetPc)
     return (generalconfig, positionconfig)
 
 def GetINDStranglesConfig(config):
@@ -58,8 +62,12 @@ def GetINDStranglesConfig(config):
     TrailSL = config["TrailSL"]
     EnterTime = config["EnterTime"]
     ExitTime = config["ExitTime"]
+    action = config["action"]
+    limit = config["Limits"]
+    pnllimit = config["PNLLimit"]
+    ddlimit = config["DrawdownLimit"]
     (generalconfig, positionconfig) = GetINDStrangles(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG,
-                                                    SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime)
+                                                    SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime, action, limit, pnllimit, ddlimit)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, 

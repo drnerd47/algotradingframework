@@ -52,7 +52,7 @@ def CheckPNL(positions, currentcandle):
     for pos in positions:
         if currentcandle.name in pos['OpData'].index:
             if pos["Active"]:
-                optionprice = pos["OpData"].loc[currentcandle.name]['close']
+                optionprice = pos["OpData"].loc[currentcandle.name]['open']
                 CurrPNL = CurrPNL + pos["PositionConfig"]["Action"] * pos["Qty"]*(optionprice - pos["EnterPrice"])
             else:
                 CurrPNL = CurrPNL + pos["trades"]["pnl"]

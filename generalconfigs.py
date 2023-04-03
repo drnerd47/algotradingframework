@@ -1,18 +1,20 @@
 import definitions as defs
 import datetime
 
-def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL, EnterTime, ExitTime):
+def GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL, EnterTime, ExitTime,
+                             limit, pnllimit, ddlimit):
     if (symbol == defs.BN):
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
         lotsize = defs.NLOTSIZE
-    elif (symbol == defs.FN):
+    elif symbol == defs.FN:
         lotsize = defs.FNLOTSIZE
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
                        "EnterTime": EnterTime, "ExitTime": ExitTime, "symbol": symbol,
                        "ReEntrySL": ReEntrySL, "ReEntryTG": ReEntryTG, "MaxReEnterCounterSL": MaxReEnterCounterSL,
                         "MaxReEnterCounterTG": MaxReEnterCounterTG, "SLToCost": SLtoCost, "REEvery": REEvery, "TrailSL": TrailSL,
-                       "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":lotsize}
+                       "debug": defs.DEBUGTIME, "Timerenter": defs.NO, "ReEnterEvery": 5, "Slippage": defs.SLIPPAGE, "LotSize":lotsize,
+                     "PNLLimit": pnllimit, "Limit": limit, "DDLimit": ddlimit}
     return generalconfig
 
 def GetGeneralConfigIntradayTime(EnterTime, ExitTime, SquareOffSL, SquareOffTG, symbol, ReEnterEvery, SLtoCost, PNLLimit, DrawdownLimit):
@@ -20,6 +22,8 @@ def GetGeneralConfigIntradayTime(EnterTime, ExitTime, SquareOffSL, SquareOffTG, 
         lotsize = defs.BNLOTSIZE
     elif (symbol == defs.N):
         lotsize = defs.NLOTSIZE
+    elif symbol == defs.FN:
+        lotsize = defs.FNLOTSIZE
     generalconfig = {"SquareOffSL": SquareOffSL, "SquareOffTG": SquareOffTG,
                        "EnterTime": EnterTime, "ExitTime": ExitTime, "symbol": symbol,
                        "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "SLToCost": SLtoCost, "REEvery": 1,
@@ -69,7 +73,7 @@ generalconfigOverNightDirBNMW = {"name":" OverNightDir", "EnterDay": [defs.MON, 
 generalconfigOverNightDirNMW = {"name":" OverNightDir", "EnterDay": [defs.MON, defs.TUE, defs.WED, defs.FRI],
                      "EnterTime":datetime.time(15,20),"ExitTime":datetime.time(9,20), "ExitDay": [defs.TUE, defs.WED, defs.THU, defs.MON],
                      "StartCheckTime": datetime.time(9,30), "EndCheckTime": datetime.time(15,10), "SType": "Trend",
-                     "symbol":defs.N, "Slippage": defs.SLIPPAGE, "LotSize":defs.BNLOTSIZE}
+                     "symbol":defs.N, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE}
 
 generalconfigNextDayBNF = {"name":"NextDayBNF" ,"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG, "EnterDay": [defs.FRI],
                      "EnterTime":datetime.time(15,15),"ExitTime":datetime.time(9,30), "ExitDay": [defs.MON], "symbol":defs.BN,
