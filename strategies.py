@@ -225,6 +225,26 @@ def OverNightDirectional(masterdf, positions, generalconfig, positionconfig):
       positions = []
   return (trades, positions)
 
+def OverNight(masterdf, positions, generalconfig, positionconfig):
+  spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
+  trades = []
+  OHLCEnter = 'open'
+  exitSQEODOHLC = 'open'
+  direc.UpdatePosition(masterdf, positions)
+  for s in range(len(spotdata)):
+    currentcandle = spotdata.iloc[s]
+    if currentcandle.name.time() == generalconfig["EnterTime"] and currentcandle.name.weekday() in generalconfig['EnterDay']:
+      (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                            currentcandle, OHLCEnter)
+      
+    # Square off Legs at ExitTime
+    if (currentcandle.name.time() == generalconfig['ExitTime']) and (currentcandle.name.weekday() in generalconfig["ExitDay"]):
+      atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+      trades = atom.GetFinalTrades(positions)
+      positions = []
+  return (trades, positions)
+
+
 def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
   trades = []
