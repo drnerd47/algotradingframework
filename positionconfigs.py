@@ -79,6 +79,12 @@ positionconfigPutSpreadN = [{"Type":defs.PUT,"Action":defs.BUY,"Delta":-1000,"SL
                       {"Type": defs.PUT, "Action": defs.SELL, "Delta": -200, "SLPc": 25, "TargetPc": 50,
                        "NumLots": 1, "SL": defs.YES, "Target": defs.NO, "Id": 4, "HedgeId": 2}]
 
+positionconfigPutSpreadAmoghN = [{"Type":defs.PUT,"Action":defs.BUY,"Delta":-700,"SLPc":25,"TargetPc":50,"NumLots":1,
+                       "SL": defs.NO,"Target":defs.NO, "Id": 2, "HedgeId": 0},
+                      {"Type": defs.PUT, "Action": defs.SELL, "Delta": -350, "SLPc": 25, "TargetPc": 50,
+                       "NumLots": 1, "SL": defs.NO, "Target": defs.NO, "Id": 4, "HedgeId": 2}]
+
+
 positionconfigCallSpread = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":1000, "SLPc":25, "TargetPc":50, "NumLots":1,
                        "SL": defs.YES, "Target":defs.NO, "Id": 1, "HedgeId": 0},
                       {"Type": defs.CALL, "Action": defs.SELL, "Delta": 200, "SLPc": 25, "TargetPc": 50,
@@ -174,3 +180,13 @@ positionconfigsinglebuydirecSL = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0,
                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 20, "TargetPc": 70},
                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "NumLots":1,
                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 20, "TargetPc": 70}]
+
+positionconfigsinglebuydirecNextWeek = [{"Type":defs.CALL,"Action":defs.BUY,"Delta":0, "NumLots":1,
+                                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 30},
+                                        {"Type":defs.PUT,"Action":defs.BUY,"Delta":0, "NumLots":1,
+                                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 30},
+                                        
+                                        {"Type":defs.CALL,"Action":defs.SELL,"Delta":0, "NumLots":1,
+                                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BEAR, "SLPc": 30},
+                                        {"Type":defs.PUT,"Action":defs.SELL,"Delta":0, "NumLots":1,
+                                        "SL": defs.YES, "Target":defs.NO, "Stance": defs.BULL, "SLPc": 30}]

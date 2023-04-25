@@ -16,15 +16,15 @@ import utils
 
 warnings.filterwarnings("ignore")
 
-year = 2021
+year = 2022
 startmonth = 1
 endmonth = 12
 start_date = datetime.date(year, startmonth, 1)
-end_date = datetime.date(year, endmonth, 31)
+end_date = datetime.date(year, endmonth, 21)
 
 delta = datetime.timedelta(days=1)
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -34,9 +34,9 @@ elif user == "RI":
   Result_path = "Results/"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
-Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
+Nifty_Path = Root + "NIFTYOptionsData/Next Week Exp and Current Spot/"
 
-approach = "ORB"
+approach = "2022"
 
 #generalconfigBN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
 #                     "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,25), "symbol":defs.BN,
@@ -46,11 +46,10 @@ approach = "ORB"
 generalconfigN = {"SquareOffSL":defs.ONELEG,"SquareOffTG":defs.ONELEG,
                   "EnterTime":datetime.time(9,30),"ExitTime":datetime.time(15,25), "symbol":defs.N,
                   "debug": defs.DEBUGTIME, "Slippage": defs.SLIPPAGE, "LotSize":defs.NLOTSIZE,
-                  "Premium": 80, "StartStrike": 17000, "EndStrikeStrike":19000, "BreakoutFactor":35, "Until":datetime.time(11,0),
-                  "OpType": defs.BUY, "Type": defs.TREND}
+                  "Premium": 40, "StartStrike": 10000, "EndStrikeStrike":19000, "Until":datetime.time(11,0)}
 
 generalconfig = generalconfigN
-positionconfig = posconfig.positionconfigsinglebuydirec
+positionconfig = posconfig.positionconfigsinglebuydirecNextWeek
 #positionconfig = posconfig.positionconfigsingleselldirecSL
 
 trade = pd.DataFrame()
@@ -67,10 +66,10 @@ while start_date <= end_date:
     masterdfN = atom.LoadDF(NPath)
     masterdfBN = atom.LoadDF(BNPath)
     if (generalconfig["symbol"] == defs.BN):
-      trade = strategies.OpeningRangeBreakout(masterdfBN, generalconfig, positionconfig)
+      trade = strategies.OpeningRangeBreakoutNextWeekExp(masterdfBN, generalconfig, positionconfig)
     elif (generalconfig["symbol"] == defs.N):
-      trade = strategies.OpeningRangeBreakout(masterdfN, generalconfig, positionconfig)
-    print(trade)
+      trade = strategies.OpeningRangeBreakoutNextWeekExp(masterdfN, generalconfig, positionconfig)
+    print('Trade - ',trade)
     if (len(trade) > 0):
       trades = trades.append(trade)
   else:

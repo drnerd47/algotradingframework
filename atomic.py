@@ -69,6 +69,17 @@ def GetExpiry(masterdf, symbol):
         print("Unknown Symbol")
         return 0
 
+def GetNextExpiry(masterdf, symbol):
+    if (symbol == defs.BN):
+        return masterdf.iloc[0]['symbol'][9:16]
+    elif (symbol == defs.N):
+        return masterdf.iloc[0]['symbol'][5:11]
+    elif symbol == defs.FN:
+        return masterdf.iloc[0]['symbol'][8:15]
+    else:
+        print("Unknown Symbol")
+        return 0
+
 def GetSpotData(masterdf, symbol):
     mask1 = masterdf['symbol'] == symbol
     #print(masterdf.info())
@@ -234,7 +245,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']   
             # futenterprice = pos['FutEnterPrice']
-            # futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]                    
+            # futexitprice = pos['FutData'].loc[currentcandle.name][OHLC]
             #enterprice = enterprice*(1 + pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             exitprice = exitprice*(1 - pos["Slippage"]*pos["PositionConfig"]["Action"]/100)
             pos["trades"] = {'EnterPrice': enterprice, 'ExitPrice': exitprice,
@@ -251,6 +262,9 @@ def GetFinalTrades(positions):
         trades = trades.append(pos["trades"], ignore_index=True)
     #trades = trades.append(trades, ignore_index=True)
     return trades
+
+def GetNextWeekExpiryData():
+    pass
 
 
 

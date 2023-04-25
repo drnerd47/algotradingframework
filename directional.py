@@ -308,6 +308,7 @@ def EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, next
         if (posc["Stance"] == stance):
             exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
             opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(strike) + posc["Type"]]
+            # print(opdf)
             futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
             #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
             # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
@@ -329,6 +330,89 @@ def EnterPositionStrike(generalconfig, positionconfig, masterdf, positions, next
                     "Active": True, "Strike": strike,
                     "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
                     "FutEnterPrice":futprice }
+                if (posc["SL"] == defs.YES):
+                    position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
+                if (posc["Target"] == defs.YES):
+                    position["TargetCond"] = enterprice + posc["Action"]*enterprice*posc["TargetPc"]/100
+                positions.append(position)
+            else:
+                positionsNotPlaced.append(posc)
+    return (positions, positionsNotPlaced)
+
+def EnterPositionStrikeAction(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance, strike, action):
+    positionsNotPlaced = []
+    for posc in positionconfig:
+        if (posc["Stance"] == stance) and posc['Action'] == action:
+            exp = atom.GetNextExpiry(masterdf, generalconfig["symbol"])
+            opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(strike) + posc["Type"]]
+            # print(opdf)
+            futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
+            #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
+            # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
+            if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
+                # print('yay')
+                price = opdf.loc[nextcandle.name][OHLC]
+                try:
+                    futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                except:
+                    futprice = 0
+                enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": strike,
+                    "OpSymbol": generalconfig["symbol"] + exp + str(strike) + posc["Type"],
+                    "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(strike) + posc["Type"]],
+                    "FutData": futdf, 
+                    "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
+                    "date": nextcandle.name.date(),                    
+                    "EnterSpotPrice": enterspotprice,
+                    "Active": True, "Strike": strike,
+                    "symbol": masterdf.iloc[0]['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
+                    "FutEnterPrice":futprice }
+                if (posc["SL"] == defs.YES):
+                    position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
+                if (posc["Target"] == defs.YES):
+                    position["TargetCond"] = enterprice + posc["Action"]*enterprice*posc["TargetPc"]/100
+                positions.append(position)
+            else:
+                positionsNotPlaced.append(posc)
+    return (positions, positionsNotPlaced)
+
+def EnterPositionAction(generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance, action):
+    positionsNotPlaced = []
+    for posc in positionconfig:
+        if (posc["Stance"] == stance) and posc['Action'] == action:
+            exp = atom.GetNextExpiry(masterdf, generalconfig["symbol"])
+            if generalconfig['symbol'] == defs.N :
+                cst = nextcandle[OHLC]
+                cst = int(round(cst / 50, 0) * 50)
+            elif generalconfig['symbol'] == defs.BN :
+                cst = nextcandle[OHLC]
+                cst = int(round(cst / 100, 0) * 100)
+            elif generalconfig['symbol'] == defs.FN :
+                cst = nextcandle[OHLC]
+                cst = int(round(cst / 50, 0)*50)
+            opdf = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]]
+            futdf = masterdf[masterdf['symbol'] == generalconfig['symbol'] + "-I"]
+            #spotdf = masterdf[masterdf['symbol'] == generalconfig['symbol']]
+            # print(config["symbol"] + exp + str(cst + pos["Delta"]) + pos["Type"])
+            if nextcandle.name in opdf.index : # and nextcandle.name in opdf.index :
+                price = opdf.loc[nextcandle.name][OHLC]
+                try:
+                    futprice = futdf.loc[nextcandle.name][OHLC] #* (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                except:
+                    futprice = 0
+                enterprice = price * (1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                enterspotprice = nextcandle[OHLC] #*(1 + generalconfig["Slippage"] * posc["Action"] / 100)
+                position = {"EnterPrice": enterprice, "PositionConfig": posc, "Expiry":exp, "StrikePrice": cst + posc["Delta"],
+                    "OpSymbol": generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"],
+                    "OpData": masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(cst + posc["Delta"]) + posc["Type"]],
+                    "FutData": futdf, 
+                    "Entertime": nextcandle.name.time(), "Qty": generalconfig["LotSize"] * posc["NumLots"],
+                    "date": nextcandle.name.date(),                    
+                    "EnterSpotPrice": enterspotprice,
+                    "Active": True, "Strike": cst + posc["Delta"],
+                    "symbol": generalconfig['symbol'], "trades":{}, "stance": stance, "Slippage": generalconfig['Slippage'],
+                    "FutEnterPrice":futprice, "TrailMul": 1}
                 if (posc["SL"] == defs.YES):
                     position["SLCond"] = enterprice - posc["Action"]*enterprice*posc["SLPc"]/100
                 if (posc["Target"] == defs.YES):
@@ -535,6 +619,29 @@ def FindStrike(masterdf, premium, time, startstrike, endstrike, optype, OHLC, sy
             #print(currprice)
             #print(s)
     return (currbeststrike, minval)
+
+def FindNextWeekStrike(masterdf, premium, time, startstrike, endstrike, optype, OHLC, symbol):
+    if symbol == defs.N :
+        inc = 50
+    elif symbol == defs.BN :
+        inc = 100
+    elif symbol == defs.FN :
+        inc = 50
+    minval = 1000
+    #print(optype)
+    for s in range(startstrike, endstrike, inc):
+        exp = atom.GetNextExpiry(masterdf, symbol)
+        opsymbol = symbol + exp + str(s) + optype       
+        currprice = atom.GetOptionPrice(masterdf, opsymbol, time, OHLC)
+        if abs(currprice - premium) < minval:
+            minval = abs(currprice - premium)
+            currbeststrike = s
+            #print(minval)
+            #print(currprice)
+            #print(s)
+    return (currbeststrike, minval)
+
+
 
 # jit_module()
         

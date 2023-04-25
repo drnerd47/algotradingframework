@@ -4,7 +4,7 @@ import directional as direc
 import pandas as pd
 import time
 
-def IntradayTimeReEntry(masterdf, generalconfig, positionconfigs):
+def IntradayTimeSLReEntry(masterdf, generalconfig, positionconfigs):
   spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
   active = True
   placed = False
@@ -41,26 +41,59 @@ def IntradayTimeReEntry(masterdf, generalconfig, positionconfigs):
         positions = []
         (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
                                                              currentcandle, OHLCEnter)
-        counter = counter + 1
+        counter += 1
         placed = True
+        CallActive = True
+        PutActive = True
         MinCounter = 0
         positionsArr.append(positions)
       if placed:
         # Check Stop Loss Condition
-        for positions in positionsArr:
+        for positions in positionsArr :
           (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
           # We enter this loop if there is any position where stop-loss is triggered.
           if (len(postoExitSL) > 0):
+            if (posConfigtoExitSL[0]["Type"] == defs.CALL):
+              CallActive = False
+            else:
+              PutActive = False
+            if(generalconfig["SquareOffSL"] == defs.ONELEGSL):
+              if (CallActive == False) and (PutActive == False):
+                ReEnterNextSL = True
+            else:
+              ReEnterNextSL = True
+            posConfigtoExitSLNext = posConfigtoExitSL
+  
             atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
             if (generalconfig["SLToCost"] == defs.YES):
               atom.StopLossToCost(positions)
             if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
               atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
+
+         # We enter the loop below if re-entry is true and stop loss was triggered the previous minute.
+        for positions in positionsArr:
+          if (generalconfig["ReEntrySL"] == defs.YES) and (ReEnterNextSL) and (MinCounter % generalconfig["REEvery"] == 0):
+            ReEnterNextSL = False
+            if (generalconfig["SquareOffSL"] == defs.ONELEG):
+              (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, posConfigtoExitSLNext, masterdf, positions,
+                                                                  currentcandle, OHLCEnter)
+            elif (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+              (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
+                                                                  currentcandle, OHLCEnter)
+            elif (generalconfig["SquareOffSL"] == defs.ONELEGSL):
+              (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
+                                                                  currentcandle, OHLCEnter)
+            elif (generalconfig["SquareOffSL"] == defs.ALLLEGSSL):
+              (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
+                                                                  currentcandle, OHLCEnter)
+              CallActive = True
+              PutActive = True
+        
         # Check Target Profit Condition
         for positions in positionsArr:
           (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
           # We enter this loop if there is any position where target profit condition is satisfied.
-          if (len(postoExitTarget) > 0):
+          if (len(postoExitTarget) > 0) :
             atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
             if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
               atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
@@ -136,6 +169,9 @@ def IntraDayStrategy(masterdf, generalconfig, positionconfig):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
         elif (generalconfig["SquareOffSL"] == defs.ONELEGSL):
+          (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
+                                                               currentcandle, OHLCEnter)
+        elif (generalconfig["SquareOffSL"] == defs.ALLLEGSSL):
           (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfig, masterdf, positions,
                                                                currentcandle, OHLCEnter)
           CallActive = True
@@ -279,7 +315,7 @@ def MultiDayStrategy(masterdf, positions, generalconfig, positionconfig):
   # Check if there is any position where there is a "SL" or "Target" Condition. If not, there is no need to
   # loop and check stop loss/target conditions.
   loop = False
-  for posc in positionconfig:
+  for posc in positionconfig :
     if (posc["SL"] == defs.YES) or (posc["Target"] == defs.YES):
       loop = True
 
@@ -545,10 +581,161 @@ def OpeningRangeBreakout(masterdf, generalconfig, positionconfig):
       # Square off Remaining Legs EOD
       if (currentcandle.name.time() == generalconfig["ExitTime"]):
         direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
-        trades = atom.GetFinalTrades(positions)  
+        trades = atom.GetFinalTrades(positions)
 
   return trades
 
+def OpeningRangeBreakoutNextWeekExp(masterdf, generalconfig, positionconfig):
+  positionconfigbuy = []
+  for position in positionconfig:
+    if position['Action'] == defs.BUY:
+      positionconfigbuy.append(position)
+
+  spotdata = atom.GetSpotData(masterdf,generalconfig["symbol"])
+  
+  placedBull = False
+  placedBear = False
+  EnterBull = False
+  EnterBear = False
+  initialized = False
+  positions = []
+  trades = []
+  MinCounter = 0
+  Debug = False
+  EnteredBullOnce = False
+  EnteredBearOnce = False
+
+  OHLCEnter = 'open'
+  OHLCUntil = 'open'
+  OHLCBreakout = 'open'
+  exitSLOHLC = 'close'
+  exitTGOHLC = 'close'
+  exitSQEODOHLC = 'open'
+
+  # if Debug:
+  #   print('Master Df - ', masterdf)
+  #   print('SpotData - ', spotdata)
+  
+  for s in range(len(spotdata)):
+    MinCounter += 1
+    currentcandle = spotdata.iloc[s]
+    # if (currentcandle.name in spotdatafull.index):
+    #   sfull = spotdatafull.index.get_loc(currentcandle.name)
+    #   if (sfull < len(spotdatafull)-1):
+    #     nextcandle = spotdatafull.iloc[sfull+1]
+    #   else:
+    #     nextcandle = currentcandle
+    # else:
+    #   nextcandle = currentcandle
+    # Get Strike Prices for Closest Premium at the start
+    if currentcandle.name.time() == generalconfig["EnterTime"]:
+      (beststrikeCE, minval) = direc.FindNextWeekStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.CALL, OHLCEnter, generalconfig["symbol"])
+      (beststrikePE, minval) = direc.FindNextWeekStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.PUT, OHLCEnter, generalconfig["symbol"])
+      if Debug:
+        print('Best CE Strike ', beststrikeCE)
+        print('Best PE Strike ', beststrikePE)
+        # print( 'Positions with buy action - ' ,positionconfigbuy)
+        # print(positions)
+      
+      # GET NEXT WEEK EXPIRY DATE----------------------------------------------------------------------------------------------------------------------------------
+      exp = atom.GetNextExpiry(masterdf, generalconfig["symbol"])
+      opdfCE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikeCE) + defs.CALL]
+      opdfPE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikePE) + defs.PUT]
+      # if Debug:
+      # print('Symbol - ', generalconfig["symbol"] + exp + str(beststrikeCE) + defs.CALL)
+      # print('Expiry - ', exp)
+      # print('opdfCE - ', opdfCE)
+      # print('opdfPE - ', opdfPE)
+
+      initialized = True
+    # Observe the highest premium in the second part
+    if initialized and (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name in opdfCE.index) and not placedBull :
+      # print('yay')
+      # print('placed bull')
+      (positions, positionsNotPlaced) = direc.EnterPositionStrikeAction(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikePE, defs.SELL)
+      placedBull = True
+      # for pos in positions:
+      #   print(pos['PositionConfig'])
+        
+    # if Debug:
+    #     print( 'Bull Positions - ' ,positions)
+    
+    if initialized and (currentcandle.name.time() >= generalconfig["EnterTime"]) and (currentcandle.name in opdfPE.index) and not placedBear :
+      # print('yay')
+      # print('placed bear')
+      (positions, positionsNotPlaced) = direc.EnterPositionStrikeAction(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikeCE, defs.SELL)
+      placedBear = True
+      # for pos in positions:
+      #   print(pos['PositionConfig'])
+        
+    # if Debug:
+    #     print( 'Bear Positions - ' ,positions)
+    
+    if placedBull or placedBear:
+      (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+      # We enter this loop if there is any position where stop-loss is triggered.
+      if (len(postoExitSL) > 0):
+        # print(postoExitSL)
+        # print('-'*200)
+        direc.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+        # for pos in postoExitSL:
+          # print(pos['PositionConfig'])
+          # print('-'*200)
+        # print('-'*200)
+        # print(positions)
+        
+
+        for pos in postoExitSL :
+          if pos['PositionConfig']['Type'] == defs.CALL and not pos['Active'] and not EnteredBullOnce:
+            EnterBull = True
+            EnteredBullOnce = True
+            # print('EnterBull',EnterBull)
+          elif pos['PositionConfig']['Type'] == defs.PUT and not pos['Active'] and not EnteredBearOnce :
+            EnterBear = True
+            EnteredBearOnce = True
+            # print('EnterBear',EnterBear)
+
+    if EnterBull :
+      # print('yay, enter bull') generalconfig, positionconfig, masterdf, positions, nextcandle, OHLC, stance, action
+      (beststrikeCE, minval) = direc.FindNextWeekStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.CALL, OHLCEnter, generalconfig["symbol"])
+      (positions, positionsNotPlaced) = direc.EnterPositionStrikeAction(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BULL, beststrikeCE, defs.BUY)
+      EnterBull = False
+      # print('bull')
+      # print(positionconfig)
+      # for pos in positions:
+      #   print(pos['PositionConfig'])
+      # print(positions)
+    if EnterBear :
+      # print('yay, enter bear')
+      (beststrikePE, minval) = direc.FindNextWeekStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
+                                                generalconfig["EndStrikeStrike"], defs.PUT, OHLCEnter, generalconfig["symbol"])
+      (positions, positionsNotPlaced) = direc.EnterPositionStrikeAction(generalconfig, positionconfig, masterdf, positions, currentcandle, OHLCBreakout, defs.BEAR, beststrikePE, defs.BUY)
+      
+      EnterBear = False
+      # print('bear')
+      
+      # # print(positionconfig)
+      # for pos in positions:
+      #   print(pos['PositionConfig'])
+    
+        
+    # Check Target Profit Condition
+    (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+    # We enter this loop if there is any position where target profit condition is satisfied.
+    if (len(postoExitTarget) > 0):
+      direc.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
+
+    # Square off Remaining Legs EOD
+    if (currentcandle.name.time() == generalconfig["ExitTime"]):
+      direc.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+      trades = atom.GetFinalTrades(positions)  
+    # if Debug:
+    #   time.sleep(2)
+
+  return trades
 
 
 

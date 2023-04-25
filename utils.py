@@ -16,6 +16,35 @@ def BuyMarginCalculator(trades, symbol):
     margin = trades.EnterPrice * defs.FNLOTSIZE
   return margin.max()
 
+nse2022holidays = [datetime.date(2022, 1, 26),
+                  datetime.date(2022, 3, 1),
+                  datetime.date(2022, 3, 18),
+                  datetime.date(2022, 4, 14),
+                  datetime.date(2022, 4, 15),
+                  datetime.date(2022, 5, 3),
+                  datetime.date(2022, 8, 9),
+                  datetime.date(2022, 8, 15),
+                  datetime.date(2022, 8, 31),
+                  datetime.date(2022, 10, 5),
+                  datetime.date(2022, 10, 24),
+                  datetime.date(2022, 10, 26),
+                  datetime.date(2022, 11, 8)]
+
+nse2021holidays = [datetime.date(2021, 1, 26),
+                  datetime.date(2021, 3, 11),
+                  datetime.date(2021, 3, 29),
+                  datetime.date(2021, 4, 2),
+                  datetime.date(2021, 4, 14),
+                  datetime.date(2021, 4, 21),
+                  datetime.date(2021, 5, 13),
+                  datetime.date(2021, 7, 21),
+                  datetime.date(2021, 8, 19),
+                  datetime.date(2021, 9, 10),
+                  datetime.date(2021, 10, 15),
+                  datetime.date(2021, 11, 4),
+                  datetime.date(2021, 11, 5),
+                  datetime.date(2021, 11, 19)]
+
 def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
   if (positiontype == "Naked"):
     if (symbol == defs.BN):

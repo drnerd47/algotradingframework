@@ -11,7 +11,7 @@ import generalconfigs as genconfigs
 import warnings
 warnings.filterwarnings("ignore")
 
-user = "RI"
+user = "SD"
 
 if user == "SD":
   Root = "D:/Work/Sykes and Ray/"
@@ -19,9 +19,6 @@ if user == "SD":
 elif user == "RI":
   Root = "../"
   Result_path = "Results/Positional/"
-elif user == "MS":
-  Root = "C:/Users/shahm/(8)Work/SRE/"
-  Result_path = "C:/Users/shahm/(8)Work/SRE/NIFTYOptionsData/OptionsData/Results/Intraday_BankNifty/Short_Straddle/One_Leg/With_Slippage"
 
 Banknifty_Path = Root + "NIFTYOptionsData/OptionsData/Banknifty/"
 Nifty_Path = Root + "NIFTYOptionsData/OptionsData/Nifty/"
