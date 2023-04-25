@@ -38,16 +38,18 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
     my_fileBN = Path(BNPath)
     my_fileFN = Path(FNPath)
     # print("Working on file - "+date_string)
-    if my_fileN.exists() and my_fileBN.exists() and my_fileFN.exists():
-      masterdfN = atom.LoadDF(NPath)
+    if generalconfig['symbol'] == defs.BN and my_fileBN.exists() :
       masterdfBN = atom.LoadDF(BNPath)
+      trade = strategies.DirectionalStrategy(data, masterdfBN, generalconfig, positionconfig, TIconfig, start_date)
+
+    if generalconfig['symbol'] == defs.N and my_fileN.exists() :
+      masterdfN = atom.LoadDF(NPath)
+      trade = strategies.DirectionalStrategy(data, masterdfN, generalconfig, positionconfig, TIconfig, start_date)
+    
+    if generalconfig['symbol'] == defs.FN and my_fileFN.exists() :
       masterdfFN = atom.LoadDF(FNPath)
-      if (generalconfig["symbol"] == defs.BN):
-        trade = strategies.DirectionalStrategy(data, masterdfBN, generalconfig, positionconfig, TIconfig, start_date)
-      elif (generalconfig["symbol"] == defs.N):
-        trade = strategies.DirectionalStrategy(data, masterdfN, generalconfig, positionconfig, TIconfig, start_date)
-      elif (generalconfig["symbol"] == defs.FN):
-        trade = strategies.DirectionalStrategy(data, masterdfFN, generalconfig, positionconfig, TIconfig, start_date)
+      trade = strategies.DirectionalStrategy(data, masterdfFN, generalconfig, positionconfig, TIconfig, start_date)
+
       #print(trade)
       if (len(trade) > 0):
         trades = trades.append(trade)
