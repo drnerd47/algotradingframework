@@ -51,8 +51,8 @@ def RunDirectionalStrategy(start_date, end_date, approach, config, Banknifty_Pat
       trade = strategies.DirectionalStrategy(data, masterdfFN, generalconfig, positionconfig, TIconfig, start_date)
 
       #print(trade)
-      if (len(trade) > 0):
-        trades = trades.append(trade)
+    if (len(trade) > 0):
+      trades = trades.append(trade)
     # else:
     #   print("No data for " + start_date.strftime("%Y-%m-%d"))
     start_date += delta
