@@ -111,6 +111,81 @@ def IntradayTimeSLReEntry(masterdf, generalconfig, positionconfigs):
   PNLTrackerSumm["FinalPNL"] = FinalPNL
   return (trades, PNLTracker, PNLTrackerSumm)
 
+def IntradayTimeReEntry(masterdf, generalconfig, positionconfigs):
+  spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
+  active = True
+  placed = False
+  positionsArr = []
+  trades = pd.DataFrame()
+  MinCounter = 0
+  OHLCEnter = 'open'
+  exitSLOHLC = 'close'
+  exitTGOHLC = 'close'
+  exitSQOHLC = 'close'
+  exitSQEODOHLC = 'open'
+  counter = 0
+  MinPNL = 0
+  MaxPNL = 0
+  FinalPNL = 0
+  PNLTracker = {}
+  PNLTrackerSumm = {}
+  for s in range(len(spotdata)):
+    MinCounter += 1
+    currentcandle = spotdata.iloc[s]
+    # Calculate current PNL
+    currPNL = 0
+    for positions in positionsArr:
+      currPNL = currPNL + atom.CheckPNL(positions, currentcandle)
+    if (MinPNL > currPNL):
+      MinPNL = currPNL
+    if (MaxPNL < currPNL):
+      MaxPNL = currPNL
+    PNLTracker[currentcandle.name.time()] = currPNL
+    FinalPNL = currPNL
+    # Check Enter time Condition
+    if active:
+      if (counter < len(generalconfig["EnterTime"])) and currentcandle.name.time() == generalconfig["EnterTime"][counter]:
+        positions = []
+        (positions, positionsNotPlaced) = atom.EnterPosition(generalconfig, positionconfigs[counter], masterdf, positions,
+                                                             currentcandle, OHLCEnter)
+        counter = counter + 1
+        placed = True
+        MinCounter = 0
+        positionsArr.append(positions)
+      if placed:
+        # Check Stop Loss Condition
+        for positions in positionsArr:
+          (postoExitSL, posConfigtoExitSL) = atom.CheckStopLoss(positions, currentcandle)
+          # We enter this loop if there is any position where stop-loss is triggered.
+          if (len(postoExitSL) > 0):
+            atom.ExitPosition(postoExitSL, currentcandle, defs.SL, exitSLOHLC)
+            if (generalconfig["SLToCost"] == defs.YES):
+              atom.StopLossToCost(positions)
+            if (generalconfig["SquareOffSL"] == defs.ALLLEGS):
+              atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitSQOHLC)
+        # Check Target Profit Condition
+        for positions in positionsArr:
+          (postoExitTarget, posConfigtoExitTG) = atom.CheckTargetCondition(positions, currentcandle)
+          # We enter this loop if there is any position where target profit condition is satisfied.
+          if (len(postoExitTarget) > 0):
+            atom.ExitPosition(postoExitTarget, currentcandle, defs.TARGET, exitTGOHLC)
+            if (generalconfig["SquareOffTG"] == defs.ALLLEGS):
+              atom.ExitPosition(positions, currentcandle, defs.SQUAREOFF, exitTGOHLC)
+
+        # Square off Remaining Legs EOD
+        if (currentcandle.name.time() == generalconfig["ExitTime"]) or (currPNL < generalconfig["PNLLimit"]) or (currPNL - MaxPNL < generalconfig["DrawdownLimit"]):
+          for positions in positionsArr:
+            atom.ExitPosition(positions, currentcandle, defs.SQUAREOFFEOD, exitSQEODOHLC)
+            tradesCurr = atom.GetFinalTrades(positions)
+            trades = trades.append(tradesCurr)
+            active = False
+
+  PNLTrackerSumm["MaxPNL"] = MaxPNL
+  PNLTrackerSumm["MinPNL"] = MinPNL
+  PNLTrackerSumm["FinalPNL"] = FinalPNL
+  return (trades, PNLTracker, PNLTrackerSumm)
+
+
 def IntraDayStrategy(masterdf, generalconfig, positionconfig):
   spotdata = atom.GetSpotData(masterdf, generalconfig["symbol"])
   placed = False
@@ -633,14 +708,14 @@ def OpeningRangeBreakoutNextWeekExp(masterdf, generalconfig, positionconfig):
                                                 generalconfig["EndStrikeStrike"], defs.CALL, OHLCEnter, generalconfig["symbol"])
       (beststrikePE, minval) = direc.FindNextWeekStrike(masterdf, generalconfig["Premium"], currentcandle.name, generalconfig["StartStrike"], 
                                                 generalconfig["EndStrikeStrike"], defs.PUT, OHLCEnter, generalconfig["symbol"])
-      if Debug:
-        print('Best CE Strike ', beststrikeCE)
-        print('Best PE Strike ', beststrikePE)
+      # if Debug:
+      # print('Best CE Strike ', beststrikeCE)
+      # print('Best PE Strike ', beststrikePE)
         # print( 'Positions with buy action - ' ,positionconfigbuy)
         # print(positions)
       
       # GET NEXT WEEK EXPIRY DATE----------------------------------------------------------------------------------------------------------------------------------
-      exp = atom.GetNextExpiry(masterdf, generalconfig["symbol"])
+      exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
       opdfCE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikeCE) + defs.CALL]
       opdfPE = masterdf[masterdf['symbol'] == generalconfig["symbol"] + exp + str(beststrikePE) + defs.PUT]
       # if Debug:
