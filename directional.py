@@ -43,7 +43,7 @@ def getMA(spotdata, columnname, period=14, type='simple'):
     tempdf[columnname] = (tempdf['close'] - tempdf['MA'])
     return tempdf
 
-def getBollingerBand(spotdata,columnname, period, stddev):
+def getBollingerBand(spotdata, columnname, period, stddev):
     tempdf = spotdata
     bb = ta.volatility.BollingerBands(tempdf.close, period, stddev)
     tempdf['upband'] = bb.bollinger_hband()
@@ -66,6 +66,16 @@ def getSuperTrendIndicator(spotdata, period, multiplier, columnname):
     df = st.SuperTrend(spotdata, period, multiplier)
     df[columnname] = np.where(df.STX == 'down', -1, np.where(df.STX == 'up', 1, 0))
     return df
+
+def getStochasticOscillator(spotdata, period, columnname):
+    tempdf = spotdata
+    tempdf['period-high'] = tempdf['High'].rolling(period).max()
+    tempdf['period-low'] = tempdf['Low'].rolling(period).min()
+    tempdf['%K'] = (tempdf['Close'] - tempdf['period-low'])*100/(tempdf['period-high'] - tempdf['period-low'])
+    tempdf['%D'] = tempdf['%K'].rolling(3).mean()
+    tempdf['Signal'] = np.where(tempdf['%K']>tempdf['%D'], 1, np.where(tempdf['%K']<tempdf['%D'], -1, 0))
+    tempdf[columnname] = np.where((tempdf['Signal']==1) & (tempdf['Signal'].shift(1)==-1), 1 , np.where((tempdf['Signal']==-1) & (tempdf['Signal'].shift(1)==1), -1, 0))
+    return tempdf
 
 def getTI(spotdata, TIconfig):
     for t in TIconfig:
@@ -381,7 +391,7 @@ def EnterPositionAction(generalconfig, positionconfig, masterdf, positions, next
     positionsNotPlaced = []
     for posc in positionconfig:
         if (posc["Stance"] == stance) and posc['Action'] == action:
-            exp = atom.GetNextExpiry(masterdf, generalconfig["symbol"])
+            exp = atom.GetExpiry(masterdf, generalconfig["symbol"])
             if generalconfig['symbol'] == defs.N :
                 cst = nextcandle[OHLC]
                 cst = int(round(cst / 50, 0) * 50)

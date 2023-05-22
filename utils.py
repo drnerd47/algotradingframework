@@ -45,6 +45,23 @@ nse2021holidays = [datetime.date(2021, 1, 26),
                   datetime.date(2021, 11, 5),
                   datetime.date(2021, 11, 19)]
 
+nse2023holidays = [datetime.date(2023, 1, 26),
+                    datetime.date(2023, 3, 7),
+                    datetime.date(2023, 3, 30),
+                    datetime.date(2023, 4, 4),
+                    datetime.date(2023, 4, 7),
+                    datetime.date(2023, 4, 14),
+                    datetime.date(2023, 5, 1),
+                    datetime.date(2023, 6, 28),
+                    datetime.date(2023, 8, 15),
+                    datetime.date(2023, 9, 19),
+                    datetime.date(2023, 10, 2),
+                    datetime.date(2023, 10, 24),
+                    datetime.date(2023, 11, 14),
+                    datetime.date(2023, 11, 27),
+                    datetime.date(2023, 12, 25)]
+
+
 def SellMarginCalculator(positiontype, numcalllegs, numputlegs, symbol):
   if (positiontype == "Naked"):
     if (symbol == defs.BN):

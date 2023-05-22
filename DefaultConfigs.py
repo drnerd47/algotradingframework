@@ -29,7 +29,7 @@ ind_straddle_N_OL = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "sym
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OLS = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, "TrailSL": defs.NO,
                 "MaxReEnterCounterSL": 3, "MaxReEnterCounterTG": 6, "SLtoCost":defs.YES, "SL":defs.YES, "Target":defs.NO, "SLPc":15, "TargetPc":75, "Delta":0, "DeltaThu":0, "OnlyThu": False,
-                         "EnterTime": datetime.time(10, 30), "ExitTime": datetime.time(15, 15), "action": defs.SELL, "Limits": defs.NO}
+                         "EnterTime": datetime.time(10, 30), "ExitTime": datetime.time(15, 15), "action": defs.SELL, "Limits": defs.NO, 'RunFriday':True, 'PNLLimit':0, 'DrawdownLimit':0 }
 
 # INTRADAY STRADDLE OL BANKNIFTY
 ind_straddle_BN_OLS2 = {"SquareOffSL":defs.ONELEG, "SquareOffTG": defs.ONELEG, "symbol": defs.BN, "ReEntrySL": defs.NO, "ReEntryTG": defs.NO, "REEvery":14, "TrailSL": defs.NO,

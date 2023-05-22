@@ -78,7 +78,11 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
         config["Delta"] = config["DeltaThu"]
       else:
         config["Delta"] = origDelta
-      (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
+      if 'Hedge Delta' in config:
+        (generalconfig, positionconfig) = GetConfigs.GetINDIronCondorConfig(config)
+      else:
+        (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
+
       date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
       BNPath = Banknifty_Path + date_string
       NPath = Nifty_Path + date_string
@@ -102,7 +106,11 @@ def RunIntradayStrategy(start_date, end_date, config, Banknifty_Path, Nifty_Path
         config["Delta"] = config["DeltaTue"]
       else:
         config["Delta"] = origDelta
-      (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
+      if 'Hedge Delta' in config:
+        (generalconfig, positionconfig) = GetConfigs.GetINDIronCondorConfig(config)
+      else:
+        (generalconfig, positionconfig) = GetConfigs.GetINDStranglesConfig(config)
+      
       date_string = start_date.strftime("%Y/Data%Y%m%d.csv")
       FNPath = Finnifty_Path + date_string
       my_fileFN = Path(FNPath)

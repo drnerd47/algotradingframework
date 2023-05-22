@@ -3,7 +3,7 @@ from pathlib import Path
 import definitions as defs
 from datetime import datetime as dt
 import datetime
-import os
+import os, glob
 
 
 def LoadDF(currpath):
@@ -71,11 +71,11 @@ def GetExpiry(masterdf, symbol):
 
 def GetNextExpiry(masterdf, symbol):
     if (symbol == defs.BN):
-        return masterdf.iloc[0]['symbol'][9:16]
+        return masterdf.iloc[0]['symbol'][9:15]
     elif (symbol == defs.N):
         return masterdf.iloc[0]['symbol'][5:11]
     elif symbol == defs.FN:
-        return masterdf.iloc[0]['symbol'][8:15]
+        return masterdf.iloc[0]['symbol'][8:14]
     else:
         print("Unknown Symbol")
         return 0
@@ -240,7 +240,7 @@ def ExitPosition(positionstoExit, currentcandle, ExitReason, OHLC):
                     if pos["OpData"].empty:
                         return
                     else:
-                        idx = pos["OpData"].index[pos["OpData"].index.get_loc(currentcandle.name, method='nearest')]
+                        idx = pos["OpData"].index[pos["OpData"].sort_index(axis=0).index.get_loc(currentcandle.name, method='nearest')]
                         exitprice = pos["OpData"].loc[idx][OHLC]
                         exitReason = "Square Off EOD"
             enterprice = pos['EnterPrice']   
@@ -263,8 +263,7 @@ def GetFinalTrades(positions):
     #trades = trades.append(trades, ignore_index=True)
     return trades
 
-def GetNextWeekExpiryData():
-    pass
+
 
 
 

@@ -70,6 +70,42 @@ def GetINDStranglesConfig(config):
                                                     SLtoCost, REEvery, SL, Target, SLPc, TargetPc, Delta, TrailSL, EnterTime, ExitTime, action, limit, pnllimit, ddlimit)
     return (generalconfig, positionconfig)
 ##############################################################################################################################
+def GetINDIronCondor(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
+                    Target, TargetPc, TrailSL, EnterTime, ExitTime, limit, pnllimit, ddlimit, Delta1, Delta2, SLBuy, SLSell,SLPcBuy, SLPcSell):
+    generalconfig = genconfigs.GetGeneralConfigIntraday(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery, TrailSL,
+                                                        EnterTime, ExitTime, limit, pnllimit, ddlimit)
+    positionconfig = posconfigs.getIronCondor(Delta1, Delta2, SLBuy, SLSell, Target, SLPcBuy, SLPcSell, TargetPc)
+    return (generalconfig, positionconfig)
+
+def GetINDIronCondorConfig(config):
+    SquareOffSL = config['SquareOffSL']
+    SquareOffTG = config['SquareOffTG']
+    symbol = config['symbol']
+    ReEntrySL = config['ReEntrySL']
+    ReEntryTG = config['ReEntryTG']
+    MaxReEnterCounterSL = config['MaxReEnterCounterSL']
+    MaxReEnterCounterTG = config['MaxReEnterCounterTG']
+    Target = config['Target']
+    TargetPc = config['TargetPc']
+    SLtoCost = config['SLtoCost']
+    REEvery = config['REEvery']
+    TrailSL = config["TrailSL"]
+    EnterTime = config["EnterTime"]
+    ExitTime = config["ExitTime"]
+    limit = config["Limits"]
+    pnllimit = config["PNLLimit"]
+    ddlimit = config["DrawdownLimit"]
+    Delta1 = config['Delta']
+    Delta2 = config['Hedge Delta']
+    SLBuy = config['SLBuy']
+    SLSell = config['SlSell']
+    SLPcBuy = config['SLPcBuy']
+    SLPcSell = config['SLPcSell']
+    (generalconfig, positionconfig) = GetINDIronCondor(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
+                    Target, TargetPc, TrailSL, EnterTime, ExitTime, limit, pnllimit, ddlimit, Delta1, Delta2, SLBuy, SLSell,SLPcBuy, SLPcSell)
+    return (generalconfig, positionconfig)
+##############################################################################################################################
+
 def GetRSI2ConfigsPB(SL, Target, SLPc, TargetPc, Resample, TBull1, TBear1, TBull2, TBear2, symbol, 
                      action, rolling, reenter, Delta, window1, window2, SLTGContinuous, TrailSL, MaxBullReEnterCount, MaxBearReEnterCount , EnterTime, ExitTime):
     if action == defs.BUY:
