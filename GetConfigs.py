@@ -98,7 +98,7 @@ def GetINDIronCondorConfig(config):
     Delta1 = config['Delta']
     Delta2 = config['Hedge Delta']
     SLBuy = config['SLBuy']
-    SLSell = config['SlSell']
+    SLSell = config['SLSell']
     SLPcBuy = config['SLPcBuy']
     SLPcSell = config['SLPcSell']
     (generalconfig, positionconfig) = GetINDIronCondor(SquareOffSL, SquareOffTG, symbol, ReEntrySL, ReEntryTG, MaxReEnterCounterSL, MaxReEnterCounterTG, SLtoCost, REEvery,
